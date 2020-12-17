@@ -1,5 +1,5 @@
-from collections import defaultdict
-from itertools import product
+from collections import Counter
+from itertools import product, chain
 
 
 def adj(cell, dimensions):
@@ -12,18 +12,8 @@ def adj(cell, dimensions):
 def simulate(field):
     dimensions = len(next(iter(field)))
     for cycle in range(6):
-        nf = set()
-        for cell in field:
-            a = sum(1 for x in adj(cell, dimensions) if x in field)
-            if a == 2 or a == 3:
-                nf.add(cell)
-            for neigh in adj(cell, dimensions):
-                if neigh in field:
-                    continue
-                a = sum(1 for x in adj(neigh, dimensions) if x in field)
-                if a == 3:
-                    nf.add(neigh)
-        field = nf
+        counts = Counter(chain.from_iterable(adj(cell, dimensions) for cell in field))
+        field = set(k for k, v in counts.items() if v == 3 or v == 2 and k in field)
     return len(field)
 
 
