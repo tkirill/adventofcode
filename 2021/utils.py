@@ -31,3 +31,7 @@ def splitfalse(items: Iterable[T], pred: Optional[Callable[[T],bool]]=None) -> L
 
 def column(a: List[List[T]], col: int) -> List[T]:
     return [row[col] for row in a]
+
+
+def sign(x: int) -> int:
+    return x // abs(x) if x else 0
