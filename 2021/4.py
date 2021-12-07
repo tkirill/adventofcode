@@ -4,7 +4,7 @@ from utils import *
 
 def read_input() -> Tuple[List[int], List[List[int]]]:
     first_line, *blocks = splitfalse(readlines('4_input.txt'))
-    return parse1d(first_line[0], ','), [parse2d(b) for b in blocks]
+    return parse1d(first_line[0]), [parse2d(b, None) for b in blocks]
 
 
 def bingo(board):

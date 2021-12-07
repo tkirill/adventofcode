@@ -4,7 +4,7 @@ from collections import deque
 
 def read_input(days):
     fishes = deque([0]*9)
-    for x in parse1d(readlines('6_input.txt')[0], ','):
+    for x in read1('6_input.txt'):
         fishes[x] += 1
     for _ in range(days):
         fishes.rotate(-1)

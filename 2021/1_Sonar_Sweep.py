@@ -1,11 +1,10 @@
 # https://adventofcode.com/2021/day/1
-
+from utils import *
 from typing import List
 
 
 def read_input() -> List[int]:
-    with open('1_input.txt') as f:
-        return [int(x) for x in f]
+    return [int(x) for x in readlines('1_input.txt')]
 
 
 def count_increases(s: list, gap=1) -> int:

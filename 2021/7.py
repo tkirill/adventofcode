@@ -1,21 +1,20 @@
 from utils import *
 
 
-def diff(x, y):
+def diff(x: int, y: int) -> int:
     return abs(x-y)
 
 
-def sum_arith_prog(x, y):
+def sum_arith_prog(x: int, y: int) -> int:
     diff = abs(x-y)
-    return ((1+diff)*diff) // 2
+    return ((1 + diff) * diff) // 2
 
 
-def mincost(lines, cost_func):
+def mincost(crabs: List[int], cost_func: Callable[[int, int], int]) -> int:
     def cost(pos):
-        return sum(cost_func(x, pos) for x in lines)
-    return min(cost(x) for x in lines)
+        return sum(cost_func(x, pos) for x in crabs)
+    return min(cost(x) for x in crabs)
 
 
-numbers = parse1d(readlines('7_input.txt')[0], ',')
-print('Star 1:', mincost(numbers, diff))
-print('Star 2:', mincost(numbers, sum_arith_prog))
+print('Star 1:', mincost(read1('7_input.txt'), diff))
+print('Star 2:', mincost(read1('7_input.txt'), sum_arith_prog))

@@ -1,14 +1,9 @@
+from utils import *
 from collections import Counter
-from functools import reduce
-
-
-def read_input():
-    with open('3_input.txt') as f:
-        return [line.strip() for line in f if line.strip()]
 
 
 def star1():
-    lines = read_input()
+    lines = readlines('3_input.txt')
     counters = [Counter(bits) for bits in zip(*lines)]
     gamma, epsilon = [int(''.join(c.most_common()[pos][0] for c in counters), base=2) for pos in [0, -1]]
     print(gamma * epsilon)
@@ -24,7 +19,7 @@ def count_most_common(lines):
         for i, c in enumerate(line):
             if c == '0':
                 count_zeroes[i] += 1
-    result = [0] *len(count_zeroes)
+    result = [0] * len(count_zeroes)
     for i, c in enumerate(count_zeroes):
         is_one = c < (len(lines) / 2)
         if is_one:
@@ -53,7 +48,7 @@ def find_co2(lines):
 
 
 def star2():
-    lines = read_input()
+    lines = readlines('3_input.txt')
     oxy, co2 = find_oxy(lines), find_co2(lines)
     print(oxy, co2)
     print(oxy * co2)

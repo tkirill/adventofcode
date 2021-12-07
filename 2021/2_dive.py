@@ -1,16 +1,16 @@
+from utils import *
 from typing import Iterable, Tuple
 
 
 def read_lines() -> Iterable[Tuple[int, int]]:
-    with open('2_input.txt') as f:
-        for line in f:
-            match line.split():
-                case 'forward', v:
-                    yield int(v), 0
-                case 'down', v:
-                    yield 0, int(v)
-                case _:
-                    yield 0, -int(v)
+    for line in readlines('2_input.txt'):
+        match line.split():
+            case 'forward', v:
+                yield int(v), 0
+            case 'down', v:
+                yield 0, int(v)
+            case _:
+                yield 0, -int(v)
 
 
 def star1():
