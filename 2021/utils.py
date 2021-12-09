@@ -43,3 +43,18 @@ def column(a: List[List[T]], col: int) -> List[T]:
 
 def sign(x: int) -> int:
     return x // abs(x) if x else 0
+
+
+def near(row: int, col: int, grid: List[List[T]]) -> Iterable[T]:
+    if row > 0:
+        yield row-1, col
+    if row < len(grid)-1:
+        yield row+1, col
+    if col > 0:
+        yield row, col-1
+    if col < len(grid[row])-1:
+        yield row, col+1
+
+
+def nearvals(row: int, col: int, grid: List[List[T]]) -> List[T]:
+    return [grid[r][c] for r, c in near(row, col, grid)]
