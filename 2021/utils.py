@@ -1,4 +1,5 @@
-from typing import Callable, Iterable, Optional, List, TypeVar
+from typing import Callable, Iterable, Optional, List, TypeVar, Tuple
+from itertools import product, chain
 
 
 T = TypeVar('T')
@@ -45,16 +46,29 @@ def sign(x: int) -> int:
     return x // abs(x) if x else 0
 
 
+def ingrid(grid: List[List[T]], row: int, col: int) -> bool:
+    return 0 <= row < len(grid) and 0 <= col < len(grid[row])
+
+
 def near(row: int, col: int, grid: List[List[T]]) -> Iterable[T]:
-    if row > 0:
-        yield row-1, col
-    if row < len(grid)-1:
-        yield row+1, col
-    if col > 0:
-        yield row, col-1
-    if col < len(grid[row])-1:
-        yield row, col+1
+    for dr, dc in [(-1, 0), (1, 0), (0, -1), (0, 1)]:
+        r, c = row + dr, col + dc
+        if ingrid(grid, r, c):
+            yield r, c, grid[r][c]
 
 
-def nearvals(row: int, col: int, grid: List[List[T]]) -> List[T]:
-    return [grid[r][c] for r, c in near(row, col, grid)]
+def near8(row: int, col: int, grid: List[List[T]]) -> Iterable[T]:
+    for dr, dc in product([-1, 0, 1], repeat=2):
+        r, c = row + dr, col + dc
+        if ingrid(grid, r, c):
+            yield r, c, grid[r][c]
+
+
+def cells(grid: List[List[T]]) -> Iterable[Tuple[int, int, T]]:
+    for row in range(len(grid)):
+        for col in range(len(grid[0])):
+            yield row, col, grid[row][col]
+
+
+def flatten(list_of_lists: List[List[T]]) -> List[T]:
+    return chain.from_iterable(list_of_lists)

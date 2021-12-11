@@ -11,7 +11,7 @@ def dfs(row, col):
     visited = {(row, col)}
     while q:
         r, c = q.pop()
-        for nr, nc in near(r, c, lines):
+        for nr, nc, _ in near(r, c, lines):
             if (nr, nc) not in visited and lines[nr][nc] != 9:
                 q.append((nr, nc))
                 visited.add((nr, nc))
@@ -20,7 +20,7 @@ def dfs(row, col):
 
 for row in range(len(lines)):
     for col in range(len(lines[0])):
-        if all(x > lines[row][col] for x in nearvals(row, col, lines)):
+        if all(x > lines[row][col] for _, _, x in near(row, col, lines)):
             low_points_sum += lines[row][col] + 1
             basins.append(dfs(row, col))
 basins.sort()
