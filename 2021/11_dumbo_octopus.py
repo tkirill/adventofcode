@@ -28,9 +28,9 @@ def step():
     return len(flashed)
 
 
-print(sum(step() for _ in range(100)))
+print('Star 1:', sum(step() for _ in range(100)))
 for day in count(101):
     f = step()
     if f == len(grid) * len(grid[0]):
-        print(day)
+        print('Star 2:', day)
         break
