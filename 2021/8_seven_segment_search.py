@@ -1,3 +1,4 @@
+# https://adventofcode.com/2021/day/8
 from utils import *
 from collections import Counter
 from itertools import permutations
@@ -38,15 +39,13 @@ def decode(ds: List[str], os: List[str]) -> int:
 
 def star1():
     c = Counter(len(x) for _, os in read_input() for x in os)
-    print(c[7]+c[4]+c[3]+c[2])
+    return c[7]+c[4]+c[3]+c[2]
 
 
 def star2():
     lines = read_input()
-    print(sum(decode(ds, os) for ds, os in lines))
+    return sum(decode(ds, os) for ds, os in lines)
 
 
-print('Star 1:')
-star1()
-print('Star 2:')
-star2()
+print('Star 1:', star1())
+print('Star 2:', star2())

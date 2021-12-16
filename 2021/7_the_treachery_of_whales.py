@@ -1,3 +1,4 @@
+# https://adventofcode.com/2021/day/7
 from utils import *
 
 
@@ -16,5 +17,5 @@ def mincost(crabs: List[int], cost_func: Callable[[int, int], int]) -> int:
     return min(cost(x) for x in crabs)
 
 
-print('Star 1:', mincost(read1('7_input.txt'), diff))
-print('Star 2:', mincost(read1('7_input.txt'), sum_arith_prog))
+print('Star 1:', mincost(read('7_input.txt'), diff))
+print('Star 2:', mincost(read('7_input.txt'), sum_arith_prog))

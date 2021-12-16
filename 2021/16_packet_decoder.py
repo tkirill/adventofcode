@@ -1,3 +1,4 @@
+# https://adventofcode.com/2021/day/16
 from utils import *
 from functools import reduce
 import operator

@@ -1,14 +1,10 @@
+# https://adventofcode.com/2021/day/14
 from utils import *
 from collections import Counter, defaultdict
-from itertools import count, repeat, product
-import re
-DIGITS = '0123456789'
-ALPHA = 'abcdefghijklmnopqrstuvwxyz'
 
 
-polymer, rules = splitfalse(readlines('14_input.txt'))
-polymer = polymer[0]
-rules = dict(r.split(' -> ') for r in rules)
+polymer, rules = read('14_input.txt', sep='->')
+rules = dict(rules)
 
 
 def freq_diff(pairs):

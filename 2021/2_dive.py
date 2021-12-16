@@ -1,39 +1,16 @@
+# https://adventofcode.com/2021/day/2
 from utils import *
 from typing import Iterable, Tuple
 
 
-def read_lines() -> Iterable[Tuple[int, int]]:
-    for line in readlines('2_input.txt'):
-        match line.split():
-            case 'forward', v:
-                yield int(v), 0
-            case 'down', v:
-                yield 0, int(v)
-            case _:
-                yield 0, -int(v)
-
-
-def star1():
-    pos = [0, 0]
-    for x, y in read_lines():
-        pos[0] += x
-        pos[1] += y
-    print(pos[0]*pos[1])
-
-
-print('Star 1:')
-star1()
-
-
-def star2():
-    pos = [0, 0]
-    aim = 0
-    for x, y in read_lines():
-        pos[0] += x
-        pos[1] += x*aim
-        aim += y
-    print(pos[0]*pos[1])
-
-
-print('Star 2:')
-star2()
+pos, aim = complex(0), 0
+for d, v in read('2_input.txt', sep=' '):
+    match d:
+        case 'forward':
+            pos += complex(v, aim*v)
+        case 'down':
+            aim += v
+        case _:
+            aim -= v
+print('Star 1:', pos.real*aim)
+print('Star 2:', pos.real*pos.imag)

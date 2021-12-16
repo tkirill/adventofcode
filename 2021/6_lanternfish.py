@@ -1,10 +1,11 @@
+# https://adventofcode.com/2021/day/6
 from utils import *
 from collections import deque
 
 
 def read_input(days):
     fishes = deque([0]*9)
-    for x in read1('6_input.txt'):
+    for x in read('6_input.txt'):
         fishes[x] += 1
     for _ in range(days):
         fishes.rotate(-1)

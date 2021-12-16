@@ -1,8 +1,35 @@
-from typing import Callable, Iterable, Optional, List, TypeVar, Tuple
+from enum import auto
+from typing import Callable, Iterable, Optional, List, TypeVar, Tuple, Union
 from itertools import product, chain
+import re
 
 
 T = TypeVar('T')
+
+
+def try_parse_int(s: str) -> Union[str, int]:
+    try:
+        return int(s)
+    except ValueError:
+        return s
+
+
+def autoflatten(x: List[T]) -> Union[T, List[T]]:
+    if len(x) == 1:
+        return x[0]
+    return x
+
+
+def read(filename: str, sep: str=',', val: Callable[[str], T]=try_parse_int) -> List[Union[T, List[Union[T, List[T]]]]]:
+    result = []
+    for block in splitfalse(readlines(filename)):
+        lines = []
+        for line in block:
+            tmp = [val(x.strip()) for x in re.split(sep, line.strip()) if x]
+            lines.append(autoflatten(tmp))
+        result.append(autoflatten(lines))
+    return autoflatten(result)
+
 
 
 def parse1d(line: str, sep: Optional[str]=',') -> List[int]:
@@ -16,10 +43,6 @@ def parse2d(lines: Iterable[str], sep: Optional[str]=',') -> List[List[int]]:
 def readlines(filename) -> List[str]:
     with open(filename) as f:
         return f.read().splitlines()
-
-
-def read(filename, sep: Optional[str]=',') -> List[List[int]]:
-    return parse2d(readlines(filename), sep)
 
 
 def read1(filename, sep: Optional[str]=',') -> List[List[int]]:

@@ -1,3 +1,4 @@
+# https://adventofcode.com/2021/day/11
 from utils import *
 from itertools import count, chain
 

@@ -3,27 +3,9 @@ from utils import *
 from typing import List
 
 
-def read_input() -> List[int]:
-    return [int(x) for x in readlines('1_input.txt')]
-
-
 def count_increases(s: list, gap=1) -> int:
     return sum(s[i] > s[i-gap] for i in range(gap, len(s)))
 
 
-def star1():
-    lines = read_input()
-    print(count_increases(lines))
-
-
-print('Star 1:')
-star1()
-
-
-def star2():
-    lines = read_input()
-    print(count_increases(lines, gap=3))
-
-
-print('Star 2:')
-star2()
+print('Star 1:', count_increases(read('1_input.txt')))
+print('Star 2:', count_increases(read('1_input.txt'), 3))

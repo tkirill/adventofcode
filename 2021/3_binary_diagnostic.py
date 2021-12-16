@@ -1,3 +1,4 @@
+# https://adventofcode.com/2021/day/3
 from utils import *
 from collections import Counter
 

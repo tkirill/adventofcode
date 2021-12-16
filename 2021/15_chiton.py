@@ -1,3 +1,4 @@
+# https://adventofcode.com/2021/day/15
 from utils import *
 
 grid = [[int(x) for x in line] for line in readlines('15_input.txt')]

@@ -1,10 +1,10 @@
+# https://adventofcode.com/2021/day/12
 from utils import *
 from collections import defaultdict
 
 
 G = defaultdict(list)
-for line in readlines('12_input.txt'):
-    l, r = line.split('-')
+for l, r in read('12_input.txt', sep='-'):
     G[l].append(r)
     G[r].append(l)
 

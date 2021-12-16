@@ -1,10 +1,6 @@
+# https://adventofcode.com/2021/day/4
 from typing import List, Tuple
 from utils import *
-
-
-def read_input() -> Tuple[List[int], List[List[int]]]:
-    first_line, *blocks = splitfalse(readlines('4_input.txt'))
-    return parse1d(first_line[0]), [parse2d(b, None) for b in blocks]
 
 
 def bingo(board):
@@ -24,7 +20,7 @@ def bingo(board):
     return move
 
 
-numbers, boards = read_input()
+numbers, *boards = read('4_input.txt', sep=',| +')
 players, scores = [bingo(b) for b in boards], []
 for x in numbers:
     scores.extend(filter(None, (p(x) for p in players)))
