@@ -1,4 +1,7 @@
-def walk(s):
+from typing import Iterable
+
+
+def walk(s) -> Iterable[int]:
     floor = 0
     for c in s:
         floor += 1 if c == '(' else -1
