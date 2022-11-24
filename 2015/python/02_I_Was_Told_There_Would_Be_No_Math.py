@@ -1,4 +1,4 @@
-lines = [x.strip() for x in open('02_input.txt').readlines()]
+lines = [x.strip() for x in open('02_input.txt')]
 presents = [tuple(int(xx) for xx in x.split('x')) for x in lines]
 
 total = 0

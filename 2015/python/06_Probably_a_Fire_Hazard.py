@@ -20,7 +20,7 @@ for cmd in commands:
         field[region] = False
     else:
         field[region] ^= True
-print(field.sum())
+print('Star 1:', field.sum())
 
 field = np.full((1000, 1000), 0)
 for cmd in commands:
@@ -32,4 +32,4 @@ for cmd in commands:
         field[field < 0] = 0
     else:
         field[region] += 2
-print(field.sum())
+print('Star 2:', field.sum())
