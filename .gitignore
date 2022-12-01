@@ -21,3 +21,6 @@
 __pycache__/
 *.py[cod]
 *$py.class
+
+# aoc cookie
+session.cookie
