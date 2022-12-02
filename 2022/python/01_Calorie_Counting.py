@@ -1,9 +1,7 @@
-def read_input():
-    elfs = open('01_input.txt').read().strip().split('\n\n')
-    return [sum(map(int, x.split())) for x in elfs]
+from aoc import *
 
 
-elfs = read_input()
+elfs = [sum(x) for x in readblocks()]
 elfs.sort()
 
 print('Star 1:', elfs[-1])
