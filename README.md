@@ -1,9 +1,12 @@
 <!-- AOC TILES BEGIN -->
 <h1 align="center">
-  2022 - 2 ⭐
+  2022 - 4 ⭐
 </h1>
 <a href="2022/python/01_Calorie_Counting.py">
   <img src="Media/2022/01.png" width="161px">
+</a>
+<a href="2022/python/02_Rock_Paper_Scissors.py">
+  <img src="Media/2022/02.png" width="161px">
 </a>
 <h1 align="center">
   2021 - 50 ⭐
@@ -162,7 +165,7 @@
   <img src="Media/2020/25.png" width="161px">
 </a>
 <h1 align="center">
-  2015 - 44 ⭐
+  2015 - 48 ⭐
 </h1>
 <a href="2015/python/01_Not_Quite_Lisp.py">
   <img src="Media/2015/01.png" width="161px">
@@ -229,5 +232,11 @@
 </a>
 <a href="2015/python/22_Wizard_Simulator_20XX.py">
   <img src="Media/2015/22.png" width="161px">
+</a>
+<a href="2015/python/23_Opening_the_Turing_Lock.py">
+  <img src="Media/2015/23.png" width="161px">
+</a>
+<a href="2015/python/24_It_Hangs_in_the_Balance.py">
+  <img src="Media/2015/24.png" width="161px">
 </a>
 <!-- AOC TILES END -->
