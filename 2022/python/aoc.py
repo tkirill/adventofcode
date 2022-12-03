@@ -69,3 +69,11 @@ def readblocks(sep=r'\s', parse=int):
             tmp.append(parseline(l, sep=sep, parse=parse))
     result.append(tmp)
     return result
+
+
+#########################
+### Text manipulation ###
+#########################
+
+def asciipos(c):
+    return ord(c) - ord('a' if c.islower() else 'A')

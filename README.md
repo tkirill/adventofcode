@@ -8,6 +8,9 @@
 <a href="2022/python/02_Rock_Paper_Scissors.py">
   <img src="Media/2022/02.png" width="161px">
 </a>
+<a href="2022/python/03.py">
+  <img src="Media/2022/03.png" width="161px">
+</a>
 <h1 align="center">
   2021 - 50 ⭐
 </h1>
