@@ -242,4 +242,7 @@
 <a href="2015/python/24_It_Hangs_in_the_Balance.py">
   <img src="Media/2015/24.png" width="161px">
 </a>
+<a href="2015/python/25_Let_It_Snow.py">
+  <img src="Media/2015/25.png" width="161px">
+</a>
 <!-- AOC TILES END -->
