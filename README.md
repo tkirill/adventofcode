@@ -1,6 +1,6 @@
 <!-- AOC TILES BEGIN -->
 <h1 align="center">
-  2022 - 6 ⭐
+  2022 - 8 ⭐
 </h1>
 <a href="2022/python/01_Calorie_Counting.py">
   <img src="Media/2022/01.png" width="161px">
@@ -10,6 +10,9 @@
 </a>
 <a href="2022/python/03.py">
   <img src="Media/2022/03.png" width="161px">
+</a>
+<a href="2022/python/04_Camp_Cleanup.py">
+  <img src="Media/2022/04.png" width="161px">
 </a>
 <h1 align="center">
   2021 - 50 ⭐
