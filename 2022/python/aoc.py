@@ -1,7 +1,7 @@
 import __main__
 from pathlib import Path
 import re
-from typing import Any
+from typing import Any, Iterable
 
 
 ###################
@@ -51,7 +51,11 @@ def parseline(l: str, sep=r'\s', parse=int) -> str | list[str | Any]:
     if sep:
         parts = [parsevalue(s, parse=parse) for s in re.split(sep, l)]
         return parts[0] if len(parts) == 1 else parts
-    return parse(l)
+    return parsevalue(l, parse=parse)
+
+
+def parselines(lines: list[str], sep=r'\s', parse=int) -> list[str | list[str | Any] | Any]:
+    return [parseline(l, sep=sep, parse=parse) for l in lines]
 
 
 def read(sep=r'\s', parse=int) -> list[str | list[str | Any]]:
@@ -75,5 +79,25 @@ def readblocks(sep=r'\s', parse=int):
 ### Text manipulation ###
 #########################
 
+
 def asciipos(c):
     return ord(c) - ord('a' if c.islower() else 'A')
+
+
+########################
+### Sequence helpers ###
+########################
+
+
+def except_(it: Iterable, exclude):
+    for a in it:
+        if a != exclude:
+            yield a
+
+
+def columns(arr2d: list[list]):
+    tmp = [[] for _ in range(len(arr2d[0]))]
+    for row in arr2d:
+        for i, v in enumerate(row):
+            tmp[i].append(v)
+    return tmp
