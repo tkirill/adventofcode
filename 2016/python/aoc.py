@@ -3,6 +3,7 @@ from pathlib import Path
 import re
 from typing import Any, Iterable
 from dataclasses import dataclass
+from collections import deque
 
 
 ###################
@@ -33,6 +34,10 @@ def readlines() -> list[str]:
 
 def readsplit(sep='\s') -> list[list[str]]:
     return [re.split(sep, l) for l in readlines()]
+
+
+def allints(s: str) -> list[int]:
+    return [int(x.group()) for x in re.finditer(r'-?\d+', s)]
 
 
 ##################
@@ -96,12 +101,11 @@ def except_(it: Iterable, exclude):
             yield a
 
 
-def columns(arr2d: list[list]):
-    tmp = [[] for _ in range(len(arr2d[0]))]
-    for row in arr2d:
-        for i, v in enumerate(row):
-            tmp[i].append(v)
-    return tmp
+def circshift(arr: list, n: int) -> list:
+    tmp = deque(arr)
+    tmp.rotate(n)
+    return list(tmp)
+
 
 
 ##################
@@ -251,3 +255,32 @@ class Walker2d:
     
     def mdist(self):
         return self.pos.mdist()
+
+
+def columns(arr2d: list[list]):
+    tmp = [[] for _ in range(len(arr2d[0]))]
+    for row in arr2d:
+        for i, v in enumerate(row):
+            tmp[i].append(v)
+    return tmp
+
+
+def setcolumn(arr2d: list[list], x: int, col: list):
+    for y, v in enumerate(col):
+        arr2d[y][x] = v
+
+
+def filter2d(arr2d: list[list], val=None):
+    for y, row in enumerate(arr2d):
+        for x, act in enumerate(row):
+            if (val is None and bool(act)) or (val is not None and act == val):
+                yield x, y, act
+
+
+def count2d(arr2d: list[list], val=None):
+    return sum(1 for _ in filter2d(arr2d, val))
+
+
+def display2d(arr2d: list[list], true_val=None):
+    for row in arr2d:
+        print(''.join('#' if (true_val is not None and v==true_val) or (true_val is None and v) else '.' for v in row))
