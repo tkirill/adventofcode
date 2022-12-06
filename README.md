@@ -177,10 +177,13 @@
   <img src="Media/2020/25.png" width="161px">
 </a>
 <h1 align="center">
-  2016 - 2 ⭐
+  2016 - 4 ⭐
 </h1>
 <a href="2016/python/01_No_Time_for_a_Taxicab.py">
   <img src="Media/2016/01.png" width="161px">
+</a>
+<a href="2016/python/02_Bathroom_Security.py">
+  <img src="Media/2016/02.png" width="161px">
 </a>
 <h1 align="center">
   2015 - 50 ⭐

@@ -148,43 +148,65 @@ class ComplexWalker:
 class Vec2:
     x: int = 0
     y: int = 0
+    ydir: int = 1
 
     def __add__(self, other):
         if isinstance(other, Vec2):
-            return Vec2(self.x + other.x, self.y + other.y)
-        return Vec2(self.x + other, self.y + other)
+            return Vec2(self.x + other.x, self.y + other.y, self.ydir)
+        return Vec2(self.x + other, self.y + other, self.ydir)
 
     def __sub__(self, other):
         if isinstance(other, Vec2):
-            return Vec2(self.x - other.x, self.y - other.y)
-        return Vec2(self.x - other, self.y - other)
+            return Vec2(self.x - other.x, self.y - other.y, self.ydir)
+        return Vec2(self.x - other, self.y - other, self.ydir)
 
     def __mul__(self, other):
-        return Vec2(self.x * other, self.y * other)
+        return Vec2(self.x * other, self.y * other, self.ydir)
     
     def __truediv__(self, other):
-        return Vec2(self.x / other, self.y / other)
+        return Vec2(self.x / other, self.y / other, self.ydir)
     
     def __floordiv__(self, other):
-        return Vec2(self.x // other, self.y // other)
+        return Vec2(self.x // other, self.y // other, self.ydir)
     
     def __mod__(self, other):
-        return Vec2(self.x % other, self.y % other)
+        return Vec2(self.x % other, self.y % other, self.ydir)
     
     def __pow__(self, other):
-        return Vec2(self.x ** other, self.y ** other)
+        return Vec2(self.x ** other, self.y ** other, self.ydir)
     
     def __neg__(self):
-        return Vec2(-self.x, -self.y)
+        return Vec2(-self.x, -self.y, self.ydir)
     
     def __abs__(self):
-        return Vec2(abs(self.x), abs(self.y))
+        return Vec2(abs(self.x), abs(self.y), self.ydir)
     
     def rotatelr(self, r: str):
-        return Vec2(self.y, -self.x) if r == 'R' else Vec2(-self.y, self.x)
+        if self.ydir == 1:
+            return Vec2(self.y, -self.x, self.ydir) if r == 'R' else Vec2(-self.y, self.x, self.ydir)
+        return Vec2(-self.y, self.x, self.ydir) if r == 'R' else Vec2(self.y, -self.x, self.ydir)
     
     def mdist(self):
         return abs(self.x) + abs(self.y)
+    
+    def up(self):
+        return self + Vec2(0, self.ydir)
+    
+    def down(self):
+        return self - Vec2(0, self.ydir)
+    
+    def left(self):
+        return self - Vec2(1, 0)
+    
+    def right(self):
+        return self + Vec2(1, 0)
+    
+    def step(self, d: str):
+        match(d):
+            case 'L': return self.left()
+            case 'R': return self.right()
+            case 'U': return self.up()
+            case 'D': return self.down()
 
 
 DIRS = 'NESW'
