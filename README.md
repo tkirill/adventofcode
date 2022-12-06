@@ -177,13 +177,22 @@
   <img src="Media/2020/25.png" width="161px">
 </a>
 <h1 align="center">
-  2016 - 4 ⭐
+  2016 - 10 ⭐
 </h1>
 <a href="2016/python/01_No_Time_for_a_Taxicab.py">
   <img src="Media/2016/01.png" width="161px">
 </a>
 <a href="2016/python/02_Bathroom_Security.py">
   <img src="Media/2016/02.png" width="161px">
+</a>
+<a href="2016/python/03_Squares_With_Three_Sides.py">
+  <img src="Media/2016/03.png" width="161px">
+</a>
+<a href="2016/python/04_Security_Through_Obscurity.py">
+  <img src="Media/2016/04.png" width="161px">
+</a>
+<a href="2016/python/05_How_About_a_Nice_Game_of_Chess.py">
+  <img src="Media/2016/05.png" width="161px">
 </a>
 <h1 align="center">
   2015 - 50 ⭐
