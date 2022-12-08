@@ -1,9 +1,14 @@
 import __main__
 from pathlib import Path
 import re
-from typing import Any, Iterable
+from typing import Any, Iterable, TypeVar, Callable
 from dataclasses import dataclass
 from collections import deque
+from itertools import takewhile, chain
+
+
+TResult = TypeVar('TResult')
+TValue = TypeVar('TValue')
 
 
 ###################
@@ -106,6 +111,14 @@ def circshift(arr: list, n: int) -> list:
     tmp.rotate(n)
     return list(tmp)
 
+
+def callchain(func: Callable[[TResult], TResult], init: TResult, yield_init=False) -> Iterable[TResult]:
+    cur = init
+    if yield_init:
+        yield cur
+    while True:
+        cur = func(cur)
+        yield cur
 
 
 ##################
@@ -211,6 +224,104 @@ class Vec2:
             case 'R': return self.right()
             case 'U': return self.up()
             case 'D': return self.down()
+    
+    def beam_left(self):
+        return callchain(lambda x: x.left(), self)
+    
+    def beam_right(self):
+        return callchain(lambda x: x.right(), self)
+    
+    def beam_up(self):
+        return callchain(lambda x: x.up(), self)
+    
+    def beam_down(self):
+        return callchain(lambda x: x.down(), self)
+    
+    def beams4(self) -> list[Iterable]:
+        return [self.beam_up(), self.beam_right(), self.beam_down(), self.beam_left()]
+    
+    def is_in_field(self, w: int , h: int) -> bool:
+        return 0 <= self.x < w and 0 <= self.y < h
+
+
+class Field:
+
+    def __init__(self, arr: list[list[TValue]]):
+        self.arr = arr
+        self.w = len(arr[0])
+        self.h = len(arr)
+    
+    def rows(self) -> Iterable[Iterable[Vec2]]:
+        return (self.row(y) for y in range(self.h))
+    
+    def row(self, y: int) -> Iterable[Vec2]:
+        return (Vec2(x, y, -1) for x in range(self.w))
+    
+    def columns(self) -> Iterable[Iterable[Vec2]]:
+        return (self.column(x) for x in range(self.w))
+    
+    def column(self, x: int) -> Iterable[Vec2]:
+        return (Vec2(x, y, -1) for y in range(self.h))
+    
+    def rowsv(self) -> Iterable[Iterable[tuple[Vec2, TValue]]]:
+        return (self.rowv(y) for y in range(self.h))
+    
+    def rowv(self, y: int) -> Iterable[tuple[Vec2, TValue]]:
+        return self.getmany(self.row(y))
+    
+    def columnsv(self) -> Iterable[Iterable[tuple[Vec2, TValue]]]:
+        return (self.columnv(x) for x in range(self.w))
+    
+    def columnv(self, x: int) -> Iterable[tuple[Vec2, TValue]]:
+        return self.getmany(self.column(x))
+    
+    def beam_up(self, at: Vec2) -> Iterable[Vec2]:
+        return takewhile(self.contains, at.beam_up())
+    
+    def beam_down(self, at: Vec2) -> Iterable[Vec2]:
+        return takewhile(self.contains, at.beam_down())
+    
+    def beam_left(self, at: Vec2) -> Iterable[Vec2]:
+        return takewhile(self.contains, at.beam_left())
+    
+    def beam_right(self, at: Vec2) -> Iterable[Vec2]:
+        return takewhile(self.contains, at.beam_right())
+    
+    def beams4(self, at: Vec2) -> list[Iterable[Vec2]]:
+        return [self.beam_up(at), self.beam_right(at), self.beam_down(at), self.beam_left(at)]
+    
+    def beam_upv(self, at: Vec2) -> Iterable[Vec2]:
+        return self.getmany(self.beam_up(at))
+    
+    def beam_downv(self, at: Vec2) -> Iterable[Vec2]:
+        return self.getmany(self.beam_down(at))
+    
+    def beam_leftv(self, at: Vec2) -> Iterable[Vec2]:
+        return self.getmany(self.beam_left(at))
+    
+    def beam_rightv(self, at: Vec2) -> Iterable[Vec2]:
+        return self.getmany(self.beam_right(at))
+    
+    def beams4v(self, at: Vec2) -> list[Iterable[Vec2]]:
+        return [self.getmany(x) for x in self.beams4(at)]
+    
+    def getmany(self, keys: Iterable[Vec2]) -> Iterable[tuple[Vec2, TValue]]:
+        return ((pos, self[pos]) for pos in keys)
+    
+    def cells(self) -> Iterable[Vec2]:
+        return chain.from_iterable(self.rows())
+    
+    def cellsv(self) -> Iterable[tuple[Vec2, TValue]]:
+        return chain.from_iterable(self.rowsv())
+    
+    def contains(self, key: Vec2) -> bool:
+        return key in self
+    
+    def __getitem__(self, key: Vec2) -> TValue:
+        return self.arr[key.y][key.x]
+    
+    def __contains__(self, key: Vec2) -> bool:
+        return key.is_in_field(self.w, self.h)
 
 
 DIRS = 'NESW'
@@ -284,3 +395,9 @@ def count2d(arr2d: list[list], val=None):
 def display2d(arr2d: list[list], true_val=None):
     for row in arr2d:
         print(''.join('#' if (true_val is not None and v==true_val) or (true_val is None and v) else '.' for v in row))
+
+
+def cells(field: list[list]):
+    for y, row in enumerate(field):
+        for x, v in enumerate(row):
+            yield x, y, v
