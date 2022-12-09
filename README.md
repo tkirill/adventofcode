@@ -1,6 +1,6 @@
 <!-- AOC TILES BEGIN -->
 <h1 align="center">
-  2022 - 14 ⭐
+  2022 - 18 ⭐
 </h1>
 <a href="2022/python/01_Calorie_Counting.py">
   <img src="Media/2022/01.png" width="161px">
@@ -22,6 +22,12 @@
 </a>
 <a href="2022/python/07_No_Space_Left_On_Device.py">
   <img src="Media/2022/07.png" width="161px">
+</a>
+<a href="2022/python/08_Treetop_Tree_House.py">
+  <img src="Media/2022/08.png" width="161px">
+</a>
+<a href="2022/python/09.py">
+  <img src="Media/2022/09.png" width="161px">
 </a>
 <h1 align="center">
   2021 - 50 ⭐
@@ -180,7 +186,7 @@
   <img src="Media/2020/25.png" width="161px">
 </a>
 <h1 align="center">
-  2016 - 18 ⭐
+  2016 - 20 ⭐
 </h1>
 <a href="2016/python/01_No_Time_for_a_Taxicab.py">
   <img src="Media/2016/01.png" width="161px">
@@ -208,6 +214,12 @@
 </a>
 <a href="2016/python/09_Explosives_in_Cyberspace.py">
   <img src="Media/2016/09.png" width="161px">
+</a>
+<a href="2016/python/10_Balance_Bots.py">
+  <img src="Media/2016/10.png" width="161px">
+</a>
+<a href="2016/python/11_Radioisotope_Thermoelectric_Generators.py">
+  <img src="Media/2016/11.png" width="161px">
 </a>
 <h1 align="center">
   2015 - 50 ⭐
