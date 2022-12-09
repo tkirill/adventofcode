@@ -1,7 +1,8 @@
+from __future__ import annotations
 import __main__
 from pathlib import Path
 import re
-from typing import Any, Iterable, TypeVar, Callable
+from typing import Any, Iterable, TypeVar, Callable, Optional
 from dataclasses import dataclass
 from collections import deque
 from itertools import takewhile, chain
@@ -121,6 +122,19 @@ def callchain(func: Callable[[TResult], TResult], init: TResult, yield_init=Fals
         yield cur
 
 
+##########################
+### Arithmetic helpers ###
+##########################
+
+
+def sign(x: TValue) -> TValue:
+    if x > 0:
+        return 1
+    if x < 0:
+        return -1
+    return 0
+
+
 ##################
 ### 2d helpers ###
 ##################
@@ -198,46 +212,56 @@ class Vec2:
     def __abs__(self):
         return Vec2(abs(self.x), abs(self.y), self.ydir)
     
-    def rotatelr(self, r: str):
+    def rotatelr(self, r: str) -> Vec2:
         if self.ydir == 1:
             return Vec2(self.y, -self.x, self.ydir) if r == 'R' else Vec2(-self.y, self.x, self.ydir)
         return Vec2(-self.y, self.x, self.ydir) if r == 'R' else Vec2(self.y, -self.x, self.ydir)
     
-    def mdist(self):
-        return abs(self.x) + abs(self.y)
+    def mdist(self, other: Optional[Vec2]=None) -> int:
+        if other is None:
+            other = Vec2()
+        return abs(self.x-other.x) + abs(self.y-other.y)
     
-    def up(self):
+    def cdist(self, other: Optional[Vec2]=None) -> int:
+        if other is None:
+            other = Vec2()
+        return max(abs(self.x-other.x), abs(self.y-other.y))
+    
+    def sign(self) -> Vec2:
+        return Vec2(sign(self.x), sign(self.y))
+    
+    def up(self) -> Vec2:
         return self + Vec2(0, self.ydir)
     
-    def down(self):
+    def down(self) -> Vec2:
         return self - Vec2(0, self.ydir)
     
-    def left(self):
+    def left(self) -> Vec2:
         return self - Vec2(1, 0)
     
-    def right(self):
+    def right(self) -> Vec2:
         return self + Vec2(1, 0)
     
-    def step(self, d: str):
+    def step(self, d: str) -> Vec2:
         match(d):
             case 'L': return self.left()
             case 'R': return self.right()
             case 'U': return self.up()
             case 'D': return self.down()
     
-    def beam_left(self):
+    def beam_left(self) -> Iterable[Vec2]:
         return callchain(lambda x: x.left(), self)
     
-    def beam_right(self):
+    def beam_right(self) -> Iterable[Vec2]:
         return callchain(lambda x: x.right(), self)
     
-    def beam_up(self):
+    def beam_up(self) -> Iterable[Vec2]:
         return callchain(lambda x: x.up(), self)
     
-    def beam_down(self):
+    def beam_down(self) -> Iterable[Vec2]:
         return callchain(lambda x: x.down(), self)
     
-    def beams4(self) -> list[Iterable]:
+    def beams4(self) -> list[Iterable[Vec2]]:
         return [self.beam_up(), self.beam_right(), self.beam_down(), self.beam_left()]
     
     def is_in_field(self, w: int , h: int) -> bool:
