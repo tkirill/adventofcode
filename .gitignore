@@ -22,6 +22,9 @@ __pycache__/
 *.py[cod]
 *$py.class
 
-# aoc cookie
+# aoc tiles
 session.cookie
 aoc_tiles/.aoc_tiles_cache
+
+# inputs
+*.txt
