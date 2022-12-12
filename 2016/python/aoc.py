@@ -1,9 +1,15 @@
+from __future__ import annotations
 import __main__
 from pathlib import Path
 import re
-from typing import Any, Iterable
+from typing import Any, Iterable, TypeVar, Callable, Optional
 from dataclasses import dataclass
 from collections import deque
+from itertools import takewhile, chain
+
+
+TResult = TypeVar('TResult')
+TValue = TypeVar('TValue')
 
 
 ###################
@@ -89,6 +95,9 @@ def readblocks(sep=r'\s', parse=int):
 def asciipos(c):
     return ord(c) - ord('a' if c.islower() else 'A')
 
+def orddiff(a, b):
+    return ord(b) - ord(a)
+
 
 ########################
 ### Sequence helpers ###
@@ -106,6 +115,27 @@ def circshift(arr: list, n: int) -> list:
     tmp.rotate(n)
     return list(tmp)
 
+
+def callchain(func: Callable[[TResult], TResult], init: TResult, yield_init=False) -> Iterable[TResult]:
+    cur = init
+    if yield_init:
+        yield cur
+    while True:
+        cur = func(cur)
+        yield cur
+
+
+##########################
+### Arithmetic helpers ###
+##########################
+
+
+def sign(x: TValue) -> TValue:
+    if x > 0:
+        return 1
+    if x < 0:
+        return -1
+    return 0
 
 
 ##################
@@ -185,32 +215,212 @@ class Vec2:
     def __abs__(self):
         return Vec2(abs(self.x), abs(self.y), self.ydir)
     
-    def rotatelr(self, r: str):
+    def rotatelr(self, r: str) -> Vec2:
         if self.ydir == 1:
             return Vec2(self.y, -self.x, self.ydir) if r == 'R' else Vec2(-self.y, self.x, self.ydir)
         return Vec2(-self.y, self.x, self.ydir) if r == 'R' else Vec2(self.y, -self.x, self.ydir)
     
-    def mdist(self):
-        return abs(self.x) + abs(self.y)
+    def mdist(self, other: Optional[Vec2]=None) -> int:
+        if other is None:
+            other = Vec2()
+        return abs(self.x-other.x) + abs(self.y-other.y)
     
-    def up(self):
+    def cdist(self, other: Optional[Vec2]=None) -> int:
+        if other is None:
+            other = Vec2()
+        return max(abs(self.x-other.x), abs(self.y-other.y))
+    
+    def sign(self) -> Vec2:
+        return Vec2(sign(self.x), sign(self.y))
+    
+    def up(self) -> Vec2:
         return self + Vec2(0, self.ydir)
     
-    def down(self):
+    def down(self) -> Vec2:
         return self - Vec2(0, self.ydir)
     
-    def left(self):
+    def left(self) -> Vec2:
         return self - Vec2(1, 0)
     
-    def right(self):
+    def right(self) -> Vec2:
         return self + Vec2(1, 0)
     
-    def step(self, d: str):
+    def up_left(self) -> Vec2:
+        return self + Vec2(-1, self.ydir)
+    
+    def up_right(self) -> Vec2:
+        return self + Vec2(1, self.ydir)
+    
+    def down_left(self) -> Vec2:
+        return self + Vec2(-1, -self.ydir)
+    
+    def down_right(self) -> Vec2:
+        return self + Vec2(1, -self.dir)
+    
+    def step(self, d: str) -> Vec2:
         match(d):
             case 'L': return self.left()
             case 'R': return self.right()
             case 'U': return self.up()
             case 'D': return self.down()
+    
+    def beam_left(self) -> Iterable[Vec2]:
+        return callchain(lambda x: x.left(), self)
+    
+    def beam_right(self) -> Iterable[Vec2]:
+        return callchain(lambda x: x.right(), self)
+    
+    def beam_up(self) -> Iterable[Vec2]:
+        return callchain(lambda x: x.up(), self)
+    
+    def beam_down(self) -> Iterable[Vec2]:
+        return callchain(lambda x: x.down(), self)
+    
+    def beams4(self) -> list[Iterable[Vec2]]:
+        return [self.beam_up(), self.beam_right(), self.beam_down(), self.beam_left()]
+    
+    def is_in_field(self, w: int , h: int) -> bool:
+        return 0 <= self.x < w and 0 <= self.y < h
+    
+    def near4(self) -> Iterable[Vec2]:
+        yield self.up()
+        yield self.right()
+        yield self.down()
+        yield self.left()
+    
+    def near5(self) -> Iterable[Vec2]:
+        yield from self.near4()
+        yield self
+    
+    def near8(self) -> Iterable[Vec2]:
+        yield from self.near4()
+        yield self.up_left()
+        yield self.up_right()
+        yield self.down_right()
+        yield self.down_left()
+    
+    def near9(self) -> Iterable[Vec2]:
+        yield from self.near8()
+        yield self
+
+
+class Field:
+
+    def __init__(self, arr: list[list[TValue]]):
+        self.arr = arr
+        self.w = len(arr[0])
+        self.h = len(arr)
+    
+    def rows(self) -> Iterable[Iterable[Vec2]]:
+        return (self.row(y) for y in range(self.h))
+    
+    def row(self, y: int) -> Iterable[Vec2]:
+        return (Vec2(x, y, -1) for x in range(self.w))
+    
+    def columns(self) -> Iterable[Iterable[Vec2]]:
+        return (self.column(x) for x in range(self.w))
+    
+    def column(self, x: int) -> Iterable[Vec2]:
+        return (Vec2(x, y, -1) for y in range(self.h))
+    
+    def rowsv(self) -> Iterable[Iterable[tuple[Vec2, TValue]]]:
+        return (self.rowv(y) for y in range(self.h))
+    
+    def rowv(self, y: int) -> Iterable[tuple[Vec2, TValue]]:
+        return self.getmany(self.row(y))
+    
+    def columnsv(self) -> Iterable[Iterable[tuple[Vec2, TValue]]]:
+        return (self.columnv(x) for x in range(self.w))
+    
+    def columnv(self, x: int) -> Iterable[tuple[Vec2, TValue]]:
+        return self.getmany(self.column(x))
+    
+    def beam_up(self, at: Vec2) -> Iterable[Vec2]:
+        return takewhile(self.contains, at.beam_up())
+    
+    def beam_down(self, at: Vec2) -> Iterable[Vec2]:
+        return takewhile(self.contains, at.beam_down())
+    
+    def beam_left(self, at: Vec2) -> Iterable[Vec2]:
+        return takewhile(self.contains, at.beam_left())
+    
+    def beam_right(self, at: Vec2) -> Iterable[Vec2]:
+        return takewhile(self.contains, at.beam_right())
+    
+    def beams4(self, at: Vec2) -> list[Iterable[Vec2]]:
+        return [self.beam_up(at), self.beam_right(at), self.beam_down(at), self.beam_left(at)]
+    
+    def beam_upv(self, at: Vec2) -> Iterable[Vec2]:
+        return self.getmany(self.beam_up(at))
+    
+    def beam_downv(self, at: Vec2) -> Iterable[Vec2]:
+        return self.getmany(self.beam_down(at))
+    
+    def beam_leftv(self, at: Vec2) -> Iterable[Vec2]:
+        return self.getmany(self.beam_left(at))
+    
+    def beam_rightv(self, at: Vec2) -> Iterable[Vec2]:
+        return self.getmany(self.beam_right(at))
+    
+    def beams4v(self, at: Vec2) -> list[Iterable[Vec2]]:
+        return [self.getmany(x) for x in self.beams4(at)]
+    
+    def near4(self, at: Vec2) -> Iterable[Vec2]:
+        return filter(self.contains, at.near4())
+    
+    def near4v(self, at: Vec2) -> Iterable[Vec2]:
+        return self.getmany(self.near4((self.w, self.h)))
+    
+    def near5(self, at: Vec2) -> Iterable[Vec2]:
+        return filter(self.contains, at.near5())
+    
+    def near5v(self, at: Vec2) -> Iterable[Vec2]:
+        return self.getmany(self.near5((self.w, self.h)))
+    
+    def near9(self, at: Vec2) -> Iterable[Vec2]:
+        return filter(self.contains, at.near9())
+    
+    def near9v(self, at: Vec2) -> Iterable[Vec2]:
+        return self.getmany(self.near9((self.w, self.h)))
+    
+    def getmany(self, keys: Iterable[Vec2]) -> Iterable[tuple[Vec2, TValue]]:
+        return ((pos, self[pos]) for pos in keys)
+    
+    def cells(self) -> Iterable[Vec2]:
+        return chain.from_iterable(self.rows())
+    
+    def cellsv(self) -> Iterable[tuple[Vec2, TValue]]:
+        return chain.from_iterable(self.rowsv())
+    
+    def contains(self, key: Vec2) -> bool:
+        return key in self
+    
+    def bfs(self, start: Vec2, near: Callable[[Vec2], Iterable[Vec2]], nfilter: Optional[Callable[[Vec2, Vec2], bool]]=None):
+        q = [start]
+        visited = {start}
+        curdist = 0
+        while q:
+            qcopy = list(q)
+            q.clear()
+            for cur in qcopy:
+                yield cur, curdist
+                for n in near(cur):
+                    if n not in visited and (not nfilter or nfilter(cur, n)):
+                        q.append(n)
+                        visited.add(n)
+            curdist += 1
+    
+    def bfs4(self, start: Vec2, nfilter: Optional[Callable[[Vec2, Vec2], bool]]=None) -> Iterable[tuple[Vec2, int]]:
+        yield from self.bfs(start, self.near4, nfilter)
+
+    def __getitem__(self, key: Vec2) -> TValue:
+        return self.arr[key.y][key.x]
+    
+    def __setitem__(self, key: Vec2, value: TValue):
+        self.arr[key.y][key.x] = value
+    
+    def __contains__(self, key: Vec2) -> bool:
+        return key.is_in_field(self.w, self.h)
 
 
 DIRS = 'NESW'
@@ -284,3 +494,9 @@ def count2d(arr2d: list[list], val=None):
 def display2d(arr2d: list[list], true_val=None):
     for row in arr2d:
         print(''.join('#' if (true_val is not None and v==true_val) or (true_val is None and v) else '.' for v in row))
+
+
+def cells(field: list[list]):
+    for y, row in enumerate(field):
+        for x, v in enumerate(row):
+            yield x, y, v

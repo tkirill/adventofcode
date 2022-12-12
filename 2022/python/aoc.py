@@ -245,6 +245,18 @@ class Vec2:
     def right(self) -> Vec2:
         return self + Vec2(1, 0)
     
+    def up_left(self) -> Vec2:
+        return self + Vec2(-1, self.ydir)
+    
+    def up_right(self) -> Vec2:
+        return self + Vec2(1, self.ydir)
+    
+    def down_left(self) -> Vec2:
+        return self + Vec2(-1, -self.ydir)
+    
+    def down_right(self) -> Vec2:
+        return self + Vec2(1, -self.dir)
+    
     def step(self, d: str) -> Vec2:
         match(d):
             case 'L': return self.left()
@@ -270,14 +282,26 @@ class Vec2:
     def is_in_field(self, w: int , h: int) -> bool:
         return 0 <= self.x < w and 0 <= self.y < h
     
-    def near4(self, field_size: Optional[tuple[int, int]]=None) -> Iterable[Vec2]:
-        if field_size is None:
-            yield self.up()
-            yield self.right()
-            yield self.down()
-            yield self.left()
-        else:
-            yield from filter(lambda x: x.is_in_field(*field_size), self.near4())
+    def near4(self) -> Iterable[Vec2]:
+        yield self.up()
+        yield self.right()
+        yield self.down()
+        yield self.left()
+    
+    def near5(self) -> Iterable[Vec2]:
+        yield from self.near4()
+        yield self
+    
+    def near8(self) -> Iterable[Vec2]:
+        yield from self.near4()
+        yield self.up_left()
+        yield self.up_right()
+        yield self.down_right()
+        yield self.down_left()
+    
+    def near9(self) -> Iterable[Vec2]:
+        yield from self.near8()
+        yield self
 
 
 class Field:
@@ -342,10 +366,22 @@ class Field:
         return [self.getmany(x) for x in self.beams4(at)]
     
     def near4(self, at: Vec2) -> Iterable[Vec2]:
-        return at.near4((self.w, self.h))
+        return filter(self.contains, at.near4())
     
     def near4v(self, at: Vec2) -> Iterable[Vec2]:
         return self.getmany(self.near4((self.w, self.h)))
+    
+    def near5(self, at: Vec2) -> Iterable[Vec2]:
+        return filter(self.contains, at.near5())
+    
+    def near5v(self, at: Vec2) -> Iterable[Vec2]:
+        return self.getmany(self.near5((self.w, self.h)))
+    
+    def near9(self, at: Vec2) -> Iterable[Vec2]:
+        return filter(self.contains, at.near9())
+    
+    def near9v(self, at: Vec2) -> Iterable[Vec2]:
+        return self.getmany(self.near9((self.w, self.h)))
     
     def getmany(self, keys: Iterable[Vec2]) -> Iterable[tuple[Vec2, TValue]]:
         return ((pos, self[pos]) for pos in keys)
@@ -359,7 +395,7 @@ class Field:
     def contains(self, key: Vec2) -> bool:
         return key in self
     
-    def bfs4(self, start: Vec2, nfilter: Optional[Callable[[Vec2, Vec2], bool]]=None) -> Iterable[tuple[Vec2, int]]:
+    def bfs(self, start: Vec2, near: Callable[[Vec2], Iterable[Vec2]], nfilter: Optional[Callable[[Vec2, Vec2], bool]]=None):
         q = [start]
         visited = {start}
         curdist = 0
@@ -368,11 +404,14 @@ class Field:
             q.clear()
             for cur in qcopy:
                 yield cur, curdist
-                for n in self.near4(cur):
+                for n in near(cur):
                     if n not in visited and (not nfilter or nfilter(cur, n)):
                         q.append(n)
                         visited.add(n)
             curdist += 1
+    
+    def bfs4(self, start: Vec2, nfilter: Optional[Callable[[Vec2, Vec2], bool]]=None) -> Iterable[tuple[Vec2, int]]:
+        yield from self.bfs(start, self.near4, nfilter)
 
     def __getitem__(self, key: Vec2) -> TValue:
         return self.arr[key.y][key.x]
