@@ -20,7 +20,7 @@ KEYPAD2 = list(filter(None, '''
 instructions = read()
 
 
-cur = Vec2(1, 1, -1)
+cur = Vec2(1, 1)
 code = []
 for i in instructions:
     for c in i:
@@ -31,7 +31,7 @@ for i in instructions:
 print('Star 1:', ''.join(code))
 
 
-cur = Vec2(2, 2, -1)
+cur = Vec2(2, 2)
 code = []
 for i in instructions:
     for c in i:

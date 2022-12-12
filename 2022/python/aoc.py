@@ -182,7 +182,7 @@ class ComplexWalker:
 class Vec2:
     x: int = 0
     y: int = 0
-    ydir: int = 1
+    ydir: int = -1
 
     def __add__(self, other):
         if isinstance(other, Vec2):
@@ -302,6 +302,21 @@ class Vec2:
     def near9(self) -> Iterable[Vec2]:
         yield from self.near8()
         yield self
+    
+    def bfs(self, near: Callable[[Vec2], Iterable[Vec2]]):
+        q = [self]
+        visited = {self}
+        curdist = 0
+        while q:
+            qcopy = list(q)
+            q.clear()
+            for cur in qcopy:
+                yield cur, curdist
+                for n in near(cur):
+                    if n not in visited:
+                        q.append(n)
+                        visited.add(n)
+            curdist += 1
 
 
 class Field:
@@ -315,13 +330,13 @@ class Field:
         return (self.row(y) for y in range(self.h))
     
     def row(self, y: int) -> Iterable[Vec2]:
-        return (Vec2(x, y, -1) for x in range(self.w))
+        return (Vec2(x, y) for x in range(self.w))
     
     def columns(self) -> Iterable[Iterable[Vec2]]:
         return (self.column(x) for x in range(self.w))
     
     def column(self, x: int) -> Iterable[Vec2]:
-        return (Vec2(x, y, -1) for y in range(self.h))
+        return (Vec2(x, y) for y in range(self.h))
     
     def rowsv(self) -> Iterable[Iterable[tuple[Vec2, TValue]]]:
         return (self.rowv(y) for y in range(self.h))
@@ -395,23 +410,11 @@ class Field:
     def contains(self, key: Vec2) -> bool:
         return key in self
     
-    def bfs(self, start: Vec2, near: Callable[[Vec2], Iterable[Vec2]], nfilter: Optional[Callable[[Vec2, Vec2], bool]]=None):
-        q = [start]
-        visited = {start}
-        curdist = 0
-        while q:
-            qcopy = list(q)
-            q.clear()
-            for cur in qcopy:
-                yield cur, curdist
-                for n in near(cur):
-                    if n not in visited and (not nfilter or nfilter(cur, n)):
-                        q.append(n)
-                        visited.add(n)
-            curdist += 1
-    
     def bfs4(self, start: Vec2, nfilter: Optional[Callable[[Vec2, Vec2], bool]]=None) -> Iterable[tuple[Vec2, int]]:
-        yield from self.bfs(start, self.near4, nfilter)
+        def nearfunc(cur):
+            return filter(lambda n: nfilter(cur, n), self.near4(cur))
+        near = self.near4 if nfilter is None else nearfunc
+        yield from start.bfs(near)
 
     def __getitem__(self, key: Vec2) -> TValue:
         return self.arr[key.y][key.x]
