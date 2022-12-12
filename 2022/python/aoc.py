@@ -95,6 +95,9 @@ def readblocks(sep=r'\s', parse=int):
 def asciipos(c):
     return ord(c) - ord('a' if c.islower() else 'A')
 
+def orddiff(a, b):
+    return ord(b) - ord(a)
+
 
 ########################
 ### Sequence helpers ###
@@ -266,6 +269,15 @@ class Vec2:
     
     def is_in_field(self, w: int , h: int) -> bool:
         return 0 <= self.x < w and 0 <= self.y < h
+    
+    def near4(self, field_size: Optional[tuple[int, int]]=None) -> Iterable[Vec2]:
+        if field_size is None:
+            yield self.up()
+            yield self.right()
+            yield self.down()
+            yield self.left()
+        else:
+            yield from filter(lambda x: x.is_in_field(*field_size), self.near4())
 
 
 class Field:
@@ -329,6 +341,12 @@ class Field:
     def beams4v(self, at: Vec2) -> list[Iterable[Vec2]]:
         return [self.getmany(x) for x in self.beams4(at)]
     
+    def near4(self, at: Vec2) -> Iterable[Vec2]:
+        return at.near4((self.w, self.h))
+    
+    def near4v(self, at: Vec2) -> Iterable[Vec2]:
+        return self.getmany(self.near4((self.w, self.h)))
+    
     def getmany(self, keys: Iterable[Vec2]) -> Iterable[tuple[Vec2, TValue]]:
         return ((pos, self[pos]) for pos in keys)
     
@@ -341,8 +359,26 @@ class Field:
     def contains(self, key: Vec2) -> bool:
         return key in self
     
+    def bfs4(self, start: Vec2, nfilter: Optional[Callable[[Vec2, Vec2], bool]]=None) -> Iterable[tuple[Vec2, int]]:
+        q = [start]
+        visited = {start}
+        curdist = 0
+        while q:
+            qcopy = list(q)
+            q.clear()
+            for cur in qcopy:
+                yield cur, curdist
+                for n in self.near4(cur):
+                    if n not in visited and (not nfilter or nfilter(cur, n)):
+                        q.append(n)
+                        visited.add(n)
+            curdist += 1
+
     def __getitem__(self, key: Vec2) -> TValue:
         return self.arr[key.y][key.x]
+    
+    def __setitem__(self, key: Vec2, value: TValue):
+        self.arr[key.y][key.x] = value
     
     def __contains__(self, key: Vec2) -> bool:
         return key.is_in_field(self.w, self.h)
