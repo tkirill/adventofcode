@@ -1,6 +1,6 @@
 <!-- AOC TILES BEGIN -->
 <h1 align="center">
-  2022 - 22 ⭐
+  2022 - 24 ⭐
 </h1>
 <a href="2022/python/01_Calorie_Counting.py">
   <img src="Media/2022/01.png" width="161px">
@@ -32,8 +32,11 @@
 <a href="2022/python/10_cathode_ray_tube.py">
   <img src="Media/2022/10.png" width="161px">
 </a>
-<a href="2022/python/11.py">
+<a href="2022/python/11_Monkey_in_the_Middle.py">
   <img src="Media/2022/11.png" width="161px">
+</a>
+<a href="2022/python/12_Hill_Climbing_Algorithm.py">
+  <img src="Media/2022/12.png" width="161px">
 </a>
 <h1 align="center">
   2021 - 50 ⭐
@@ -192,7 +195,7 @@
   <img src="Media/2020/25.png" width="161px">
 </a>
 <h1 align="center">
-  2016 - 22 ⭐
+  2016 - 24 ⭐
 </h1>
 <a href="2016/python/01_No_Time_for_a_Taxicab.py">
   <img src="Media/2016/01.png" width="161px">
@@ -226,6 +229,9 @@
 </a>
 <a href="2016/python/11_Radioisotope_Thermoelectric_Generators.py">
   <img src="Media/2016/11.png" width="161px">
+</a>
+<a href="2016/python/12_Leonardoss_Monorail.py">
+  <img src="Media/2016/12.png" width="161px">
 </a>
 <h1 align="center">
   2015 - 50 ⭐
