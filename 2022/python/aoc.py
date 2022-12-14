@@ -2,7 +2,7 @@ from __future__ import annotations
 import __main__
 from pathlib import Path
 import re
-from typing import Any, Iterable, TypeVar, Callable, Optional
+from typing import Any, Iterable, TypeVar, Callable, Optional, NamedTuple
 from dataclasses import dataclass
 from collections import deque
 from itertools import takewhile, chain
@@ -178,8 +178,7 @@ class ComplexWalker:
         return abs(self.pos.real) + abs(self.pos.imag)
 
 
-@dataclass(frozen=True)
-class Vec2:
+class Vec2(NamedTuple):
     x: int = 0
     y: int = 0
     ydir: int = -1
@@ -255,7 +254,7 @@ class Vec2:
         return self + Vec2(-1, -self.ydir)
     
     def down_right(self) -> Vec2:
-        return self + Vec2(1, -self.dir)
+        return self + Vec2(1, -self.ydir)
     
     def step(self, d: str) -> Vec2:
         match(d):
@@ -282,6 +281,13 @@ class Vec2:
     def is_in_field(self, w: int , h: int) -> bool:
         return 0 <= self.x < w and 0 <= self.y < h
     
+    def line_to(self, other: Vec2) -> Iterable[Vec2]:
+        cur, delta = self, (other-self).sign()
+        while cur != other:
+            yield cur
+            cur += delta
+        yield cur
+    
     def near4(self) -> Iterable[Vec2]:
         yield self.up()
         yield self.right()
@@ -304,19 +310,7 @@ class Vec2:
         yield self
     
     def bfs(self, near: Callable[[Vec2], Iterable[Vec2]]):
-        q = [self]
-        visited = {self}
-        curdist = 0
-        while q:
-            qcopy = list(q)
-            q.clear()
-            for cur in qcopy:
-                yield cur, curdist
-                for n in near(cur):
-                    if n not in visited:
-                        q.append(n)
-                        visited.add(n)
-            curdist += 1
+        yield from bfs(self, near)
 
 
 class Field:
@@ -503,3 +497,22 @@ def cells(field: list[list]):
     for y, row in enumerate(field):
         for x, v in enumerate(row):
             yield x, y, v
+
+
+#############
+### Other ###
+#############
+def bfs(start: TValue, near: Callable[[TValue], Iterable[TValue]]):
+    q = [start]
+    visited = {start}
+    curdist = 0
+    while q:
+        qcopy = list(q)
+        q.clear()
+        for cur in qcopy:
+            yield cur, curdist
+            for n in near(cur):
+                if n not in visited:
+                    q.append(n)
+                    visited.add(n)
+        curdist += 1
