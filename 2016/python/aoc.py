@@ -304,19 +304,7 @@ class Vec2:
         yield self
     
     def bfs(self, near: Callable[[Vec2], Iterable[Vec2]]):
-        q = [self]
-        visited = {self}
-        curdist = 0
-        while q:
-            qcopy = list(q)
-            q.clear()
-            for cur in qcopy:
-                yield cur, curdist
-                for n in near(cur):
-                    if n not in visited:
-                        q.append(n)
-                        visited.add(n)
-            curdist += 1
+        yield from bfs(self, near)
 
 
 class Field:
@@ -503,3 +491,22 @@ def cells(field: list[list]):
     for y, row in enumerate(field):
         for x, v in enumerate(row):
             yield x, y, v
+
+
+#############
+### Other ###
+#############
+def bfs(start: TValue, near: Callable[[TValue], Iterable[TValue]]):
+    q = [start]
+    visited = {start}
+    curdist = 0
+    while q:
+        qcopy = list(q)
+        q.clear()
+        for cur in qcopy:
+            yield cur, curdist
+            for n in near(cur):
+                if n not in visited:
+                    q.append(n)
+                    visited.add(n)
+        curdist += 1

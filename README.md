@@ -1,6 +1,6 @@
 <!-- AOC TILES BEGIN -->
 <h1 align="center">
-  2022 - 24 ⭐
+  2022 - 36 ⭐
 </h1>
 <a href="2022/python/01_Calorie_Counting.py">
   <img src="Media/2022/01.png" width="161px">
@@ -37,6 +37,24 @@
 </a>
 <a href="2022/python/12_Hill_Climbing_Algorithm.py">
   <img src="Media/2022/12.png" width="161px">
+</a>
+<a href="2022/python/13_Distress_Signal.py">
+  <img src="Media/2022/13.png" width="161px">
+</a>
+<a href="2022/python/14_Regolith_Reservoir.py">
+  <img src="Media/2022/14.png" width="161px">
+</a>
+<a href="2022/python/15_Beacon_Exclusion_Zone.py">
+  <img src="Media/2022/15.png" width="161px">
+</a>
+<a href="2022/python/16_Proboscidea_Volcanium.py">
+  <img src="Media/2022/16.png" width="161px">
+</a>
+<a href="2022/python/17_Pyroclastic_Flow.py">
+  <img src="Media/2022/17.png" width="161px">
+</a>
+<a href="2022/python/18_Boiling_Boulders.py">
+  <img src="Media/2022/18.png" width="161px">
 </a>
 <h1 align="center">
   2021 - 50 ⭐
@@ -195,7 +213,7 @@
   <img src="Media/2020/25.png" width="161px">
 </a>
 <h1 align="center">
-  2016 - 24 ⭐
+  2016 - 32 ⭐
 </h1>
 <a href="2016/python/01_No_Time_for_a_Taxicab.py">
   <img src="Media/2016/01.png" width="161px">
@@ -232,6 +250,21 @@
 </a>
 <a href="2016/python/12_Leonardoss_Monorail.py">
   <img src="Media/2016/12.png" width="161px">
+</a>
+<a href="2016/python/13_Maze_of_Twisty_Little_Cubicles.py">
+  <img src="Media/2016/13.png" width="161px">
+</a>
+<a href="2016/python/14_One_Time_Pad.py">
+  <img src="Media/2016/14.png" width="161px">
+</a>
+<a href="2016/python/15_Timing_is_Everything.py">
+  <img src="Media/2016/15.png" width="161px">
+</a>
+<a href="2016/python/16_Dragon_Checksum.py">
+  <img src="Media/2016/16.png" width="161px">
+</a>
+<a href="2016/python/17_Two_Steps_Forward.py">
+  <img src="Media/2016/17.png" width="161px">
 </a>
 <h1 align="center">
   2015 - 50 ⭐
