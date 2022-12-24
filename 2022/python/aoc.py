@@ -203,6 +203,8 @@ class Vec2(NamedTuple):
         return Vec2(self.x // other, self.y // other, self.ydir)
     
     def __mod__(self, other):
+        if isinstance(other, Vec2):
+            return Vec2(self.x % other.x, self.y % other.y, self.ydir)
         return Vec2(self.x % other, self.y % other, self.ydir)
     
     def __pow__(self, other):
@@ -258,10 +260,10 @@ class Vec2(NamedTuple):
     
     def step(self, d: str) -> Vec2:
         match(d):
-            case 'L': return self.left()
-            case 'R': return self.right()
-            case 'U': return self.up()
-            case 'D': return self.down()
+            case 'L' | 'W': return self.left()
+            case 'R' | 'E': return self.right()
+            case 'U' | 'N': return self.up()
+            case 'D' | 'S': return self.down()
     
     def beam_left(self) -> Iterable[Vec2]:
         return callchain(lambda x: x.left(), self)
@@ -309,8 +311,67 @@ class Vec2(NamedTuple):
         yield from self.near8()
         yield self
     
+    def side_up(self) -> Iterable[Vec2]:
+        yield self.up_left()
+        yield self.up()
+        yield self.up_right()
+    
+    def side_right(self) -> Iterable[Vec2]:
+        yield self.up_right()
+        yield self.right()
+        yield self.down_right()
+    
+    def side_down(self) -> Iterable[Vec2]:
+        yield self.down_left()
+        yield self.down()
+        yield self.down_right()
+    
+    def side_left(self) -> Iterable[Vec2]:
+        yield self.down_left()
+        yield self.left()
+        yield self.up_left()
+    
+    def side(self, side: str) -> Iterable[Vec2]:
+        match side:
+            case 'U' | 'N': return self.side_up()
+            case 'R' | 'E': return self.side_right()
+            case 'D' | 'S': return self.side_down()
+            case 'L' | 'W': return self.side_left()
+    
     def bfs(self, near: Callable[[Vec2], Iterable[Vec2]]):
         yield from bfs(self, near)
+
+
+class Vec3(NamedTuple):
+    x: int = 0
+    y: int = 0
+    z: int = 0
+
+    def up(self):
+        return Vec3(self.x, self.y-1, self.z)
+    
+    def down(self):
+        return Vec3(self.x, self.y+1, self.z)
+    
+    def left(self):
+        return Vec3(self.x-1, self.y, self.z)
+    
+    def right(self):
+        return Vec3(self.x+1, self.y, self.z)
+    
+    def forward(self):
+        return Vec3(self.x, self.y, self.z+1)
+    
+    def backward(self):
+        return Vec3(self.x, self.y, self.z-1)
+    
+    def near6(self):
+        yield self.up()
+        yield self.down()
+        yield self.left()
+        yield self.right()
+        yield self.forward()
+        yield self.backward()
 
 
 class Field:
