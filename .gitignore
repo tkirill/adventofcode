@@ -22,6 +22,9 @@ __pycache__/
 *.py[cod]
 *$py.class
 
+# vscode
+.vscode
+
 # aoc tiles
 session.cookie
 aoc_tiles/.aoc_tiles_cache
