@@ -1,6 +1,12 @@
 <!-- AOC TILES BEGIN -->
 <h1 align="center">
-  2022 - 36 ⭐
+  2023 - 2 ⭐
+</h1>
+<a href="2023/python/01_Trebuchet.py">
+  <img src="Media/2023/01.png" width="161px">
+</a>
+<h1 align="center">
+  2022 - 48 ⭐
 </h1>
 <a href="2022/python/01_Calorie_Counting.py">
   <img src="Media/2022/01.png" width="161px">
@@ -55,6 +61,27 @@
 </a>
 <a href="2022/python/18_Boiling_Boulders.py">
   <img src="Media/2022/18.png" width="161px">
+</a>
+<a href="2022/python/19_Not_Enough_Minerals.py">
+  <img src="Media/2022/19.png" width="161px">
+</a>
+<a href="2022/python/20_Grove_Positioning_System.py">
+  <img src="Media/2022/20.png" width="161px">
+</a>
+<a href="2022/python/21.py">
+  <img src="Media/2022/21.png" width="161px">
+</a>
+<a href="2022/python/22.py">
+  <img src="Media/2022/22.png" width="161px">
+</a>
+<a href="2022/python/23_Unstable_Diffusion.py">
+  <img src="Media/2022/23.png" width="161px">
+</a>
+<a href="2022/python/24_Blizzard_Basin.py">
+  <img src="Media/2022/24.png" width="161px">
+</a>
+<a href="2022/python/25_Full_of_Hot_Air.py">
+  <img src="Media/2022/25.png" width="161px">
 </a>
 <h1 align="center">
   2021 - 50 ⭐
