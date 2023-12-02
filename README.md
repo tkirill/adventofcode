@@ -1,9 +1,12 @@
 <!-- AOC TILES BEGIN -->
 <h1 align="center">
-  2023 - 2 ⭐
+  2023 - 4 ⭐
 </h1>
 <a href="2023/python/01_Trebuchet.py">
   <img src="Media/2023/01.png" width="161px">
+</a>
+<a href="2023/python/02_Cube_Conundrum.py">
+  <img src="Media/2023/02.png" width="161px">
 </a>
 <h1 align="center">
   2022 - 48 ⭐
