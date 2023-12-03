@@ -3,28 +3,20 @@ import re
 from collections import defaultdict
 
 
-lines = readlines()
+schematic = Field(readlines())
 total = 0
 gears = defaultdict(list)
 
 
-def find_parts(row, match):
-    for r in range(row - 1, row + 2):
-        for c in range(match.start() - 1, match.end() + 1):
-            if 0 <= r < len(lines) and 0 <= c < len(lines[row]):
-                v = lines[r][c]
-                if not v.isdigit() and v != ".":
-                    yield r, c, v
-
-
-for row, line in enumerate(lines):
-    for match in re.finditer(r"\d+", line):
+for row, s in enumerate(schematic.arr):
+    for m in re.finditer(r'\d+', s):
+        number = int(m.group(0))
         has_part = False
-        number = int(match.group(0))
-        for r, c, v in find_parts(row, match):
-            has_part = True
-            if v == "*":
-                gears[(r, c)].append(number)
+        for pos, v in schematic.near8v(Rectangle.ylr(row, m.start(), m.end()-1)):
+            if not v.isdigit() and v != '.':
+                has_part = True
+            if v == '*':
+                gears[pos].append(number)
         if has_part:
             total += number
 print("Star 1:", total)

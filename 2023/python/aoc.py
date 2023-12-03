@@ -3,9 +3,10 @@ import __main__
 from pathlib import Path
 import re
 from typing import Any, Iterable, TypeVar, Callable, Optional, NamedTuple
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from collections import deque
 from itertools import takewhile, chain
+import abc
 
 
 TResult = TypeVar('TResult')
@@ -374,6 +375,33 @@ class Vec3(NamedTuple):
         yield self.backward()
 
 
+class NearABC(abc.ABC):
+
+    def near8(self):
+        ...
+
+
+@dataclass
+class Rectangle(NearABC):
+    top_left: Vec2
+    bottom_right: Vec2
+    width: int | float = field(init=False)
+    height: int | float = field(init=False)
+
+    def near8(self) -> Iterable[Vec2]:
+        for y in range(self.top_left.y-1, self.bottom_right.y + 2):
+            for x in range(self.top_left.x-1, self.bottom_right.x + 2):
+                yield Vec2(x, y)
+    
+    @classmethod
+    def xywh(cls, x: int, y: int, w: int, h: int) -> Rectangle:
+        return Rectangle(Vec2(x, y), Vec2(x + w, y + h))
+    
+    @classmethod
+    def ylr(cls, y: int, l: int, r: int) -> Rectangle:
+        return Rectangle(Vec2(l, y), Vec2(r, y))
+
+
 class Field:
 
     def __init__(self, arr: list[list[TValue]]):
@@ -446,6 +474,12 @@ class Field:
     
     def near5v(self, at: Vec2) -> Iterable[Vec2]:
         return self.getmany(self.near5((self.w, self.h)))
+    
+    def near8(self, at: NearABC) -> Iterable[Vec2]:
+        return filter(self.contains, at.near8())
+    
+    def near8v(self, at: NearABC) -> Iterable[tuple[Vec2, TValue]]:
+        return self.getmany(self.near8(at))
     
     def near9(self, at: Vec2) -> Iterable[Vec2]:
         return filter(self.contains, at.near9())
