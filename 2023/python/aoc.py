@@ -402,6 +402,36 @@ class Rectangle(NearABC):
         return Rectangle(Vec2(l, y), Vec2(r, y))
 
 
+@dataclass(frozen=True, order=True)
+class Range:
+    start: int
+    end: int
+    
+    def intersect(self, other: Range) -> Range:
+        return Range(max(self.start, other.start), min(self.end, other.end))
+    
+    def difference_many(self, others: Iterable[Range]) -> Iterable[Range]:
+        cur = self.start
+        for o in sorted(others):
+            if o.start >= self.end:
+                break
+            if o.start > cur:
+                yield Range(cur, o.start)
+            cur = max(cur, o.end)
+        if self.start <= cur < self.end:
+            yield Range(cur, self.end)
+    
+    def shift(self, delta: int) -> Range:
+        return Range(self.start + delta, self.end + delta)
+    
+    def __len__(self):
+        return max(self.end - self.start, 0)
+
+    @classmethod
+    def lw(cls, l, w) -> Range:
+        return Range(l, l+w)
+
+
 class Field:
 
     def __init__(self, arr: list[list[TValue]]):
