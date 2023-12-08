@@ -3,7 +3,7 @@ import itertools as itls
 import math
 
 
-moves, map = readblocks(sep='[ =,()]+')
+moves, map = readblocks(sep="[ =,()]+")
 moves = moves[0]
 adj = {}
 for src, dst1, dst2, _ in map:
