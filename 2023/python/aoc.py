@@ -197,6 +197,9 @@ class Vec2(NamedTuple):
     def __mul__(self, other):
         return Vec2(self.x * other, self.y * other, self.ydir)
     
+    def __rmul__(self, other):
+        return Vec2(self.x * other, self.y * other, self.ydir)
+    
     def __truediv__(self, other):
         return Vec2(self.x / other, self.y / other, self.ydir)
     
