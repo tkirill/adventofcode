@@ -1,6 +1,6 @@
 <!-- AOC TILES BEGIN -->
 <h1 align="center">
-  2023 - 22 ⭐
+  2023 - 24 ⭐
 </h1>
 <a href="2023/python/01_Trebuchet.py">
   <img src="Media/2023/01.png" width="161px">
@@ -34,6 +34,9 @@
 </a>
 <a href="2023/python/11_Cosmic_Expansion.py">
   <img src="Media/2023/11.png" width="161px">
+</a>
+<a href="2023/python/12_Hot_Springs.py">
+  <img src="Media/2023/12.png" width="161px">
 </a>
 <h1 align="center">
   2022 - 48 ⭐
