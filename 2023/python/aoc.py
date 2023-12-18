@@ -126,6 +126,24 @@ def callchain(func: Callable[[TResult], TResult], init: TResult, yield_init=Fals
         yield cur
 
 
+def scanl(func: Callable[[TResult, TValue], TResult], init: TResult, values: Iterable[TValue]) -> Iterable[TResult]:
+    yield init
+    cur = init
+    for s in values:
+        cur = func(cur, s)
+        yield cur
+
+
+def min_and_max(s: Iterable[TValue]) -> tuple[TValue, TValue]:
+    it = iter(s)
+    vmin = next(it, None)
+    vmax = vmin
+    for v in it:
+        vmin = min(vmin, v)
+        vmax = max(vmax, v)
+    return vmin, vmax
+
+
 ##########################
 ### Arithmetic helpers ###
 ##########################
@@ -238,17 +256,17 @@ class Vec2(NamedTuple):
     def sign(self) -> Vec2:
         return Vec2(sign(self.x), sign(self.y))
     
-    def up(self) -> Vec2:
-        return self + Vec2(0, self.ydir)
+    def up(self, dist=1) -> Vec2:
+        return self + Vec2(0, self.ydir * dist)
     
-    def down(self) -> Vec2:
-        return self - Vec2(0, self.ydir)
+    def down(self, dist=1) -> Vec2:
+        return self - Vec2(0, self.ydir * dist)
     
-    def left(self) -> Vec2:
-        return self - Vec2(1, 0)
+    def left(self, dist=1) -> Vec2:
+        return self - Vec2(dist, 0)
     
-    def right(self) -> Vec2:
-        return self + Vec2(1, 0)
+    def right(self, dist=1) -> Vec2:
+        return self + Vec2(dist, 0)
     
     def up_left(self) -> Vec2:
         return self + Vec2(-1, self.ydir)
@@ -262,12 +280,12 @@ class Vec2(NamedTuple):
     def down_right(self) -> Vec2:
         return self + Vec2(1, -self.ydir)
     
-    def step(self, d: str) -> Vec2:
-        match(d):
-            case 'L' | 'W': return self.left()
-            case 'R' | 'E': return self.right()
-            case 'U' | 'N': return self.up()
-            case 'D' | 'S': return self.down()
+    def step(self, dir: str, dist=1) -> Vec2:
+        match(dir):
+            case 'L' | 'W': return self.left(dist)
+            case 'R' | 'E': return self.right(dist)
+            case 'U' | 'N': return self.up(dist)
+            case 'D' | 'S': return self.down(dist)
     
     def beam_left(self) -> Iterable[Vec2]:
         return callchain(lambda x: x.left(), self)
