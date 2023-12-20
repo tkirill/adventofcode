@@ -446,7 +446,10 @@ class Range:
         return Range(self.start + delta, self.end + delta)
     
     def __len__(self):
-        return max(self.end - self.start, 0)
+        return max(self.end - self.start + 1, 0)
+    
+    def __contains__(self, x: int) -> bool:
+        return self.start <= x <= self.end
 
     @classmethod
     def lw(cls, l, w) -> Range:
