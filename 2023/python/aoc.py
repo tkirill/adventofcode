@@ -521,13 +521,13 @@ class Field:
         return filter(self.contains, at.near4())
     
     def near4v(self, at: Vec2) -> Iterable[Vec2]:
-        return self.getmany(self.near4((self.w, self.h)))
+        return self.getmany(self.near4(at))
     
     def near5(self, at: Vec2) -> Iterable[Vec2]:
         return filter(self.contains, at.near5())
     
     def near5v(self, at: Vec2) -> Iterable[Vec2]:
-        return self.getmany(self.near5((self.w, self.h)))
+        return self.getmany(self.near5(at))
     
     def near8(self, at: NearABC) -> Iterable[Vec2]:
         return filter(self.contains, at.near8())
