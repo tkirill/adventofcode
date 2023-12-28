@@ -558,6 +558,9 @@ class Field:
             return filter(lambda n: nfilter(cur, n), self.near4(cur))
         near = self.near4 if nfilter is None else nearfunc
         yield from start.bfs(near)
+    
+    def transpose(self) -> Field:
+        return Field([[v for _, v in c] for c in self.columnsv()])
 
     def __getitem__(self, key: Vec2) -> TValue:
         return self.arr[key.y][key.x]
