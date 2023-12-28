@@ -2,10 +2,11 @@ from __future__ import annotations
 import __main__
 from pathlib import Path
 import re
-from typing import Any, Iterable, TypeVar, Callable, Optional, NamedTuple
+from typing import Any, Iterable, TypeVar, Callable, Optional, NamedTuple, Hashable
 from dataclasses import dataclass, field
 from collections import deque
 from itertools import takewhile, chain
+from more_itertools import nth
 import abc
 
 
@@ -142,6 +143,33 @@ def min_and_max(s: Iterable[TValue]) -> tuple[TValue, TValue]:
         vmin = min(vmin, v)
         vmax = max(vmax, v)
     return vmin, vmax
+
+
+def detect_cycle(items: Iterable[Hashable]) -> tuple[int, int]:
+    mem = {}
+    pos = 0
+    for cur in items:
+        prev = mem.setdefault(cur, pos)
+        if prev != pos:
+            return prev, pos-prev
+        pos += 1
+
+
+def nth_with_cycle(items: Iterable[TValue], at: int) -> TValue:
+    it = iter(items)
+    mem = {}
+    pos = 0
+    for cur in it:
+        if pos == at:
+            return cur
+        prev = mem.setdefault(cur, pos)
+        if prev != pos:
+            start, size = prev, pos-prev
+            adjusted = (at-start) % size
+            if not adjusted:
+                return cur
+            return nth(it, adjusted-1)
+        pos += 1
 
 
 ##########################
