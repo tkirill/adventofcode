@@ -1,6 +1,6 @@
 <!-- AOC TILES BEGIN -->
 <h1 align="center">
-  2023 - 24 ⭐
+  2023 - 42 ⭐
 </h1>
 <a href="2023/python/01_Trebuchet.py">
   <img src="Media/2023/01.png" width="161px">
@@ -37,6 +37,33 @@
 </a>
 <a href="2023/python/12_Hot_Springs.py">
   <img src="Media/2023/12.png" width="161px">
+</a>
+<a href="2023/python/13_Point_of_Incidence.py">
+  <img src="Media/2023/13.png" width="161px">
+</a>
+<a href="2023/python/14_Parabolic_Reflector_Dish.py">
+  <img src="Media/2023/14.png" width="161px">
+</a>
+<a href="2023/python/15_Lens_Library.py">
+  <img src="Media/2023/15.png" width="161px">
+</a>
+<a href="2023/python/16_The_Floor_Will_Be_Lava.py">
+  <img src="Media/2023/16.png" width="161px">
+</a>
+<a href="2023/python/17_Clumsy_Crucible.py">
+  <img src="Media/2023/17.png" width="161px">
+</a>
+<a href="2023/python/18_Lavaduct_Lagoon.py">
+  <img src="Media/2023/18.png" width="161px">
+</a>
+<a href="2023/python/19_Aplenty.py">
+  <img src="Media/2023/19.png" width="161px">
+</a>
+<a href="2023/python/20_Pulse_Propagation.py">
+  <img src="Media/2023/20.png" width="161px">
+</a>
+<a href="2023/python/21_Step_Counter.py">
+  <img src="Media/2023/21.png" width="161px">
 </a>
 <h1 align="center">
   2022 - 48 ⭐
