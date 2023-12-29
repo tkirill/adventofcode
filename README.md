@@ -66,7 +66,7 @@
   <img src="Media/2023/21.png" width="161px">
 </a>
 <h1 align="center">
-  2022 - 48 ⭐
+  2022 - 50 ⭐
 </h1>
 <a href="2022/python/01_Calorie_Counting.py">
   <img src="Media/2022/01.png" width="161px">
