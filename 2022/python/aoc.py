@@ -29,7 +29,7 @@ def get_input_filename() -> Path:
 def readraw():
     input_filename = get_input_filename()
     with input_filename.open() as f:
-        return f.read().strip()
+        return f.read()
 
 
 def readlines() -> list[str]:
