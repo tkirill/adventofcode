@@ -8,6 +8,7 @@ from collections import deque
 from itertools import takewhile, chain
 from more_itertools import nth
 import abc
+from pqdict import pqdict
 
 
 TResult = TypeVar('TResult')
@@ -696,3 +697,27 @@ def bfs(start: TValue, near: Callable[[TValue], Iterable[TValue]]):
                     q.append(n)
                     visited.add(n)
         curdist += 1
+
+
+def dijkstra(
+    start: TValue | Iterable[TValue],
+    near: Callable[[TValue], Iterable[tuple[TValue, int]]],
+):
+    if isinstance(start, Iterable):
+        dist = {s: 0 for s in start}
+        prev = {s: None for s in start}
+    else:
+        dist = {start: 0}
+        prev = {start: None}
+    q = pqdict(dist)
+
+    while q:
+        cur = q.pop()
+        for n, ndist in near(cur):
+            alt = dist[cur] + ndist
+            ex = dist.get(n)
+            if ex is None or ex > alt:
+                dist[n] = alt
+                q[n] = alt
+                prev[n] = cur
+    return dist, prev
