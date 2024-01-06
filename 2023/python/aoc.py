@@ -423,6 +423,11 @@ class Vec3(NamedTuple):
         yield self.right()
         yield self.forward()
         yield self.backward()
+    
+    def __sub__(self, other: Vec3 | int) -> Vec3:
+        if isinstance(other, Vec3):
+            return Vec3(self.x - other.x, self.y - other.y, self.z - other.z)
+        return Vec3(self.x - other, self.y - other, self.z - other)
 
 
 class NearABC(abc.ABC):
