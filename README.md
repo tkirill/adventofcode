@@ -1,6 +1,6 @@
 <!-- AOC TILES BEGIN -->
 <h1 align="center">
-  2023 - 44 ⭐
+  2023 - 50 ⭐
 </h1>
 <a href="2023/python/01_Trebuchet.py">
   <img src="Media/2023/01.png" width="161px">
@@ -67,6 +67,15 @@
 </a>
 <a href="2023/python/22_Sand_Slabs.py">
   <img src="Media/2023/22.png" width="161px">
+</a>
+<a href="2023/python/23_A_Long_Walk.py">
+  <img src="Media/2023/23.png" width="161px">
+</a>
+<a href="2023/python/24_Never_Tell_Me_The_Odds.py">
+  <img src="Media/2023/24.png" width="161px">
+</a>
+<a href="2023/python/25_Snowverload.py">
+  <img src="Media/2023/25.png" width="161px">
 </a>
 <h1 align="center">
   2022 - 50 ⭐
