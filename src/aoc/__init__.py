@@ -1,1 +1,1 @@
-__all__ = ['io', 'vec']
+__all__ = ['io', 'primitives', 'grid', 'algo']
