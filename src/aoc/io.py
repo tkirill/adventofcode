@@ -25,7 +25,7 @@ def readlines() -> list[str]:
         return [l.strip() for l in f]
 
 
-def readsplit(sep='\s') -> list[list[str]]:
+def readsplit(sep=r'\s') -> list[list[str]]:
     return [re.split(sep, l) for l in readlines()]
 
 
@@ -40,20 +40,20 @@ def parsevalue[TValue](s: str, parse: Callable[[str], TValue]=int) -> str | TVal
         return s
 
 
-def parseline[TValue](l: str, sep: str=r'\s', parse: Callable[[str], TValue]=int) -> str | TValue | list[str | TValue]:
+def parseline[TValue](l: str, sep: str=r'\s', parse: Callable[[str], TValue]=int, skip_empty=True) -> str | TValue | list[str | TValue]:
     l = l.strip()
     if sep:
-        parts = [parsevalue(s, parse=parse) for s in re.split(sep, l)]
+        parts = [parsevalue(s, parse=parse) for s in re.split(sep, l) if s or not skip_empty]
         return parts[0] if len(parts) == 1 else parts
     return parsevalue(l, parse=parse)
 
 
-def parselines[TValue](lines: list[str], sep: str=r'\s', parse: Callable[[str], TValue]=int) -> list[str | TValue | list[str | TValue]]:
-    return [parseline(l, sep, parse) for l in lines]
+def parselines[TValue](lines: list[str], sep: str=r'\s', parse: Callable[[str], TValue]=int, skip_empty=True) -> list[str | TValue | list[str | TValue]]:
+    return [parseline(l, sep, parse, skip_empty) for l in lines]
 
 
-def read[TValue](sep: str=r'\s', parse: Callable[[str], TValue]=int) -> list[str | TValue | list[str | TValue]]:
-    return parselines(readlines(), sep, parse)
+def read[TValue](sep: str=r'\s', parse: Callable[[str], TValue]=int, skip_empty=True) -> list[str | TValue | list[str | TValue]]:
+    return parselines(readlines(), sep, parse, skip_empty)
 
 
 def readblocks[TValue](sep: str=r'\s', parse: Callable[[str], TValue]=int):
