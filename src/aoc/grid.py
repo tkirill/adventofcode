@@ -14,6 +14,12 @@ class Grid2d:
 
     delta_right: Vec2 = Vec2(1, 0)
     delta_up: Vec2 = Vec2(0, -1)
+    delta_left: Vec2 = dataclasses.field(init=False)
+    delta_down: Vec2 = dataclasses.field(init=False)
+
+    def __post_init__(self):
+        self.delta_left = -self.delta_right
+        self.delta_down = - self.delta_up
 
     def up(self, p: Vec2, d: int=1) -> Vec2:
         return p + self.delta_up * d
@@ -46,61 +52,37 @@ class Grid2d:
             case 'U' | 'N': return self.up(p, dist)
             case 'D' | 'S': return self.down(p, dist)
     
-    def beam_up(self, p: Vec2, emit_start: bool=True) -> Iterable[Vec2]:
+    def beam(self, p: Vec2, delta: Vec2, emit_start: bool=True) -> Vec2:
         if emit_start:
             yield p
         while True:
-            p = self.up(p)
+            p = p + delta
             yield p
+
+    
+    def beam_up(self, p: Vec2, emit_start: bool=True) -> Iterable[Vec2]:
+        return self.beam(p, self.delta_up, emit_start)
     
     def beam_up_left(self, p: Vec2, emit_start: bool=True) -> Iterable[Vec2]:
-        if emit_start:
-            yield p
-        while True:
-            p = self.up_left(p)
-            yield p
+        return self.beam(p, self.delta_up + self.delta_left, emit_start)
     
     def beam_up_right(self, p: Vec2, emit_start: bool=True) -> Iterable[Vec2]:
-        if emit_start:
-            yield p
-        while True:
-            p = self.up_right(p)
-            yield p
+        return self.beam(p, self.delta_up + self.delta_right, emit_start)
     
     def beam_down(self, p: Vec2, emit_start: bool=True) -> Iterable[Vec2]:
-        if emit_start:
-            yield p
-        while True:
-            p = self.down(p)
-            yield p
+        return self.beam(p, self.delta_down, emit_start)
     
     def beam_down_left(self, p: Vec2, emit_start: bool=True) -> Iterable[Vec2]:
-        if emit_start:
-            yield p
-        while True:
-            p = self.down_left(p)
-            yield p
+        return self.beam(p, self.delta_down + self.delta_left, emit_start)
     
     def beam_down_right(self, p: Vec2, emit_start: bool=True) -> Iterable[Vec2]:
-        if emit_start:
-            yield p
-        while True:
-            p = self.down_right(p)
-            yield p
+        return self.beam(p, self.delta_down + self.delta_right, emit_start)
     
     def beam_left(self, p: Vec2, emit_start: bool=True) -> Iterable[Vec2]:
-        if emit_start:
-            yield p
-        while True:
-            p = self.left(p)
-            yield p
+        return self.beam(p, self.delta_left, emit_start)
     
     def beam_right(self, p: Vec2, emit_start: bool=True) -> Iterable[Vec2]:
-        if emit_start:
-            yield p
-        while True:
-            p = self.right(p)
-            yield p
+        return self.beam(p, self.delta_right, emit_start)
     
     def range_up(self, p: Vec2, l: int) -> Iterable[Vec2]:
         return itertools.islice(self.beam_up(p), l)
@@ -123,6 +105,16 @@ class Grid2d:
         yield self.down(p)
         yield self.down_left(p)
         yield self.left(p)
+    
+    def beam8(self, p: Vec2, emit_start: bool=True) -> Iterable[Iterable[Vec2]]:
+        yield self.beam_up_left(p, emit_start)
+        yield self.beam_up(p, emit_start)
+        yield self.beam_up_right(p, emit_start)
+        yield self.beam_right(p, emit_start)
+        yield self.beam_down_right(p, emit_start)
+        yield self.beam_down(p, emit_start)
+        yield self.beam_down_left(p, emit_start)
+        yield self.beam_left(p, emit_start)
     
     def near8_rectangle(self, r: Rectangle) -> Iterable[Vec2]:
         cur = self.up_left(r.top_left)
@@ -161,6 +153,7 @@ class GridWalker:
 @dataclass
 class Field[TValue]:
     items: list[Sequence[TValue]]
+    grid: Grid2d = dataclasses.field(default_factory=lambda: screen)
     w: int = dataclasses.field(init=False)
     h: int = dataclasses.field(init=False)
 
@@ -235,56 +228,64 @@ class Field[TValue]:
     def transpose(self) -> Field[TValue]:
         return Field(transpose(self.items))
     
-    def beam_up(self, pos: Vec2, emit_start: bool=True, grid: Grid2d=screen) -> Iterable[Vec2]:
-        return self.takewhile_inside(grid.beam_up(pos, emit_start))
+    def beam_up(self, pos: Vec2, emit_start: bool=True) -> Iterable[Vec2]:
+        return self.takewhile_inside(self.grid.beam_up(pos, emit_start))
     
-    def beam_up_left(self, pos: Vec2, emit_start: bool=True, grid: Grid2d=screen) -> Iterable[Vec2]:
-        return self.takewhile_inside(grid.beam_up_left(pos, emit_start))
+    def beam_up_left(self, pos: Vec2, emit_start: bool=True) -> Iterable[Vec2]:
+        return self.takewhile_inside(self.grid.beam_up_left(pos, emit_start))
     
-    def beam_up_right(self, pos: Vec2, emit_start: bool=True, grid: Grid2d=screen) -> Iterable[Vec2]:
-        return self.takewhile_inside(grid.beam_up_right(pos, emit_start))
+    def beam_up_right(self, pos: Vec2, emit_start: bool=True) -> Iterable[Vec2]:
+        return self.takewhile_inside(self.grid.beam_up_right(pos, emit_start))
     
-    def beam_down(self, pos: Vec2, emit_start: bool=True, grid: Grid2d=screen) -> Iterable[Vec2]:
-        return self.takewhile_inside(grid.beam_down(pos, emit_start))
+    def beam_down(self, pos: Vec2, emit_start: bool=True) -> Iterable[Vec2]:
+        return self.takewhile_inside(self.grid.beam_down(pos, emit_start))
     
-    def beam_down_left(self, pos: Vec2, emit_start: bool=True, grid: Grid2d=screen) -> Iterable[Vec2]:
-        return self.takewhile_inside(grid.beam_down_left(pos, emit_start))
+    def beam_down_left(self, pos: Vec2, emit_start: bool=True) -> Iterable[Vec2]:
+        return self.takewhile_inside(self.grid.beam_down_left(pos, emit_start))
     
-    def beam_down_right(self, pos: Vec2, emit_start: bool=True, grid: Grid2d=screen) -> Iterable[Vec2]:
-        return self.takewhile_inside(grid.beam_down_right(pos, emit_start))
+    def beam_down_right(self, pos: Vec2, emit_start: bool=True) -> Iterable[Vec2]:
+        return self.takewhile_inside(self.grid.beam_down_right(pos, emit_start))
     
-    def beam_left(self, pos: Vec2, emit_start: bool=True, grid: Grid2d=screen) -> Iterable[Vec2]:
-        return self.takewhile_inside(grid.beam_left(pos, emit_start))
+    def beam_left(self, pos: Vec2, emit_start: bool=True) -> Iterable[Vec2]:
+        return self.takewhile_inside(self.grid.beam_left(pos, emit_start))
     
-    def beam_right(self, pos: Vec2, emit_start: bool=True, grid: Grid2d=screen) -> Iterable[Vec2]:
-        return self.takewhile_inside(grid.beam_right(pos, emit_start))
+    def beam_right(self, pos: Vec2, emit_start: bool=True) -> Iterable[Vec2]:
+        return self.takewhile_inside(self.grid.beam_right(pos, emit_start))
     
-    def beam_upv(self, pos: Vec2, emit_start: bool=True, grid: Grid2d=screen) -> Iterable[Tuple[Vec2, TValue]]:
-        return self.with_values(self.beam_up(pos, emit_start, grid))
+    def beam_upv(self, pos: Vec2, emit_start: bool=True) -> Iterable[Tuple[Vec2, TValue]]:
+        return self.with_values(self.beam_up(pos, emit_start))
     
-    def beam_up_leftv(self, pos: Vec2, emit_start: bool=True, grid: Grid2d=screen) -> Iterable[Vec2]:
-        return self.with_values(self.beam_up_left(pos, emit_start, grid))
+    def beam_up_leftv(self, pos: Vec2, emit_start: bool=True) -> Iterable[Vec2]:
+        return self.with_values(self.beam_up_left(pos, emit_start))
     
-    def beam_up_rightv(self, pos: Vec2, emit_start: bool=True, grid: Grid2d=screen) -> Iterable[Vec2]:
-        return self.with_values(self.beam_up_right(pos, emit_start, grid))
+    def beam_up_rightv(self, pos: Vec2, emit_start: bool=True) -> Iterable[Vec2]:
+        return self.with_values(self.beam_up_right(pos, emit_start))
     
-    def beam_downv(self, pos: Vec2, emit_start: bool=True, grid: Grid2d=screen) -> Iterable[Tuple[Vec2, TValue]]:
-        return self.with_values(self.beam_down(pos, emit_start, grid))
+    def beam_downv(self, pos: Vec2, emit_start: bool=True) -> Iterable[Tuple[Vec2, TValue]]:
+        return self.with_values(self.beam_down(pos, emit_start))
     
-    def beam_down_leftv(self, pos: Vec2, emit_start: bool=True, grid: Grid2d=screen) -> Iterable[Vec2]:
-        return self.with_values(self.beam_down_left(pos, emit_start, grid))
+    def beam_down_leftv(self, pos: Vec2, emit_start: bool=True) -> Iterable[Vec2]:
+        return self.with_values(self.beam_down_left(pos, emit_start))
     
-    def beam_down_rightv(self, pos: Vec2, emit_start: bool=True, grid: Grid2d=screen) -> Iterable[Vec2]:
-        return self.with_values(self.beam_down_right(pos, emit_start, grid))
+    def beam_down_rightv(self, pos: Vec2, emit_start: bool=True) -> Iterable[Vec2]:
+        return self.with_values(self.beam_down_right(pos, emit_start))
     
-    def beam_leftv(self, pos: Vec2, emit_start: bool=True, grid: Grid2d=screen) -> Iterable[Tuple[Vec2, TValue]]:
-        return self.with_values(self.beam_left(pos, emit_start, grid))
+    def beam_leftv(self, pos: Vec2, emit_start: bool=True) -> Iterable[Tuple[Vec2, TValue]]:
+        return self.with_values(self.beam_left(pos, emit_start))
     
-    def beam_rightv(self, pos: Vec2, emit_start: bool=True, grid: Grid2d=screen) -> Iterable[Tuple[Vec2, TValue]]:
-        return self.with_values(self.beam_right(pos, emit_start, grid))
+    def beam_rightv(self, pos: Vec2, emit_start: bool=True) -> Iterable[Tuple[Vec2, TValue]]:
+        return self.with_values(self.beam_right(pos, emit_start))
     
-    def near8(self, pos: Vec2, grid: Grid2d=screen) -> Iterable[Vec2]:
-        return self.inside(grid.near8(pos))
+    def near8(self, pos: Vec2) -> Iterable[Vec2]:
+        return self.inside(self.grid.near8(pos))
     
-    def near8v(self, pos: Vec2, grid: Grid2d=screen) -> Iterable[Vec2]:
-        return self.with_values(self.near8(pos, grid))
+    def near8v(self, pos: Vec2) -> Iterable[Vec2]:
+        return self.with_values(self.near8(pos))
+    
+    def beam8(self, pos: Vec2, emit_start: bool=True) -> Iterable[Iterable[Vec2]]:
+        for beam in self.grid.beam8(pos, emit_start):
+            yield self.takewhile_inside(beam)
+    
+    def beam8v(self, pos: Vec2, emit_start: bool=True) -> Iterable[Iterable[Tuple[Vec2, TValue]]]:
+        for beam in self.beam8(pos, emit_start):
+            yield self.with_values(beam)
