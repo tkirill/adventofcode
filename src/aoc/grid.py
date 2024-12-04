@@ -4,6 +4,7 @@ import dataclasses
 from collections.abc import Sequence, Iterable
 from typing import Tuple
 import itertools
+import functools
 
 from aoc.primitives import Vec2, Rectangle
 from aoc.algo import transpose
@@ -52,13 +53,12 @@ class Grid2d:
             case 'U' | 'N': return self.up(p, dist)
             case 'D' | 'S': return self.down(p, dist)
     
-    def beam(self, p: Vec2, delta: Vec2, emit_start: bool=True) -> Vec2:
+    def beam(self, p: Vec2, delta: Vec2, emit_start: bool=True) -> Iterable[Vec2]:
         if emit_start:
             yield p
         while True:
             p = p + delta
             yield p
-
     
     def beam_up(self, p: Vec2, emit_start: bool=True) -> Iterable[Vec2]:
         return self.beam(p, self.delta_up, emit_start)
@@ -131,16 +131,21 @@ class Grid2d:
         for _ in range(r.h):
             cur = self.up(cur)
             yield cur
+    
+    def rotatelr(self, p: Vec2, dir: str) -> Vec2:
+        if dir == 'R':
+            return Vec2(p.y * self.delta_up.y, p.x * -self.delta_up.y)
+        return Vec2(p.y * -self.delta_up.y, p.x * self.delta_up.y)
 
 
 screen = Grid2d()
 
 
-#@dataclass(frozen=True)
+@dataclass(frozen=True)
 class GridWalker:
     pos: Vec2 = Vec2(0, 0)
     velocity: Vec2 = None
-    grid: Grid2d = dataclasses.field(default=screen, compare=False)
+    grid: Grid2d = dataclasses.field(default_factory=lambda: screen, compare=False)
 
     def __post_init__(self):
         if self.velocity is None:
@@ -148,6 +153,9 @@ class GridWalker:
     
     def step(self) -> GridWalker:
         return dataclasses.replace(self, pos=self.pos + self.velocity)
+    
+    def rotatelr(self, dir: str) -> GridWalker:
+        return GridWalker(self.pos, self.grid.rotatelr(self.velocity, dir))
 
 
 @dataclass
