@@ -29,6 +29,14 @@ def callchain[TResult](func: Callable[[TResult], TResult], init: TResult, yield_
         yield cur
 
 
+def scanl[TResult, TValue](func: Callable[[TResult, TValue], TResult], init: TResult, values: Iterable[TValue]) -> Iterable[TResult]:
+    yield init
+    cur = init
+    for s in values:
+        cur = func(cur, s)
+        yield cur
+
+
 def detect_cycle(items: Iterable[Hashable]) -> tuple[int, int]:
     mem = {}
     pos = 0
