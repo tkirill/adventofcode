@@ -38,13 +38,13 @@ class Vec3(NamedTuple):
     z: int = 0
 
     def __add__(self, other: Vec3) -> Vec3:
-        return Vec2(self.x + other.x, self.y + other.y, self.z + other.z)
+        return Vec3(self.x + other.x, self.y + other.y, self.z + other.z)
     
-    def __sub__(self, other: Vec2) -> Vec3:
-        return Vec2(self.x - other.x, self.y - other.y, self.z - other.z)
+    def __sub__(self, other: Vec3) -> Vec3:
+        return Vec3(self.x - other.x, self.y - other.y, self.z - other.z)
 
     def __mul__(self, s: int) -> Vec3:
-        return Vec2(self.x * s, self.y * s, self.z * s)
+        return Vec3(self.x * s, self.y * s, self.z * s)
     
     def __neg__(self) -> Vec3:
         return Vec3(-self.x, -self.y, -self.z)
