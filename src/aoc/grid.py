@@ -2,12 +2,11 @@ from __future__ import annotations
 from dataclasses import dataclass
 import dataclasses
 from collections.abc import Sequence, Iterable
-from typing import Tuple
+from typing import Tuple, Optional, Callable
 import itertools
-import functools
 
 from aoc.primitives import Vec2, Rectangle
-from aoc.algo import transpose
+from aoc import algo
 
 
 @dataclass
@@ -95,6 +94,12 @@ class Grid2d:
     
     def range_right(self, p: Vec2, l: int) -> Iterable[Vec2]:
         return itertools.islice(self.beam_right(p), l)
+    
+    def near4(self, p: Vec2) -> Iterable[Vec2]:
+        yield self.up(p)
+        yield self.right(p)
+        yield self.down(p)
+        yield self.left(p)
     
     def near8(self, p: Vec2) -> Iterable[Vec2]:
         yield self.up_left(p)
@@ -234,7 +239,7 @@ class Field[TValue]:
         return self.with_values(self.cells())
     
     def transpose(self) -> Field[TValue]:
-        return Field(transpose(self.items))
+        return Field(algo.transpose(self.items))
     
     def beam_up(self, pos: Vec2, emit_start: bool=True) -> Iterable[Vec2]:
         return self.takewhile_inside(self.grid.beam_up(pos, emit_start))
@@ -284,6 +289,12 @@ class Field[TValue]:
     def beam_rightv(self, pos: Vec2, emit_start: bool=True) -> Iterable[Tuple[Vec2, TValue]]:
         return self.with_values(self.beam_right(pos, emit_start))
     
+    def near4(self, pos: Vec2) -> Iterable[Vec2]:
+        return self.inside(self.grid.near4(pos))
+    
+    def near4v(self, pos: Vec2) -> Iterable[Vec2]:
+        return self.with_values(self.near4(pos))
+    
     def near8(self, pos: Vec2) -> Iterable[Vec2]:
         return self.inside(self.grid.near8(pos))
     
@@ -297,3 +308,9 @@ class Field[TValue]:
     def beam8v(self, pos: Vec2, emit_start: bool=True) -> Iterable[Iterable[Tuple[Vec2, TValue]]]:
         for beam in self.beam8(pos, emit_start):
             yield self.with_values(beam)
+    
+    def bfs4(self, start: Vec2, nfilter: Optional[Callable[[Vec2, Vec2], bool]]=None) -> Iterable[tuple[Vec2, int]]:
+        def nearfunc(cur):
+            return filter(lambda n: nfilter(cur, n), self.near4(cur))
+        near = self.near4 if nfilter is None else nearfunc
+        yield from algo.bfs(start, near)
