@@ -1,9 +1,14 @@
 import unittest
+from pathlib import Path
 
 from aoc.aoc_test_base import AocTestBase
 
 
 class TestYear2024(AocTestBase):
+
+    def setUp(self):
+        self.test_dir = Path(__file__).parent
+        return super().setUp()
 
     def test_2024_01(self):
         self.assertAocDay(1, '936063', '23150395')

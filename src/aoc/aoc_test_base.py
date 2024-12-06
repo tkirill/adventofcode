@@ -6,12 +6,13 @@ import unittest
 
 class AocTestBase(unittest.TestCase):
 
+    test_dir: str
+
     def assertAocDay(self, day: int, star1: str, star2: Optional[str]):
-        this_dir = Path(__file__).parent.parent
-        filename = next((x.name for x in this_dir.iterdir() if x.name.startswith(f'{day:02d}_') and x.suffix == '.py'), None)
+        filename = next((x for x in self.test_dir.iterdir() if x.name.startswith(f'{day:02d}_') and x.suffix == '.py'), None)
         if not filename:
-            self.assertIsNotNone(filename, msg=f'Could not find a file for specified day in a dir {this_dir.absolute()}')
-        self.assertAoc(filename, star1, star2)
+            self.assertIsNotNone(filename, msg=f'Could not find a file for specified day in a dir {self.test_dir.absolute()}')
+        self.assertAoc(filename.absolute(), star1, star2)
     
     def assertAoc(self, filename: str, star1: str, star2: Optional[str]):
         output = subprocess.run(['python', filename], capture_output=True, text=True)
