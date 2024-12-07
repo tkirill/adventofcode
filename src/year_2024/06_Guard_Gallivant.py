@@ -2,8 +2,6 @@ from aoc.io import *
 from aoc.grid import *
 from aoc.primitives import *
 from aoc import algo
-import itertools as itls
-import more_itertools as mitls
 
 
 def walk(field, cur):
