@@ -5,7 +5,8 @@ from collections.abc import Iterable
 import math
 
 
-class Vec2(NamedTuple):
+@dataclass(frozen=True)
+class Vec2:
 
     x: int = 0
     y: int = 0
@@ -19,8 +20,14 @@ class Vec2(NamedTuple):
     def __mul__(self, s: int) -> Vec2:
         return Vec2(self.x * s, self.y * s)
     
+    def __rmul__(self, s: int) -> Vec2:
+        return Vec2(self.x * s, self.y * s)
+    
     def __neg__(self) -> Vec2:
         return Vec2(-self.x, -self.y)
+    
+    def __abs__(self) -> Vec2:
+        return Vec2(abs(self.x), abs(self.y))
     
     def increase(self, v: int) -> Vec2:
         return Vec2(self.x+v, self.y+v)

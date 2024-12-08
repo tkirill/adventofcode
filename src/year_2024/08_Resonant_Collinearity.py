@@ -13,36 +13,35 @@ for pos, v in field.cellsv():
         antennas[v].append(pos)
 
 
-def get_antinodes1(items):
-    for a, b in itls.combinations(items, 2):
-        delta = (b - a).normalize()
-        for i, x in enumerate(field.takewhile_inside(field.grid.beam(a, delta, False))):
-            if x != a and x != b:
-                db = x - b
-                if abs(db.x // delta.x) == (i+1)*2 or abs(db.x // delta.x) * 2 == i+1:
-                    yield x
-        
-        for i, x in enumerate(field.takewhile_inside(field.grid.beam(a, -delta, False))):
-            if x != a and x != b:
-                db = x - b
-                if abs(db.x // delta.x) == (i+1)*2 or abs(db.x // delta.x) * 2 == i+1:
-                    yield x
+def get_antinodes(a: Vec2, b: Vec2) -> Iterable[Vec2]:
+    yield from field.beam_to(a, b)
+    yield from field.beam_to(b, a)
 
 
-def get_antinodes(items):
-    for a, b in itls.combinations(items, 2):
-        yield from field.beam_to(a, b)
-        yield from field.beam_to(b, a)
+def get_antinodes_part1(a: Vec2, b: Vec2) -> Iterable[Vec2]:
+    a = [2 * a - b, 2 * b - a]
+    yield from field.inside(a)
+
+
+# Expected answer for the input `...x..x...` is `#..x..x..#`.
+# This version answers with `#..x##x..#`.
+# Both versions are accepted though.
+def get_antinodes_part1_v2(a: Vec2, b: Vec2) -> Iterable[Vec2]:
+    for x in get_antinodes(a, b):
+        da, db = x - a, x - b
+        if abs(da) == 2 * abs(db) or abs(db) == 2 * abs(da):
+            yield x
 
 
 antinodes = set()
-for vals in antennas.values():
-    antinodes.update(get_antinodes1(vals))
-antinodes.difference_update(antennas)
+for items in antennas.values():
+    for a, b in itls.combinations(items, 2):
+        antinodes.update(get_antinodes_part1(a, b))
 print('Star 1:', len(antinodes))
 
 
 antinodes = set()
-for vals in antennas.values():
-    antinodes.update(get_antinodes(vals))
+for items in antennas.values():
+    for a, b in itls.combinations(items, 2):
+        antinodes.update(get_antinodes(a, b))
 print('Star 2:', len(antinodes))
