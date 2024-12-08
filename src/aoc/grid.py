@@ -241,6 +241,9 @@ class Field[TValue]:
     def transpose(self) -> Field[TValue]:
         return Field(algo.transpose(self.items))
     
+    def beam_to(self, start: Vec2, other: Vec2, skip_start: bool=False, skip_other: bool=False) -> Iterable[Vec2]:
+        return self.takewhile_inside(start.beam_to(other, skip_start=skip_start, skip_other=skip_other))
+    
     def beam_up(self, pos: Vec2, emit_start: bool=True) -> Iterable[Vec2]:
         return self.takewhile_inside(self.grid.beam_up(pos, emit_start))
     

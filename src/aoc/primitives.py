@@ -2,6 +2,7 @@ from __future__ import annotations
 from typing import NamedTuple
 from dataclasses import dataclass
 from collections.abc import Iterable
+import math
 
 
 class Vec2(NamedTuple):
@@ -29,6 +30,21 @@ class Vec2(NamedTuple):
     
     def mdist(self, other: Vec2) -> int:
         return abs(self.x-other.x) + abs(self.y-other.y)
+    
+    def beam_to(self, other: Vec2, skip_start: bool=False, skip_other: bool=False) -> Iterable[Vec2]:
+        delta = (other - self).normalize()
+        cur = self
+        if not skip_start:
+            yield cur
+        while True:
+            cur = cur + delta
+            if not skip_other or cur != other:
+                yield cur
+    
+    def normalize(self) -> Vec2:
+        g = math.gcd(abs(self.x), abs(self.y))
+        return Vec2(self.x // g, self.y // g)
+        
 
 
 class Vec3(NamedTuple):
