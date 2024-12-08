@@ -6,7 +6,7 @@ import math
 moves, map = readblocks(sep="[ =,()]+")
 moves = moves[0]
 adj = {}
-for src, dst1, dst2, _ in map:
+for src, dst1, dst2 in map:
     adj[src] = dst1, dst2
 
 

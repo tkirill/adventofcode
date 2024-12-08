@@ -36,7 +36,7 @@ def near(cur: GridWalker):
 
 
 v = set(x.pos for x, d in algo.bfs(GridWalker(velocity=map.grid.delta_right), near) if x.pos in map)
-print(len(v))
+print('Star 1:', len(v))
 
 
 dir = Vec2(0, 1)
@@ -46,4 +46,4 @@ for border in [map.row(0), map.column(map.w - 1), map.row(map.h - 1), map.column
         e = set(x.pos for x, _ in algo.bfs(GridWalker(start, dir), near) if x.pos in map)
         max_energy = max(max_energy, len(e))
     dir = map.grid.rotatelr(dir, "R")
-print(max_energy)
+print('Star 2:', max_energy)

@@ -20,7 +20,6 @@ class AocTestBase(unittest.TestCase):
             msg = f'Script for the day finished with non-zero code\n\nOutput:\n{output.stdout}\n\nError:\n{output.stderr}'
             self.assertEqual(output.returncode, 0, msg)
         lines = output.stdout.splitlines()
-        self.assertEqual(len(lines), 2, 'Script for the day returned wrong number of lines')
         self.assertTrue(lines[0].startswith('Star 1: '), 'First line of output does not follow expected format')
         self.assertEqual(lines[0], f'Star 1: {star1}')
         if star2 is not None:

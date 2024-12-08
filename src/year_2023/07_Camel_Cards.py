@@ -39,6 +39,10 @@ print("Star 2:", sum((i + 1) * x[1] for i, x in enumerate(hands)))
 
 from blessed import Terminal
 import time
+import sys
+
+if len(sys.argv) == 1:
+    exit()
 
 term = Terminal()
 hands = [(str(h), b) for h, b in read()]

@@ -16,7 +16,7 @@ steps = read(sep=",")[0]
 print("Star 1:", sum(hash(HASHable(s)) for s in steps))
 
 
-steps = parselines(steps, sep="[=\-]")
+steps = parselines(steps, sep="[=\-]", skip_empty=False)
 boxes = {}
 for label, focal in steps:
     label = HASHable(label)
