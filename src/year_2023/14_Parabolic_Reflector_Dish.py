@@ -22,20 +22,20 @@ def tilt(
 
 
 def spin_cycle(dish: Field, rocks: Iterable[Vec2]) -> tuple[Vec2]:
-    rocks = list(tilt(dish, rocks, lambda x: dish.beam_upv(x, emit_start=False)))
+    rocks = list(tilt(dish, rocks, lambda x: dish.beam_upv(x, skip_start=True)))
     rocks.sort(key=lambda r: (r.x, r.y))
-    rocks = list(tilt(dish, rocks, lambda x: dish.beam_leftv(x, emit_start=False)))
+    rocks = list(tilt(dish, rocks, lambda x: dish.beam_leftv(x, skip_start=True)))
     rocks.sort(key=lambda r: (r.y, r.x), reverse=True)
-    rocks = list(tilt(dish, rocks, lambda x: dish.beam_downv(x, emit_start=False)))
+    rocks = list(tilt(dish, rocks, lambda x: dish.beam_downv(x, skip_start=True)))
     rocks.sort(key=lambda r: (r.x, r.y), reverse=True)
-    rocks = list(tilt(dish, rocks, lambda x: dish.beam_rightv(x, emit_start=False)))
+    rocks = list(tilt(dish, rocks, lambda x: dish.beam_rightv(x, skip_start=True)))
     rocks.sort(key=lambda r: (r.y, r.x))
     return tuple(rocks)
 
 
 dish = Field([list(l) for l in read()])
 rocks = [p for p, v in dish.cellsv() if v == "O"]
-rocks = tilt(dish, rocks, lambda x: dish.beam_upv(x, emit_start=False))
+rocks = tilt(dish, rocks, lambda x: dish.beam_upv(x, skip_start=True))
 print("Star 1:", sum(dish.h - pos.y for pos in rocks))
 
 

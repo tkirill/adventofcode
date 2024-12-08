@@ -38,13 +38,17 @@ class Vec2:
     def mdist(self, other: Vec2) -> int:
         return abs(self.x-other.x) + abs(self.y-other.y)
     
-    def beam_to(self, other: Vec2, skip_start: bool=False, skip_other: bool=False) -> Iterable[Vec2]:
-        delta = (other - self).normalize()
+    def beam(self, delta: Vec2, skip_start: bool=False) -> Iterable[Vec2]:
         cur = self
         if not skip_start:
             yield cur
         while True:
             cur = cur + delta
+            yield cur
+    
+    def beam_to(self, other: Vec2, skip_start: bool=False, skip_other: bool=False) -> Iterable[Vec2]:
+        delta = (other - self).normalize()
+        for cur in self.beam(delta, skip_start=skip_start):
             if not skip_other or cur != other:
                 yield cur
     
