@@ -102,3 +102,7 @@ def dijkstra[TValue](
                 q[n] = alt
                 prev[n] = cur
     return dist, prev
+
+
+def asciipos(c):
+    return ord(c) - ord('a' if c.islower() else 'A')

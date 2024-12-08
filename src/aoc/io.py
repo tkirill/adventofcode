@@ -1,7 +1,7 @@
 import __main__
 from pathlib import Path
 import re
-from typing import Any, Callable
+from typing import Any, Callable, Optional
 
 
 def get_input_filename() -> Path:
@@ -19,10 +19,10 @@ def readraw():
         return f.read().strip()
 
 
-def readlines() -> list[str]:
+def readlines(strip: bool=True, strip_chars: Optional[str]=None) -> list[str]:
     input_filename = get_input_filename()
     with input_filename.open() as f:
-        return [l.strip() for l in f]
+        return [l.strip(strip_chars) if strip else l for l in f]
 
 
 def readsplit(sep=r'\s') -> list[list[str]]:
@@ -40,8 +40,15 @@ def parsevalue[TValue](s: str, parse: Callable[[str], TValue]=int) -> str | TVal
         return s
 
 
-def parseline[TValue](l: str, sep: str=r'\s', parse: Callable[[str], TValue]=int, skip_empty=True) -> str | TValue | list[str | TValue]:
-    l = l.strip()
+def parseline[TValue](
+        l: str,
+        sep: str=r'\s',
+        parse: Callable[[str], TValue]=int,
+        skip_empty=True,
+        strip: bool=True,
+        strip_chars: Optional[str]=None) -> str | TValue | list[str | TValue]:
+    if strip:
+        l = l.strip(strip_chars)
     if sep:
         parts = [parsevalue(s, parse=parse) for s in re.split(sep, l) if s or not skip_empty]
         return parts[0] if len(parts) == 1 else parts
@@ -56,14 +63,14 @@ def read[TValue](sep: str=r'\s', parse: Callable[[str], TValue]=int, skip_empty=
     return parselines(readlines(), sep, parse, skip_empty)
 
 
-def readblocks[TValue](sep: str=r'\s', parse: Callable[[str], TValue]=int):
+def readblocks[TValue](sep: str=r'\s', parse: Callable[[str], TValue]=int, strip: bool=True, strip_chars: Optional[str]=None):
     result = []
     tmp = []
-    for l in readlines():
+    for l in readlines(strip=strip, strip_chars=strip_chars):
         if not l:
             result.append(tmp)
             tmp = []
         else:
-            tmp.append(parseline(l, sep=sep, parse=parse))
+            tmp.append(parseline(l, sep=sep, parse=parse, strip=strip, strip_chars=strip_chars))
     result.append(tmp)
     return result
