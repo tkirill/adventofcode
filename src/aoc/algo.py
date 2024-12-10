@@ -3,14 +3,6 @@ from more_itertools import nth
 from pqdict import pqdict
 
 
-def sign(x: int) -> bool:
-    if x > 0:
-        return 1
-    if x < 0:
-        return -1
-    return 0
-
-
 def transpose[TValue](s: Sequence[Sequence[TValue]]) -> list[list[TValue]]:
     result = []
     if not s:

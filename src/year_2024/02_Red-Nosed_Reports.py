@@ -1,6 +1,5 @@
 from aoc.io import *
-from aoc.algo import sign
-from collections import Counter
+from aoc.primitives import sign
 from itertools import pairwise
 
 

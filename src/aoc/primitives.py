@@ -1,8 +1,16 @@
 from __future__ import annotations
-from typing import NamedTuple
+from typing import NamedTuple, Optional
 from dataclasses import dataclass
 from collections.abc import Iterable
 import math
+
+
+def sign(x: int) -> bool:
+    if x > 0:
+        return 1
+    if x < 0:
+        return -1
+    return 0
 
 
 @dataclass(frozen=True)
@@ -37,6 +45,14 @@ class Vec2:
     
     def mdist(self, other: Vec2) -> int:
         return abs(self.x-other.x) + abs(self.y-other.y)
+    
+    def cdist(self, other: Optional[Vec2]=None) -> int:
+        if other is None:
+            other = Vec2()
+        return max(abs(self.x-other.x), abs(self.y-other.y))
+    
+    def sign(self) -> Vec2:
+        return Vec2(sign(self.x), sign(self.y))
     
     def beam(self, delta: Vec2, skip_start: bool=False) -> Iterable[Vec2]:
         cur = self
