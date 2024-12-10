@@ -101,6 +101,10 @@ def asciipos(c):
     return ord(c) - ord('a' if c.islower() else 'A')
 
 
+def orddiff(a, b):
+    return ord(b) - ord(a)
+
+
 def display2d(arr2d: list[list], true_val=None):
     for row in arr2d:
         print(''.join('#' if (true_val is not None and v==true_val) or (true_val is None and v) else '.' for v in row))
