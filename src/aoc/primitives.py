@@ -68,6 +68,14 @@ class Vec2:
             if not skip_other or cur != other:
                 yield cur
     
+    def range_to(self, other: Vec2, skip_start: bool=False, skip_other: bool=False) -> Iterable[Vec2]:
+        delta = (other - self).normalize()
+        for cur in self.beam(delta, skip_start=skip_start):
+            if not skip_other or cur != other:
+                yield cur
+            if cur == other:
+                break
+    
     def normalize(self) -> Vec2:
         g = math.gcd(abs(self.x), abs(self.y))
         return Vec2(self.x // g, self.y // g)
