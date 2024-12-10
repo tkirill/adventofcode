@@ -104,6 +104,12 @@ class Grid2d:
         yield self.down_left(p)
         yield self.left(p)
     
+    def beam4(self, p: Vec2, skip_start: bool=False) -> Iterable[Iterable[Vec2]]:
+        yield self.beam_up(p, skip_start)
+        yield self.beam_right(p, skip_start)
+        yield self.beam_down(p, skip_start)
+        yield self.beam_left(p, skip_start)
+    
     def beam8(self, p: Vec2, skip_start: bool=False) -> Iterable[Iterable[Vec2]]:
         yield self.beam_up_left(p, skip_start)
         yield self.beam_up(p, skip_start)
@@ -296,6 +302,14 @@ class Field[TValue]:
     
     def near8v(self, pos: Vec2) -> Iterable[Vec2]:
         return self.with_values(self.near8(pos))
+    
+    def beam4(self, pos: Vec2, skip_start: bool=False) -> Iterable[Iterable[Vec2]]:
+        for beam in self.grid.beam4(pos, skip_start):
+            yield self.takewhile_inside(beam)
+    
+    def beam4v(self, pos: Vec2, skip_start: bool=False) -> Iterable[Iterable[Tuple[Vec2, TValue]]]:
+        for beam in self.beam4(pos, skip_start):
+            yield self.with_values(beam)
     
     def beam8(self, pos: Vec2, skip_start: bool=False) -> Iterable[Iterable[Vec2]]:
         for beam in self.grid.beam8(pos, skip_start):
