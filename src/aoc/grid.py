@@ -305,8 +305,8 @@ class Field[TValue]:
         for beam in self.beam8(pos, skip_start):
             yield self.with_values(beam)
     
-    def bfs4(self, start: Vec2, nfilter: Optional[Callable[[Vec2, Vec2], bool]]=None) -> Iterable[tuple[Vec2, int]]:
+    def bfs4(self, start: Vec2, nfilter: Optional[Callable[[Vec2, Vec2], bool]]=None, track_visited: bool=True) -> Iterable[tuple[Vec2, int]]:
         def nearfunc(cur):
             return filter(lambda n: nfilter(cur, n), self.near4(cur))
         near = self.near4 if nfilter is None else nearfunc
-        yield from algo.bfs(start, near)
+        yield from algo.bfs(start, near, track_visited=track_visited)

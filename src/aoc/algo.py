@@ -64,7 +64,7 @@ def nth_with_cycle[TValue](items: Iterable[TValue], at: int) -> TValue:
         pos += 1
 
 
-def bfs[TValue](start: TValue, near: Callable[[TValue], Iterable[TValue]]):
+def bfs[TValue](start: TValue, near: Callable[[TValue], Iterable[TValue]], track_visited: bool=True):
     q = [start]
     visited = {start}
     curdist = 0
@@ -74,9 +74,10 @@ def bfs[TValue](start: TValue, near: Callable[[TValue], Iterable[TValue]]):
         for cur in qcopy:
             yield cur, curdist
             for n in near(cur):
-                if n not in visited:
+                if not track_visited or n not in visited:
                     q.append(n)
-                    visited.add(n)
+                    if track_visited:
+                        visited.add(n)
         curdist += 1
 
 
