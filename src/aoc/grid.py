@@ -143,6 +143,7 @@ class Grid2d:
 
 
 screen = Grid2d()
+traditional = Grid2d(delta_up=Vec2(0, 1))
 
 
 @dataclass(frozen=True)

@@ -57,6 +57,9 @@ class TestYear2022(AocTestBase):
     
     def test_2022_16(self):
         self.assertAocDay(16, '1767', '2528')
+    
+    def test_2022_17(self):
+        self.assertAocDay(17, '3090', '1530057803453')
 
 
 if __name__ == '__main__':
