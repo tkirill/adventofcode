@@ -99,6 +99,32 @@ class Vec3(NamedTuple):
     
     def __neg__(self) -> Vec3:
         return Vec3(-self.x, -self.y, -self.z)
+    
+    def up(self):
+        return Vec3(self.x, self.y-1, self.z)
+    
+    def down(self):
+        return Vec3(self.x, self.y+1, self.z)
+    
+    def left(self):
+        return Vec3(self.x-1, self.y, self.z)
+    
+    def right(self):
+        return Vec3(self.x+1, self.y, self.z)
+    
+    def forward(self):
+        return Vec3(self.x, self.y, self.z+1)
+    
+    def backward(self):
+        return Vec3(self.x, self.y, self.z-1)
+    
+    def near6(self):
+        yield self.up()
+        yield self.down()
+        yield self.left()
+        yield self.right()
+        yield self.forward()
+        yield self.backward()
 
 
 @dataclass
