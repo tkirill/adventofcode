@@ -140,6 +140,33 @@ class Grid2d:
         if dir == 'R':
             return Vec2(p.y * self.delta_up.y, p.x * -self.delta_up.y)
         return Vec2(p.y * -self.delta_up.y, p.x * self.delta_up.y)
+    
+    def side_up(self, p: Vec2) -> Iterable[Vec2]:
+        yield self.up_left(p)
+        yield self.up(p)
+        yield self.up_right(p)
+    
+    def side_right(self, p: Vec2) -> Iterable[Vec2]:
+        yield self.up_right(p)
+        yield self.right(p)
+        yield self.down_right(p)
+    
+    def side_down(self, p: Vec2) -> Iterable[Vec2]:
+        yield self.down_left(p)
+        yield self.down(p)
+        yield self.down_right(p)
+    
+    def side_left(self, p: Vec2) -> Iterable[Vec2]:
+        yield self.down_left(p)
+        yield self.left(p)
+        yield self.up_left(p)
+    
+    def side(self, p: Vec2, side: str) -> Iterable[Vec2]:
+        match side:
+            case 'U' | 'N': return self.side_up(p)
+            case 'R' | 'E': return self.side_right(p)
+            case 'D' | 'S': return self.side_down(p)
+            case 'L' | 'W': return self.side_left(p)
 
 
 screen = Grid2d()
@@ -149,13 +176,9 @@ traditional = Grid2d(delta_up=Vec2(0, 1))
 @dataclass(frozen=True)
 class GridWalker:
     pos: Vec2 = Vec2(0, 0)
-    velocity: Vec2 = None
+    velocity: Vec2 = dataclasses.field(default_factory=lambda: screen.delta_up)
     grid: Grid2d = dataclasses.field(default_factory=lambda: screen, compare=False)
 
-    def __post_init__(self):
-        if self.velocity is None:
-            self.velocity = self.grid.delta_up
-    
     def step(self) -> GridWalker:
         return dataclasses.replace(self, pos=self.pos + self.velocity)
     

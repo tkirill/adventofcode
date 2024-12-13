@@ -43,6 +43,9 @@ class Vec2:
     def decrease(self, v: int) -> Vec2:
         return Vec2(self.x-v, self.y-v)
     
+    def mod_by(self, other: Vec2) -> Vec2:
+        return Vec2(self.x % other.x, self.y % other.y)
+    
     def mdist(self, other: Vec2) -> int:
         return abs(self.x-other.x) + abs(self.y-other.y)
     
