@@ -182,6 +182,11 @@ class GridWalker:
     def step(self) -> GridWalker:
         return dataclasses.replace(self, pos=self.pos + self.velocity)
     
+    def mod_by(self, w: int, h: int) -> GridWalker:
+        if 0 <= self.pos.x < w and 0 <= self.pos.y < h:
+            return self
+        return dataclasses.replace(self, pos=Vec2((self.pos.x + w) % w, (self.pos.y + h) % h))
+    
     def rotatelr(self, dir: str) -> GridWalker:
         return GridWalker(self.pos, self.grid.rotatelr(self.velocity, dir))
 
