@@ -47,10 +47,10 @@ class Grid2d:
     
     def step(self, p: Vec2, dir: str, dist: int=1) -> Vec2:
         match(dir):
-            case 'L' | 'W': return self.left(p, dist)
-            case 'R' | 'E': return self.right(p, dist)
-            case 'U' | 'N': return self.up(p, dist)
-            case 'D' | 'S': return self.down(p, dist)
+            case 'L' | 'W' | '<': return self.left(p, dist)
+            case 'R' | 'E' | '>': return self.right(p, dist)
+            case 'U' | 'N' | '^': return self.up(p, dist)
+            case 'D' | 'S' | 'v': return self.down(p, dist)
     
     def beam_up(self, p: Vec2, skip_start: bool=False) -> Iterable[Vec2]:
         return p.beam(self.delta_up, skip_start)
