@@ -75,7 +75,7 @@ def bfs[TValue](start: TValue, near: Callable[[TValue], Iterable[TValue]], track
 
 def dijkstra[TValue](
     start: TValue | Iterable[TValue],
-    near: Callable[[TValue], Iterable[tuple[TValue, int]]],
+    near: Callable[[TValue], Iterable[tuple[TValue, int]]]
 ):
     if isinstance(start, Iterable):
         dist = {s: 0 for s in start}
