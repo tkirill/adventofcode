@@ -55,8 +55,11 @@ class TestYear2024(AocTestBase):
     def test_2024_15(self):
         self.assertAocDay(15, '1441031', '1425169')
     
-    def test_2024_15(self):
+    def test_2024_16(self):
         self.assertAocDay(16, '83444', '483')
+    
+    def test_2024_17(self):
+        self.assertAocDay(17, '3,3,7,3,6,3,6,0,2', '105843716614554')
 
 
 if __name__ == '__main__':
