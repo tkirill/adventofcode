@@ -82,7 +82,11 @@ class Vec2:
     def normalize(self) -> Vec2:
         g = math.gcd(abs(self.x), abs(self.y))
         return Vec2(self.x // g, self.y // g)
-        
+    
+    def circle(self, r: int, emit_center: bool=True) -> Iterable[Vec2]:
+        for dx in range(-r, r+1):
+            for dy in range(abs(dx)-r, r-abs(dx)+1):
+                yield Vec2(self.x + dx, self.y + dy)
 
 
 class Vec3(NamedTuple):

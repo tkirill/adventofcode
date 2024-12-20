@@ -323,7 +323,7 @@ class Field[TValue]:
     def near4(self, pos: Vec2) -> Iterable[Vec2]:
         return self.inside(self.grid.near4(pos))
     
-    def near4v(self, pos: Vec2) -> Iterable[Vec2]:
+    def near4v(self, pos: Vec2) -> Iterable[tuple[Vec2, TValue]]:
         return self.with_values(self.near4(pos))
     
     def near8(self, pos: Vec2) -> Iterable[Vec2]:
@@ -353,3 +353,9 @@ class Field[TValue]:
             return filter(lambda n: nfilter(cur, n), self.near4(cur))
         near = self.near4 if nfilter is None else nearfunc
         yield from algo.bfs(start, near, track_visited=track_visited)
+    
+    def circle(self, pos: Vec2, r: int) -> Iterable[Vec2]:
+        yield from self.inside(pos.circle(r))
+    
+    def circlev(self, pos: Vec2, r: int) -> Iterable[tuple[Vec2, TValue]]:
+        yield from self.with_values(self.circle(pos, r))
