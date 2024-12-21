@@ -77,17 +77,34 @@ def dijkstra[TValue](
     start: TValue | Iterable[TValue],
     near: Callable[[TValue], Iterable[tuple[TValue, int]]]
 ):
-    if isinstance(start, Iterable):
-        dist = {s: 0 for s in start}
-        prev = {s: None for s in start}
-    else:
-        dist = {start: 0}
-        prev = {start: None}
+    dist = {start: 0}
+    prev = {start: None}
     q = pqdict(dist)
 
     while q:
         cur = q.pop()
         for n, ndist in near(cur):
+            alt = dist[cur] + ndist
+            ex = dist.get(n)
+            if ex is None or ex > alt:
+                dist[n] = alt
+                q[n] = alt
+                prev[n] = cur
+    return dist, prev
+
+
+def dijkstra_many[TValue](
+    start: TValue | Iterable[TValue],
+    near: Callable[[TValue], Iterable[tuple[TValue, int]]]
+):
+    dist = {s: 0 for s in start}
+    prev = {s: None for s in start}
+    q = pqdict(dist)
+
+    while q:
+        cur = q.pop()
+        for n, ndist in near(cur):
+            #print('near', cur, n, ndist)
             alt = dist[cur] + ndist
             ex = dist.get(n)
             if ex is None or ex > alt:

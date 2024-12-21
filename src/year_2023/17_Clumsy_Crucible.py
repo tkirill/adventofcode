@@ -38,13 +38,13 @@ def near2(
 
 island = Field([[int(c) for c in l] for l in readlines()])
 start = [(GridWalker(velocity=d), 0) for d in [Vec2(1, 0), Vec2(0, 1)]]
-dist, prev = algo.dijkstra(start, lambda c: near1(island, c))
+dist, prev = algo.dijkstra_many(start, lambda c: near1(island, c))
 print(
     "Star 1:",
     min(v for k, v in dist.items() if k[0].pos == Vec2(island.w - 1, island.h - 1)),
 )
 
-dist, prev = algo.dijkstra(start, lambda c: near2(island, c))
+dist, prev = algo.dijkstra_many(start, lambda c: near2(island, c))
 print(
     "Star 2:",
     min(
