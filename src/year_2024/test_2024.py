@@ -80,7 +80,7 @@ class TestYear2024(AocTestBase):
         self.assertAocDay(23, '926', 'az,ed,hz,it,ld,nh,pc,td,ty,ux,wc,yg,zz')
     
     def test_2024_24(self):
-        self.assertAocDay(24, '43559017878162', 'fhc,ggt,hqk,mwh,qhj,z06,z11,z35')
+        self.assertAocFile('24_Crossed_Wires.py', '43559017878162', 'fhc,ggt,hqk,mwh,qhj,z06,z11,z35')
 
 
 if __name__ == '__main__':
