@@ -81,6 +81,9 @@ class TestYear2024(AocTestBase):
     
     def test_2024_24(self):
         self.assertAocFile('24_Crossed_Wires.py', '43559017878162', 'fhc,ggt,hqk,mwh,qhj,z06,z11,z35')
+    
+    def test_2024_25(self):
+        self.assertAocFile(25, '3264', None)
 
 
 if __name__ == '__main__':
