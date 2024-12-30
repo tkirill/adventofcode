@@ -117,6 +117,14 @@ class State:
         if self.minute == minutes:
             return
 
+        if self.blueprint.geode_robot in self.resources:
+            yield replace(
+                self,
+                minute=self.minute + 1,
+                resources=self.resources + self.robots - self.blueprint.geode_robot,
+                robots=self.robots + ResourceVector(geode=1)
+            )
+            return
         if self.robots.ore < self.blueprint.max_required_robots.ore:
             nadd = self.minutes_until_next(self.blueprint.ore_robot)
             if self.minute + nadd + 1 <= minutes:
