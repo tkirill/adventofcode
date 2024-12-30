@@ -117,6 +117,7 @@ class State:
         if self.minute == minutes:
             return
 
+        # number of geodes is our goal so if we can build a geode robot we do it
         if self.blueprint.geode_robot in self.resources:
             yield replace(
                 self,
@@ -163,12 +164,34 @@ class State:
                 )
 
 
+def bfs_geodes(start: State, near: Callable[[State], Iterable[State]]):
+    q = [start]
+    visited = {start}
+    curdist = 0
+    max_geodes_robots = [0] * 33  # max minute is #32
+    max_geodes = [0] * 33
+    while q:
+        qcopy = list(q)
+        q.clear()
+        for cur in qcopy:
+            yield cur, curdist
+            # number of geodes is our goal so states with less geode potential are skipped
+            if cur.robots.geode < max_geodes_robots[cur.minute] and cur.resources.geode < max_geodes[cur.minute]:
+                continue
+            for n in near(cur):
+                if n not in visited and n.minute < len(max_geodes_robots):
+                    q.append(n)
+                    visited.add(n)
+                    max_geodes_robots[n.minute] = max(max_geodes_robots[n.minute], n.robots.geode)
+                    max_geodes[n.minute] = max(max_geodes[n.minute], n.resources.geode)
+        curdist += 1
+
+
 def get_max_geodes(bp: Bluepint, minutes: int) -> int:
     max_geodes = 0
-    for s, minute in bfs(State(blueprint=bp), lambda x: x.near(minutes)):
+    for s, _ in bfs_geodes(State(blueprint=bp), lambda x: x.near(minutes)):
         if s.minute == minutes and s.resources.geode > max_geodes:
             max_geodes = s.resources.geode
-    # print(bp.id, max_geodes)
     return max_geodes
 
 
@@ -178,16 +201,5 @@ def get_bluepint_score(bp: Bluepint) -> int:
 
 blueprints = [parse_blueprint(s) for s in readlines()]
 
-import datetime
-print(datetime.datetime.now())
 print('Star 1:', sum(get_bluepint_score(x) for x in blueprints))
-print(datetime.datetime.now())
 print('Star 2:', get_max_geodes(blueprints[0], 32) * get_max_geodes(blueprints[1], 32) * get_max_geodes(blueprints[2], 32))
-print(datetime.datetime.now())
-
-
-# 2024-12-30 20:10:58.468635
-# Star 1: 1550
-# 2024-12-30 20:11:26.625220
-# Star 2: 18630
-# 2024-12-30 20:21:28.482330
