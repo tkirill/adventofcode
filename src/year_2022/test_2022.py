@@ -73,6 +73,9 @@ class TestYear2022(AocTestBase):
     def test_2022_21(self):
         self.assertAocDay(21, '170237589447588', '3712643961892')
     
+    def test_2022_22(self):
+        self.assertAocDay(22, '36518', '143208')
+    
     def test_2022_23(self):
         self.assertAocDay(23, '3874', '948')
     

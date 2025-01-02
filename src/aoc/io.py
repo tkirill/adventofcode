@@ -13,10 +13,11 @@ def get_input_filename() -> Path:
     return input_filename
 
 
-def readraw():
+def readraw(strip=True):
     input_filename = get_input_filename()
     with input_filename.open() as f:
-        return f.read().strip()
+        result = f.read()
+        return result.strip() if strip else result
 
 
 def readlines(strip: bool=True, strip_chars: Optional[str]=None) -> list[str]:
