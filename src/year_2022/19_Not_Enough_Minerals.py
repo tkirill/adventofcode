@@ -1,6 +1,5 @@
 from __future__ import annotations
 from aoc.io import *
-from aoc.algo import bfs
 from collections.abc import Iterable
 from dataclasses import dataclass, replace
 

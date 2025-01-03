@@ -6,7 +6,7 @@ from typing import Tuple, Optional, Callable
 import itertools
 
 from aoc.primitives import Vec2, Rectangle
-from aoc import algo
+from aoc import algo, vec2
 
 
 @dataclass
@@ -53,28 +53,28 @@ class Grid2d:
             case 'D' | 'S' | 'v': return self.down(p, dist)
     
     def beam_up(self, p: Vec2, skip_start: bool=False) -> Iterable[Vec2]:
-        return p.beam(self.delta_up, skip_start)
+        return vec2.beam(p, self.delta_up, skip_start)
     
     def beam_up_left(self, p: Vec2, skip_start: bool=False) -> Iterable[Vec2]:
-        return p.beam(self.delta_up + self.delta_left, skip_start)
+        return vec2.beam(p, self.delta_up + self.delta_left, skip_start)
     
     def beam_up_right(self, p: Vec2, skip_start: bool=False) -> Iterable[Vec2]:
-        return p.beam(self.delta_up + self.delta_right, skip_start)
+        return vec2.beam(p, self.delta_up + self.delta_right, skip_start)
     
     def beam_down(self, p: Vec2, skip_start: bool=False) -> Iterable[Vec2]:
-        return p.beam(self.delta_down, skip_start)
+        return vec2.beam(p, self.delta_down, skip_start)
     
     def beam_down_left(self, p: Vec2, skip_start: bool=False) -> Iterable[Vec2]:
-        return p.beam(self.delta_down + self.delta_left, skip_start)
+        return vec2.beam(p, self.delta_down + self.delta_left, skip_start)
     
     def beam_down_right(self, p: Vec2, skip_start: bool=False) -> Iterable[Vec2]:
-        return p.beam(self.delta_down + self.delta_right, skip_start)
+        return vec2.beam(p, self.delta_down + self.delta_right, skip_start)
     
     def beam_left(self, p: Vec2, skip_start: bool=False) -> Iterable[Vec2]:
-        return p.beam(self.delta_left, skip_start)
+        return vec2.beam(p, self.delta_left, skip_start)
     
     def beam_right(self, p: Vec2, skip_start: bool=False) -> Iterable[Vec2]:
-        return p.beam(self.delta_right, skip_start)
+        return vec2.beam(p, self.delta_right, skip_start)
     
     def range_up(self, p: Vec2, l: int) -> Iterable[Vec2]:
         return itertools.islice(self.beam_up(p), l)

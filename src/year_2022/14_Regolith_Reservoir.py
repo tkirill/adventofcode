@@ -3,6 +3,7 @@ from aoc.io import *
 from aoc.primitives import *
 from aoc import grid
 from aoc import algo
+from aoc import vec2
 from collections import defaultdict
 from more_itertools import windowed, chunked, ilen
 
@@ -11,7 +12,7 @@ def read_cave():
     cave = defaultdict(int)
     for line in read(sep=' -> |,'):
         for p1, p2 in windowed(chunked(line, 2), 2):
-            cave.update((p, 1) for p in Vec2(*p1).range_to(Vec2(*p2)))
+            cave.update((p, 1) for p in vec2.range_to(Vec2(*p1), Vec2(*p2)))
     floor = max(v.y for v in cave.keys())
     return cave, floor
 

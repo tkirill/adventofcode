@@ -1,7 +1,6 @@
 from aoc.io import *
 from aoc.primitives import *
 from aoc import grid
-from dataclasses import dataclass
 from collections import Counter, deque
 from more_itertools import flatten, nth, ilen
 from itertools import takewhile

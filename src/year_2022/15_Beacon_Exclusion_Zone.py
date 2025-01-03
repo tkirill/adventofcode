@@ -1,6 +1,8 @@
 from __future__ import annotations
+from collections.abc import Iterable
 from aoc.io import *
 from aoc.primitives import *
+from aoc import vec2
 
 
 ROW = 2000000
@@ -15,7 +17,7 @@ def read_input():
 
 
 def exclude_single(s: Vec2, b: Vec2, y: int) -> tuple[int, int]:
-    dx = s.mdist(b) - abs(s.y - y)
+    dx = vec2.mdist(s, b) - abs(s.y - y)
     return (s.x-dx, s.x+dx) if dx >= 0 else None
 
 

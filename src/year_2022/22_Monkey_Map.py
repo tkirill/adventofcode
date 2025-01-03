@@ -86,7 +86,7 @@ def step1(field: dict[Vec2, bool], cur: GridWalker) -> GridWalker:
     nxt_walker = cur.step()
     while nxt_walker.pos not in field:
         nxt_walker = nxt_walker.step()
-        nxt_walker = GridWalker(nxt_walker.pos.mod_by(Vec2(W, H)), nxt_walker.velocity)
+        nxt_walker = GridWalker(nxt_walker.pos % Vec2(W, H), nxt_walker.velocity)
     return nxt_walker
 
 
