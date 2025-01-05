@@ -60,7 +60,7 @@ class Vec3(NamedTuple):
 
 
 @dataclass(frozen=True, order=True)
-class Range:
+class Interval:
 
     start: int
     end: int
@@ -72,8 +72,8 @@ class Range:
         return self.start <= x <= self.end
 
     @classmethod
-    def lw(cls, l, w) -> Range:
-        return Range(l, l+w)
+    def lw(cls, l, w) -> Interval:
+        return Interval(l, l+w)
 
 
 @dataclass

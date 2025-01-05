@@ -1,5 +1,6 @@
 from aoc.io import *
 from aoc.grid import *
+from aoc import vec2
 from aoc import algo
 
 
@@ -25,7 +26,7 @@ def dig_lagoon(vertices: list[Vec2]):
         prev = vertices[i-1] - delta
         cur = vertices[i] - delta
         area += cur.x*prev.y - cur.y*prev.x
-        edge += prev.mdist(cur)
+        edge += vec2.mdist(prev, cur)
     area = abs(area // 2)
     interior = area - edge // 2 + 1
     return edge + interior

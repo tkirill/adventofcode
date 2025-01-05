@@ -1,6 +1,7 @@
 from aoc.io import *
 from aoc.primitives import *
 from aoc.grid import *
+from aoc import vec2
 import itertools as itls
 import more_itertools as mitls
 from collections.abc import Iterable
@@ -24,5 +25,5 @@ def distances(galaxies):
 
 
 map = Field(read(parse=list))
-print('Star 1:', sum(a.mdist(b) for a, b in itls.combinations(find_galaxies(2), 2)))
-print('Star 2:', sum(a.mdist(b) for a, b in itls.combinations(find_galaxies(1_000_000), 2)))
+print('Star 1:', sum(vec2.mdist(a, b) for a, b in itls.combinations(find_galaxies(2), 2)))
+print('Star 2:', sum(vec2.mdist(a, b) for a, b in itls.combinations(find_galaxies(1_000_000), 2)))
