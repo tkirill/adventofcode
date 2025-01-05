@@ -5,168 +5,157 @@ from collections.abc import Sequence, Iterable
 from typing import Tuple, Optional, Callable
 import itertools
 
-from aoc.primitives import Vec2, Rectangle
+from aoc.primitives import Vec2, Rectangle, Grid2d
 from aoc import algo, vec2
 
 
-@dataclass
-class Grid2d:
+def up(g: Grid2d, p: Vec2, d: int=1) -> Vec2:
+        return p + g.delta_up * d
+    
+def down(g: Grid2d, p: Vec2, d: int=1) -> Vec2:
+    return p - g.delta_up * d
 
-    delta_right: Vec2 = Vec2(1, 0)
-    delta_up: Vec2 = Vec2(0, -1)
-    delta_left: Vec2 = dataclasses.field(init=False)
-    delta_down: Vec2 = dataclasses.field(init=False)
+def left(g: Grid2d, p: Vec2, d: int=1) -> Vec2:
+    return p - g.delta_right * d
 
-    def __post_init__(self):
-        self.delta_left = -self.delta_right
-        self.delta_down = - self.delta_up
+def right(g: Grid2d, p: Vec2, d: int=1) -> Vec2:
+    return p + g.delta_right * d
 
-    def up(self, p: Vec2, d: int=1) -> Vec2:
-        return p + self.delta_up * d
-    
-    def down(self, p: Vec2, d: int=1) -> Vec2:
-        return p - self.delta_up * d
-    
-    def left(self, p: Vec2, d: int=1) -> Vec2:
-        return p - self.delta_right * d
-    
-    def right(self, p: Vec2, d: int=1) -> Vec2:
-        return p + self.delta_right * d
-    
-    def up_left(self, p: Vec2, d_up: int=1, d_left: int=1) -> Vec2:
-        return self.left(self.up(p, d_up), d_left)
-    
-    def up_right(self, p: Vec2, d_up: int=1, d_left: int=1) -> Vec2:
-        return self.right(self.up(p, d_up), d_left)
-    
-    def down_left(self, p: Vec2, d_up: int=1, d_left: int=1) -> Vec2:
-        return self.left(self.down(p, d_up), d_left)
-    
-    def down_right(self, p: Vec2, d_up: int=1, d_left: int=1) -> Vec2:
-        return self.right(self.down(p, d_up), d_left)
-    
-    def step(self, p: Vec2, dir: str, dist: int=1) -> Vec2:
-        match(dir):
-            case 'L' | 'W' | '<': return self.left(p, dist)
-            case 'R' | 'E' | '>': return self.right(p, dist)
-            case 'U' | 'N' | '^': return self.up(p, dist)
-            case 'D' | 'S' | 'v': return self.down(p, dist)
-    
-    def beam_up(self, p: Vec2, skip_start: bool=False) -> Iterable[Vec2]:
-        return vec2.beam(p, self.delta_up, skip_start)
-    
-    def beam_up_left(self, p: Vec2, skip_start: bool=False) -> Iterable[Vec2]:
-        return vec2.beam(p, self.delta_up + self.delta_left, skip_start)
-    
-    def beam_up_right(self, p: Vec2, skip_start: bool=False) -> Iterable[Vec2]:
-        return vec2.beam(p, self.delta_up + self.delta_right, skip_start)
-    
-    def beam_down(self, p: Vec2, skip_start: bool=False) -> Iterable[Vec2]:
-        return vec2.beam(p, self.delta_down, skip_start)
-    
-    def beam_down_left(self, p: Vec2, skip_start: bool=False) -> Iterable[Vec2]:
-        return vec2.beam(p, self.delta_down + self.delta_left, skip_start)
-    
-    def beam_down_right(self, p: Vec2, skip_start: bool=False) -> Iterable[Vec2]:
-        return vec2.beam(p, self.delta_down + self.delta_right, skip_start)
-    
-    def beam_left(self, p: Vec2, skip_start: bool=False) -> Iterable[Vec2]:
-        return vec2.beam(p, self.delta_left, skip_start)
-    
-    def beam_right(self, p: Vec2, skip_start: bool=False) -> Iterable[Vec2]:
-        return vec2.beam(p, self.delta_right, skip_start)
-    
-    def range_up(self, p: Vec2, l: int) -> Iterable[Vec2]:
-        return itertools.islice(self.beam_up(p), l)
-    
-    def range_down(self, p: Vec2, l: int) -> Iterable[Vec2]:
-        return itertools.islice(self.beam_down(p), l)
-    
-    def range_left(self, p: Vec2, l: int) -> Iterable[Vec2]:
-        return itertools.islice(self.beam_left(p), l)
-    
-    def range_right(self, p: Vec2, l: int) -> Iterable[Vec2]:
-        return itertools.islice(self.beam_right(p), l)
-    
-    def near4(self, p: Vec2) -> Iterable[Vec2]:
-        yield self.up(p)
-        yield self.right(p)
-        yield self.down(p)
-        yield self.left(p)
-    
-    def near8(self, p: Vec2) -> Iterable[Vec2]:
-        yield self.up_left(p)
-        yield self.up(p)
-        yield self.up_right(p)
-        yield self.right(p)
-        yield self.down_right(p)
-        yield self.down(p)
-        yield self.down_left(p)
-        yield self.left(p)
-    
-    def beam4(self, p: Vec2, skip_start: bool=False) -> Iterable[Iterable[Vec2]]:
-        yield self.beam_up(p, skip_start)
-        yield self.beam_right(p, skip_start)
-        yield self.beam_down(p, skip_start)
-        yield self.beam_left(p, skip_start)
-    
-    def beam8(self, p: Vec2, skip_start: bool=False) -> Iterable[Iterable[Vec2]]:
-        yield self.beam_up_left(p, skip_start)
-        yield self.beam_up(p, skip_start)
-        yield self.beam_up_right(p, skip_start)
-        yield self.beam_right(p, skip_start)
-        yield self.beam_down_right(p, skip_start)
-        yield self.beam_down(p, skip_start)
-        yield self.beam_down_left(p, skip_start)
-        yield self.beam_left(p, skip_start)
-    
-    def near8_rectangle(self, r: Rectangle) -> Iterable[Vec2]:
-        cur = self.up_left(r.top_left)
+
+def up_left(g: Grid2d, p: Vec2, d_up: int=1, d_left: int=1) -> Vec2:
+    return left(g, up(g, p, d_up), d_left)
+
+def up_right(g: Grid2d, p: Vec2, d_up: int=1, d_left: int=1) -> Vec2:
+    return right(g, up(g, p, d_up), d_left)
+
+def down_left(g: Grid2d, p: Vec2, d_up: int=1, d_left: int=1) -> Vec2:
+    return left(g, down(g, p, d_up), d_left)
+
+def down_right(g: Grid2d, p: Vec2, d_up: int=1, d_left: int=1) -> Vec2:
+    return right(g, down(g, p, d_up), d_left)
+
+def step(g: Grid2d, p: Vec2, dir: str, dist: int=1) -> Vec2:
+    match(dir):
+        case 'L' | 'W' | '<': return left(g, p, dist)
+        case 'R' | 'E' | '>': return right(g, p, dist)
+        case 'U' | 'N' | '^': return up(g, p, dist)
+        case 'D' | 'S' | 'v': return down(g, p, dist)
+
+def beam_up(g: Grid2d, p: Vec2, skip_start: bool=False) -> Iterable[Vec2]:
+    return vec2.beam(p, g.delta_up, skip_start)
+
+def beam_up_left(g: Grid2d, p: Vec2, skip_start: bool=False) -> Iterable[Vec2]:
+    return vec2.beam(p, g.delta_up + g.delta_left, skip_start)
+
+def beam_up_right(g: Grid2d, p: Vec2, skip_start: bool=False) -> Iterable[Vec2]:
+    return vec2.beam(p, g.delta_up + g.delta_right, skip_start)
+
+def beam_down(g: Grid2d, p: Vec2, skip_start: bool=False) -> Iterable[Vec2]:
+    return vec2.beam(p, g.delta_down, skip_start)
+
+def beam_down_left(g: Grid2d, p: Vec2, skip_start: bool=False) -> Iterable[Vec2]:
+    return vec2.beam(p, g.delta_down + g.delta_left, skip_start)
+
+def beam_down_right(g: Grid2d, p: Vec2, skip_start: bool=False) -> Iterable[Vec2]:
+    return vec2.beam(p, g.delta_down + g.delta_right, skip_start)
+
+def beam_left(g: Grid2d, p: Vec2, skip_start: bool=False) -> Iterable[Vec2]:
+    return vec2.beam(p, g.delta_left, skip_start)
+
+def beam_right(g: Grid2d, p: Vec2, skip_start: bool=False) -> Iterable[Vec2]:
+    return vec2.beam(p, g.delta_right, skip_start)
+
+def range_up(g: Grid2d, p: Vec2, l: int) -> Iterable[Vec2]:
+    return itertools.islice(beam_up(g, p), l)
+
+def range_down(g: Grid2d, p: Vec2, l: int) -> Iterable[Vec2]:
+    return itertools.islice(beam_down(g, p), l)
+
+def range_left(g: Grid2d, p: Vec2, l: int) -> Iterable[Vec2]:
+    return itertools.islice(beam_left(g, p), l)
+
+def range_right(g: Grid2d, p: Vec2, l: int) -> Iterable[Vec2]:
+    return itertools.islice(beam_right(g, p), l)
+
+def near4(g: Grid2d, p: Vec2) -> Iterable[Vec2]:
+    yield up(g, p)
+    yield right(g, p)
+    yield down(g, p)
+    yield left(g, p)
+
+def near8(g: Grid2d, p: Vec2) -> Iterable[Vec2]:
+    yield up_left(g, p)
+    yield up(g, p)
+    yield up_right(g, p)
+    yield right(g, p)
+    yield down_right(g, p)
+    yield down(g, p)
+    yield down_left(g, p)
+    yield left(g, p)
+
+def beam4(g: Grid2d, p: Vec2, skip_start: bool=False) -> Iterable[Iterable[Vec2]]:
+    yield beam_up(g, p, skip_start)
+    yield beam_right(g, p, skip_start)
+    yield beam_down(g, p, skip_start)
+    yield beam_left(g, p, skip_start)
+
+def beam8(g: Grid2d, p: Vec2, skip_start: bool=False) -> Iterable[Iterable[Vec2]]:
+    yield beam_up_left(g, p, skip_start)
+    yield beam_up(g, p, skip_start)
+    yield beam_up_right(g, p, skip_start)
+    yield beam_right(g, p, skip_start)
+    yield beam_down_right(g, p, skip_start)
+    yield beam_down(g, p, skip_start)
+    yield beam_down_left(g, p, skip_start)
+    yield beam_left(g, p, skip_start)
+
+def near8_rectangle(g: Grid2d, r: Rectangle) -> Iterable[Vec2]:
+    cur = up_left(g, r.top_left)
+    yield cur
+    for _ in range(r.w+1):
+        cur = right(g, cur)
         yield cur
-        for _ in range(r.w+1):
-            cur = self.right(cur)
-            yield cur
-        for _ in range(r.h+1):
-            cur = self.down(cur)
-            yield cur
-        for _ in range(r.w+1):
-            cur = self.left(cur)
-            yield cur
-        for _ in range(r.h):
-            cur = self.up(cur)
-            yield cur
-    
-    def rotatelr(self, p: Vec2, dir: str) -> Vec2:
-        if dir == 'R':
-            return Vec2(p.y * self.delta_up.y, p.x * -self.delta_up.y)
-        return Vec2(p.y * -self.delta_up.y, p.x * self.delta_up.y)
-    
-    def side_up(self, p: Vec2) -> Iterable[Vec2]:
-        yield self.up_left(p)
-        yield self.up(p)
-        yield self.up_right(p)
-    
-    def side_right(self, p: Vec2) -> Iterable[Vec2]:
-        yield self.up_right(p)
-        yield self.right(p)
-        yield self.down_right(p)
-    
-    def side_down(self, p: Vec2) -> Iterable[Vec2]:
-        yield self.down_left(p)
-        yield self.down(p)
-        yield self.down_right(p)
-    
-    def side_left(self, p: Vec2) -> Iterable[Vec2]:
-        yield self.down_left(p)
-        yield self.left(p)
-        yield self.up_left(p)
-    
-    def side(self, p: Vec2, side: str) -> Iterable[Vec2]:
-        match side:
-            case 'U' | 'N': return self.side_up(p)
-            case 'R' | 'E': return self.side_right(p)
-            case 'D' | 'S': return self.side_down(p)
-            case 'L' | 'W': return self.side_left(p)
+    for _ in range(r.h+1):
+        cur = down(g, cur)
+        yield cur
+    for _ in range(r.w+1):
+        cur = left(g, cur)
+        yield cur
+    for _ in range(r.h):
+        cur = up(g, cur)
+        yield cur
+
+def rotatelr(g: Grid2d, p: Vec2, dir: str) -> Vec2:
+    if dir == 'R':
+        return Vec2(p.y * g.delta_up.y, p.x * -g.delta_up.y)
+    return Vec2(p.y * -g.delta_up.y, p.x * g.delta_up.y)
+
+def side_up(g: Grid2d, p: Vec2) -> Iterable[Vec2]:
+    yield up_left(g, p)
+    yield up(g, p)
+    yield up_right(g, p)
+
+def side_right(g: Grid2d, p: Vec2) -> Iterable[Vec2]:
+    yield up_right(g, p)
+    yield right(g, p)
+    yield down_right(g, p)
+
+def side_down(g: Grid2d, p: Vec2) -> Iterable[Vec2]:
+    yield down_left(g, p)
+    yield down(g, p)
+    yield down_right(g, p)
+
+def side_left(g: Grid2d, p: Vec2) -> Iterable[Vec2]:
+    yield down_left(g, p)
+    yield left(g, p)
+    yield up_left(g, p)
+
+def side(g: Grid2d, p: Vec2, side: str) -> Iterable[Vec2]:
+    match side:
+        case 'U' | 'N': return side_up(g, p)
+        case 'R' | 'E': return side_right(g, p)
+        case 'D' | 'S': return side_down(g, p)
+        case 'L' | 'W': return side_left(g, p)
 
 
 screen = Grid2d()
@@ -188,7 +177,7 @@ class GridWalker:
         return dataclasses.replace(self, pos=Vec2((self.pos.x + w) % w, (self.pos.y + h) % h))
     
     def rotatelr(self, dir: str) -> GridWalker:
-        return GridWalker(self.pos, self.grid.rotatelr(self.velocity, dir))
+        return GridWalker(self.pos, rotatelr(self.grid, self.velocity, dir))
 
 
 @dataclass
@@ -321,19 +310,19 @@ class Field[TValue]:
         return self.with_values(self.beam_right(pos, skip_start))
     
     def near4(self, pos: Vec2) -> Iterable[Vec2]:
-        return self.inside(self.grid.near4(pos))
+        return self.inside(near4(self.grid, pos))
     
     def near4v(self, pos: Vec2) -> Iterable[tuple[Vec2, TValue]]:
         return self.with_values(self.near4(pos))
     
     def near8(self, pos: Vec2) -> Iterable[Vec2]:
-        return self.inside(self.grid.near8(pos))
+        return self.inside(near8(self.grid, pos))
     
     def near8v(self, pos: Vec2) -> Iterable[Vec2]:
         return self.with_values(self.near8(pos))
     
     def beam4(self, pos: Vec2, skip_start: bool=False) -> Iterable[Iterable[Vec2]]:
-        for beam in self.grid.beam4(pos, skip_start):
+        for beam in beam4(self.grid, pos, skip_start):
             yield self.takewhile_inside(beam)
     
     def beam4v(self, pos: Vec2, skip_start: bool=False) -> Iterable[Iterable[Tuple[Vec2, TValue]]]:
@@ -341,7 +330,7 @@ class Field[TValue]:
             yield self.with_values(beam)
     
     def beam8(self, pos: Vec2, skip_start: bool=False) -> Iterable[Iterable[Vec2]]:
-        for beam in self.grid.beam8(pos, skip_start):
+        for beam in beam8(self.grid, pos, skip_start):
             yield self.takewhile_inside(beam)
     
     def beam8v(self, pos: Vec2, skip_start: bool=False) -> Iterable[Iterable[Tuple[Vec2, TValue]]]:

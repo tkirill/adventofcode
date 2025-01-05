@@ -1,4 +1,5 @@
 from __future__ import annotations
+import dataclasses
 from dataclasses import dataclass
 from typing import NamedTuple
 
@@ -85,6 +86,19 @@ class Rectangle:
     @classmethod
     def ylr(cls, y: int, l: int, r: int) -> Rectangle:
         return Rectangle(Vec2(l, y), r-l+1, 1)
+
+
+@dataclass
+class Grid2d:
+
+    delta_right: Vec2 = Vec2(1, 0)
+    delta_up: Vec2 = Vec2(0, -1)
+    delta_left: Vec2 = dataclasses.field(init=False)
+    delta_down: Vec2 = dataclasses.field(init=False)
+
+    def __post_init__(self):
+        self.delta_left = -self.delta_right
+        self.delta_down = - self.delta_up
 
 
 def sign(x: int) -> bool:
