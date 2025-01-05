@@ -270,7 +270,7 @@ class Field[TValue]:
         return Field(algo.transpose(self.items))
     
     def beam_to(self, start: Vec2, other: Vec2, skip_start: bool=False, skip_other: bool=False) -> Iterable[Vec2]:
-        return self.takewhile_inside(start.beam_to(other, skip_start=skip_start, skip_other=skip_other))
+        return self.takewhile_inside(vec2.beam_to(start, other, skip_start=skip_start, skip_other=skip_other))
     
     def beam_up(self, pos: Vec2, skip_start: bool=False) -> Iterable[Vec2]:
         return self.takewhile_inside(self.grid.beam_up(pos, skip_start))
@@ -355,7 +355,7 @@ class Field[TValue]:
         yield from algo.bfs(start, near, track_visited=track_visited)
     
     def circle(self, pos: Vec2, r: int) -> Iterable[Vec2]:
-        yield from self.inside(pos.circle(r))
+        yield from self.inside(vec2.circle(pos, r))
     
     def circlev(self, pos: Vec2, r: int) -> Iterable[tuple[Vec2, TValue]]:
         yield from self.with_values(self.circle(pos, r))

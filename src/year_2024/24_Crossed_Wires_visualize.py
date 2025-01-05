@@ -1,6 +1,5 @@
 from aoc.io import *
 import graphlib
-import itertools as itls
 
 
 def simulate(inputs: dict[str, int], gates: list[tuple[str, str]]) -> int:

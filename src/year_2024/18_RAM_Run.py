@@ -1,7 +1,6 @@
 from aoc.io import *
 from aoc.grid import *
 from aoc.primitives import *
-from aoc import algo
 
 
 bytes =[Vec2(x, y) for x, y in read(sep=',')]

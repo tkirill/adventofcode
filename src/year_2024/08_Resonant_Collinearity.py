@@ -1,7 +1,6 @@
 from aoc.io import *
 from aoc.grid import *
 from aoc.primitives import *
-from aoc import algo
 from collections import defaultdict
 import itertools as itls
 
