@@ -16,14 +16,14 @@ def read_elves():
 
 
 def round(elves: set[Vec2], directions: list[str]):
-    nears = Counter(flatten(grid.screen.near8(e) for e in elves))
+    nears = Counter(flatten(grid.near8(grid.screen, e) for e in elves))
 
     def propose_move(elf: Vec2):
         if elf not in nears:
             return elf
         for d in directions:
-            if all(n not in elves for n in grid.screen.side(elf, d)):
-                return grid.screen.step(elf, d)
+            if all(n not in elves for n in grid.side(grid.screen, elf, d)):
+                return grid.step(grid.screen, elf, d)
         return elf
 
     moves = {e: propose_move(e) for e in elves}

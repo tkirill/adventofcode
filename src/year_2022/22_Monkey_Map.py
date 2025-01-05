@@ -1,6 +1,7 @@
 from aoc.io import *
 from aoc.primitives import *
 from aoc.grid import *
+from aoc import grid
 import itertools as itls
 import re
 
@@ -30,8 +31,8 @@ def getmoves(moves: str) -> list[tuple[str, int]]:
 def make_tp(src: list[Vec2], sdir: Vec2, dst: list[Vec2], ddir: Vec2):
     for ss, dd in zip(src, dst):
         yield GridWalker(ss, sdir), GridWalker(dd, ddir)
-    sdir = screen.rotatelr(screen.rotatelr(sdir, "R"), "R")
-    ddir = screen.rotatelr(screen.rotatelr(ddir, "R"), "R")
+    sdir = grid.rotatelr(screen, grid.rotatelr(screen, sdir, "R"), "R")
+    ddir = grid.rotatelr(screen, grid.rotatelr(screen, ddir, "R"), "R")
     for ss, dd in zip(src, dst):
         yield GridWalker(dd, ddir), GridWalker(ss, sdir)
 

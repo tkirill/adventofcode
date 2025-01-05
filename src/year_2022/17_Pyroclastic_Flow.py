@@ -13,12 +13,12 @@ class Rock(NamedTuple):
     parts: list[Vec2]
 
     def down(self) -> Rock:
-        return Rock([grid.traditional.down(x) for x in self.parts])
+        return Rock([grid.down(grid.traditional, x) for x in self.parts])
     
     def side(self, s: str):
         if s == '<':
-            return Rock([grid.traditional.left(x) for x in self.parts])
-        return Rock([grid.traditional.right(x) for x in self.parts])
+            return Rock([grid.left(grid.traditional, x) for x in self.parts])
+        return Rock([grid.right(grid.traditional, x) for x in self.parts])
     
     def adjust(self, d: Vec2) -> Rock:
         return Rock([x + d for x in self.parts])

@@ -10,7 +10,7 @@ def pull(len_: int, moves: Iterable[tuple[str, int]]):
     visited = {rope[-1]}
     for d, n in moves:
         for _ in range(n):
-            rope[0] = grid.screen.step(rope[0], d)
+            rope[0] = grid.step(grid.screen, rope[0], d)
             for i in range(1, len(rope)):
                 if vec2.cdist(rope[i], rope[i-1]) <= 1:
                     continue

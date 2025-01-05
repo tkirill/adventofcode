@@ -3,6 +3,7 @@ from aoc.io import *
 from aoc.primitives import *
 from aoc.grid import *
 from aoc.algo import callchain, bfs
+from aoc import grid
 from typing import NamedTuple
 import dataclasses
 from itertools import islice
@@ -23,7 +24,7 @@ class State(NamedTuple):
         bpos = blizzard_cache[self.time+1]
         exit_visited = self.exit_visited or self.pos == exit_
         entry_visited_again = self.entry_visited_again or self.exit_visited and self.pos == entry
-        for n in screen.near4(self.pos):
+        for n in grid.near4(screen, self.pos):
             if (n == entry or n == exit_) or 1 <= n.x <= field.w-2 and 1 <= n.y <= field.h-2 and n not in bpos:
                 yield State(n, self.time+1, exit_visited, entry_visited_again)
         if self.pos not in bpos:

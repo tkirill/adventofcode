@@ -1,9 +1,7 @@
 from __future__ import annotations
 from aoc.io import *
 from aoc.primitives import *
-from aoc import grid
-from aoc import algo
-from aoc import vec2
+from aoc import grid, algo, vec2
 from collections import defaultdict
 from more_itertools import windowed, chunked, ilen
 
@@ -23,16 +21,16 @@ def sand(cave, floor):
         return
     while True:
         yield cur
-        d = grid.screen.down(cur)
+        d = grid.down(grid.screen, cur)
         if d.y == floor:
             cave[cur] = 2
             break
         elif not cave[d]:
             cur = d
-        elif not cave[grid.screen.left(d)]:
-            cur = grid.screen.left(d)
-        elif not cave[grid.screen.right(d)]:
-            cur = grid.screen.right(d)
+        elif not cave[grid.left(grid.screen, d)]:
+            cur = grid.left(grid.screen, d)
+        elif not cave[grid.right(grid.screen, d)]:
+            cur = grid.right(grid.screen, d)
         else:
             cave[cur] = 2
             break
@@ -69,7 +67,7 @@ def simulate2_bfs(cave: defaultdict, floor):
         return pos.y != floor and pos not in cave
 
     def near(cur: Vec2):
-        return filter(is_open, [grid.screen.down_left(cur), grid.screen.down(cur), grid.screen.down_right(cur)])
+        return filter(is_open, [grid.down_left(grid.screen, cur), grid.down(grid.screen, cur), grid.down_right(grid.screen, cur)])
 
     return algo.bfs(Vec2(500, 0), near)
 
