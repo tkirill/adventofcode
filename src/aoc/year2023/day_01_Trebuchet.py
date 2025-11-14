@@ -1,5 +1,3 @@
-from typing import Sequence
-
 from aoc.io import readlines
 
 
@@ -9,7 +7,7 @@ ALL_DIGITS = list(DIGITS) + DIGIT_WORDS
 DIGIT_TO_INT = {d: DIGITS.index(d)+1 for d in DIGITS} | {d: DIGIT_WORDS.index(d)+1 for d in DIGIT_WORDS}
 
 
-def find_first_and_last_digits(line: str, digits: Sequence[str]) -> int:
+def find_first_and_last_digits(line: str, digits: list[str]) -> int:
     first = min([d for d in digits if d in line], key=line.find)
     last = max([d for d in digits if d in line], key=line.rfind)
     return int(f'{DIGIT_TO_INT[first]}{DIGIT_TO_INT[last]}')
