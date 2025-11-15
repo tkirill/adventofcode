@@ -1,4 +1,4 @@
-from aoc.year2023 import day_01_Trebuchet, day_02_Cube_Conundrum, day_03_Gear_Ratios
+from aoc.year2023 import day_01_Trebuchet, day_02_Cube_Conundrum, day_03_Gear_Ratios, day_04_Scratchcards
 
 
 def main():
@@ -15,3 +15,8 @@ def main():
     print('Day 03: Gear Ratios')
     print('Star 1:', day_03_Gear_Ratios.star1())
     print('Star 2:', day_03_Gear_Ratios.star2())
+    
+    print()
+    print('Day 04: Scratchcards')
+    print('Star 1:', day_04_Scratchcards.star1())
+    print('Star 2:', day_04_Scratchcards.star2())
