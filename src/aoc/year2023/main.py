@@ -1,4 +1,11 @@
-from aoc.year2023 import day_01_Trebuchet, day_02_Cube_Conundrum, day_03_Gear_Ratios, day_04_Scratchcards, day_05_Seeds
+from aoc.year2023 import (
+    day_01_Trebuchet,
+    day_02_Cube_Conundrum,
+    day_03_Gear_Ratios,
+    day_04_Scratchcards,
+    day_05_Seeds,
+    day_06_Wait_For_It
+)
 
 
 def main():
@@ -25,3 +32,8 @@ def main():
     print('Day 05: If You Give A Seed A Fertilizer')
     print('Star 1:', day_05_Seeds.star1())
     print('Star 2:', day_05_Seeds.star2())
+
+    print()
+    print('Day 06: Wait For It')
+    print('Star 1:', day_06_Wait_For_It.star1())
+    print('Star 2:', day_06_Wait_For_It.star2())

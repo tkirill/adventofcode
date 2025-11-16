@@ -3,7 +3,7 @@ import unittest
 from aoc.year2023.day_05_Seeds import star1, star2
 
 
-class Year2023_Day04_Seeds(unittest.TestCase):
+class Year2023_Day05_Seeds(unittest.TestCase):
 
     def testStar1(self):
         actual = star1()
