@@ -1,3 +1,3 @@
-from aoc.year2023 import main
+from aoc.year2023.main import main
 
 main()

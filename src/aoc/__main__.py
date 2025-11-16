@@ -1,5 +1,4 @@
-from aoc import year2023
-
+from aoc.year2023.main import main as main2023
 
 print('Year 2023')
-year2023.main()
+main2023()
