@@ -5,7 +5,8 @@ from aoc.year2023 import (
     day_04_Scratchcards,
     day_05_Seeds,
     day_06_Wait_For_It,
-    day_07_Camel_Cards
+    day_07_Camel_Cards,
+    day_08_Haunted_Wasteland
 )
 
 
@@ -43,3 +44,8 @@ def main():
     print('Day 07: Camel Cards')
     print('Star 1:', day_07_Camel_Cards.star1())
     print('Star 2:', day_07_Camel_Cards.star2())
+
+    print()
+    print('Day 08: Haunted Wasteland')
+    print('Star 1:', day_08_Haunted_Wasteland.star1())
+    print('Star 2:', day_08_Haunted_Wasteland.star2())
