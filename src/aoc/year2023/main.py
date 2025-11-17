@@ -4,7 +4,8 @@ from aoc.year2023 import (
     day_03_Gear_Ratios,
     day_04_Scratchcards,
     day_05_Seeds,
-    day_06_Wait_For_It
+    day_06_Wait_For_It,
+    day_07_Camel_Cards
 )
 
 
@@ -37,3 +38,8 @@ def main():
     print('Day 06: Wait For It')
     print('Star 1:', day_06_Wait_For_It.star1())
     print('Star 2:', day_06_Wait_For_It.star2())
+
+    print()
+    print('Day 07: Camel Cards')
+    print('Star 1:', day_07_Camel_Cards.star1())
+    print('Star 2:', day_07_Camel_Cards.star2())
