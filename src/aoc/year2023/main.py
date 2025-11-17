@@ -6,7 +6,8 @@ from aoc.year2023 import (
     day_05_Seeds,
     day_06_Wait_For_It,
     day_07_Camel_Cards,
-    day_08_Haunted_Wasteland
+    day_08_Haunted_Wasteland,
+    day_09_Mirage_Maintenance
 )
 
 
@@ -49,3 +50,8 @@ def main():
     print('Day 08: Haunted Wasteland')
     print('Star 1:', day_08_Haunted_Wasteland.star1())
     print('Star 2:', day_08_Haunted_Wasteland.star2())
+
+    print()
+    print('Day 09: Mirage Maintenance')
+    print('Star 1:', day_09_Mirage_Maintenance.star1())
+    print('Star 2:', day_09_Mirage_Maintenance.star2())
