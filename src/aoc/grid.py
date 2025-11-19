@@ -13,6 +13,20 @@ DOWN_RIGHT = Vec2(1, 1)
 DOWN = Vec2(0, 1)
 DOWN_LEFT = Vec2(-1, 1)
 LEFT = Vec2(-1, 0)
+OPPOSITE = {
+    UP_LEFT: DOWN_RIGHT,
+    UP: DOWN,
+    UP_RIGHT: DOWN_LEFT,
+    RIGHT: LEFT,
+    DOWN_RIGHT: UP_LEFT,
+    DOWN: UP,
+    DOWN_LEFT: UP_RIGHT,
+    LEFT: RIGHT
+}
+
+
+def opposite(direction: Vec2) -> Vec2:
+    return OPPOSITE[direction]
 
 
 def near8(p: Vec2 | Rectangle):

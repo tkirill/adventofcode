@@ -1,5 +1,5 @@
 from dataclasses import dataclass, field
-from typing import Iterable
+from typing import Iterable, Optional
 
 from aoc.vec2 import Vec2
 from aoc.rectangle import Rectangle
@@ -31,3 +31,27 @@ def near8[TValue](b: Board[TValue], p: Vec2 | Rectangle) -> Iterable[Vec2]:
 def near8v[TValue](b: Board[TValue], p: Vec2 | Rectangle) -> Iterable[tuple[Vec2, TValue]]:
     for p in near8(b, p):
         yield p, b[p]
+
+
+def with_value[TValue](b: Board[TValue], positions: Iterable[Vec2]) -> Iterable[tuple[Vec2, TValue]]:
+    for p in positions:
+        yield p, b[p]
+
+
+def cells[TValue](b: Board[TValue]) -> Iterable[Vec2]:
+    for row in range(b.height):
+        for col in range(b.width):
+            yield Vec2(col, row)
+
+
+def cellsv[TValue](b: Board[TValue]) -> Iterable[tuple[Vec2, TValue]]:
+    yield from with_value(b, cells(b))
+
+
+def find[TValue](b: Board[TValue], value: TValue) -> Optional[TValue]:
+    return next((p for p, v in cellsv(b) if v == value), None)
+
+
+def rows[TValue](b: Board[TValue]) -> Iterable[Iterable[Vec2]]:
+    for row in range(b.height):
+        yield (Vec2(col, row) for col in range(b.width))
