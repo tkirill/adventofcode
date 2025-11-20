@@ -57,6 +57,11 @@ def rows[TValue](b: Board[TValue]) -> Iterable[Iterable[Vec2]]:
         yield (Vec2(col, row) for col in range(b.width))
 
 
+def rowsv[TValue](b: Board[TValue]) -> Iterable[Iterable[tuple[Vec2, TValue]]]:
+    for row in rows(b):
+        yield with_value(b, row)
+
+
 def cols[TValue](b: Board[TValue]) -> Iterable[Iterable[Vec2]]:
     for col in range(b.width):
         yield (Vec2(col, row) for row in range(b.height))

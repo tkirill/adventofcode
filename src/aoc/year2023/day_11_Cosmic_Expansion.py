@@ -1,4 +1,5 @@
-from itertools import combinations
+from itertools import combinations, accumulate
+from typing import Iterable
 
 from aoc.io import read
 from aoc import board
@@ -10,25 +11,25 @@ from aoc import grid
 def distance(a: Vec2, b: Vec2, empty_rows: list[int], empty_cols: list[int], coeff: int) -> int:
     result = grid.mdist(a, b)
     l, r = min(a.x, b.x), max(a.x, b.x)
-    result += sum(coeff-1 for col in empty_cols if l <= col <= r)
+    result += (empty_cols[r] - empty_cols[l]) * (coeff-1)
     l, r = min(a.y, b.y), max(a.y, b.y)
-    result += sum(coeff-1 for row in empty_rows if l <= row <= r)
+    result += (empty_rows[r] - empty_rows[l]) * (coeff-1)
     return result
 
 
 def star1():
     universe = Board(read(2023, 11, sep=None, parse=list))
     galaxies = [p for p, v in board.cellsv(universe) if v == '#']
-    empty_rows = [r for r, row in enumerate(universe.values) if all(c == '.' for c in row)]
-    empty_cols = [c for c, col in enumerate(board.colsv(universe)) if all(v == '.' for _, v in col)]
+    empty_rows = list(accumulate(int(all(v == '.' for _, v in row)) for row in board.rowsv(universe)))
+    empty_cols = list(accumulate(int(all(v == '.' for _, v in row)) for row in board.colsv(universe)))
     return sum(distance(a, b, empty_rows, empty_cols, 2) for a, b in combinations(galaxies, 2))
 
 
 def star2():
     universe = Board(read(2023, 11, sep=None, parse=list))
     galaxies = [p for p, v in board.cellsv(universe) if v == '#']
-    empty_rows = [r for r, row in enumerate(universe.values) if all(c == '.' for c in row)]
-    empty_cols = [c for c, col in enumerate(board.colsv(universe)) if all(v == '.' for _, v in col)]
+    empty_rows = list(accumulate(int(all(v == '.' for _, v in row)) for row in board.rowsv(universe)))
+    empty_cols = list(accumulate(int(all(v == '.' for _, v in row)) for row in board.colsv(universe)))
     return sum(distance(a, b, empty_rows, empty_cols, 1_000_000) for a, b in combinations(galaxies, 2))
 
 
