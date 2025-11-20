@@ -55,3 +55,13 @@ def find[TValue](b: Board[TValue], value: TValue) -> Optional[TValue]:
 def rows[TValue](b: Board[TValue]) -> Iterable[Iterable[Vec2]]:
     for row in range(b.height):
         yield (Vec2(col, row) for col in range(b.width))
+
+
+def cols[TValue](b: Board[TValue]) -> Iterable[Iterable[Vec2]]:
+    for col in range(b.width):
+        yield (Vec2(col, row) for row in range(b.height))
+
+
+def colsv[TValue](b: Board[TValue]) -> Iterable[Iterable[tuple[Vec2, TValue]]]:
+    for col in cols(b):
+        yield with_value(b, col)

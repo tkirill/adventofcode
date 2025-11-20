@@ -90,3 +90,7 @@ def beam(p: Vec2, delta: Vec2, n: Optional[int]=None) -> Iterable[Vec2]:
     while True:
         yield cur
         cur += delta
+
+
+def mdist(a: Vec2, b: Vec2) -> int:
+    return abs(a.x - b.x) + abs(a.y - b.y)
