@@ -19,12 +19,9 @@ def find_galaxies(universe: Board[str]) -> tuple[list[Vec2], list[int], list[boo
 
 
 def distance(a: Vec2, b: Vec2, empty_rows: list[int], empty_cols: list[int], coeff: int) -> int:
-    result = grid.mdist(a, b)
-    l, r = min(a.x, b.x), max(a.x, b.x)
-    result += (empty_cols[r] - empty_cols[l]) * (coeff-1)
-    l, r = min(a.y, b.y), max(a.y, b.y)
-    result += (empty_rows[r] - empty_rows[l]) * (coeff-1)
-    return result
+    return (grid.mdist(a, b) +
+            abs(empty_cols[a.x] - empty_cols[b.x]) * (coeff-1) +
+            abs(empty_rows[a.y] - empty_rows[b.y]) * (coeff-1))
 
 
 def star1():
