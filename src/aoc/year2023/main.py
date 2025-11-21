@@ -7,7 +7,10 @@ from aoc.year2023 import (
     day_06_Wait_For_It,
     day_07_Camel_Cards,
     day_08_Haunted_Wasteland,
-    day_09_Mirage_Maintenance
+    day_09_Mirage_Maintenance,
+    day_10_Pipe_Maze,
+    day_11_Cosmic_Expansion,
+    day_12_Hot_Springs
 )
 
 
@@ -55,3 +58,18 @@ def main():
     print('Day 09: Mirage Maintenance')
     print('Star 1:', day_09_Mirage_Maintenance.star1())
     print('Star 2:', day_09_Mirage_Maintenance.star2())
+
+    print()
+    print('Day 10: Pipe Maze')
+    print('Star 1:', day_10_Pipe_Maze.star1())
+    print('Star 2:', day_10_Pipe_Maze.star2())
+
+    print()
+    print('Day 11: Cosmic Expansion')
+    print('Star 1:', day_11_Cosmic_Expansion.star1())
+    print('Star 2:', day_11_Cosmic_Expansion.star2())
+
+    print()
+    print('Day 12: Hot Springs')
+    print('Star 1:', day_12_Hot_Springs.star1())
+    print('Star 2:', day_12_Hot_Springs.star2())
