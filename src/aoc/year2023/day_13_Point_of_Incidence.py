@@ -43,7 +43,7 @@ def star1():
         if s is not None:
             total += s
         else:
-            total += 100 * board_symmetry([[v for _, v in col] for col in board.colsv(p)], 0)
+            total += 100 * board_symmetry(board.transpose(p).values, 0)
     return total
 
 
@@ -55,7 +55,7 @@ def star2():
         if s is not None:
             total += s
         else:
-            total += 100 * board_symmetry([[v for _, v in col] for col in board.colsv(p)], 1)
+            total += 100 * board_symmetry(board.transpose(p).values, 1)
     return total
 
 

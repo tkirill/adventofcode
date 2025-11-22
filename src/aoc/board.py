@@ -70,3 +70,12 @@ def cols[TValue](b: Board[TValue]) -> Iterable[Iterable[Vec2]]:
 def colsv[TValue](b: Board[TValue]) -> Iterable[Iterable[tuple[Vec2, TValue]]]:
     for col in cols(b):
         yield with_value(b, col)
+
+
+def itranspose[TValue](b: Board[TValue]) -> Iterable[Iterable[TValue]]:
+    for col in range(b.width):
+        yield (b.values[row][col] for row in range(b.height))
+
+
+def transpose[TValue](b: Board[TValue]) -> Board[TValue]:
+    return Board([list(c) for c in itranspose(b)])
