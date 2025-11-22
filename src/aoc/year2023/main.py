@@ -10,7 +10,8 @@ from aoc.year2023 import (
     day_09_Mirage_Maintenance,
     day_10_Pipe_Maze,
     day_11_Cosmic_Expansion,
-    day_12_Hot_Springs
+    day_12_Hot_Springs,
+    day_13_Point_of_Incidence
 )
 
 
@@ -73,3 +74,8 @@ def main():
     print('Day 12: Hot Springs')
     print('Star 1:', day_12_Hot_Springs.star1())
     print('Star 2:', day_12_Hot_Springs.star2())
+
+    print()
+    print('Day 13: Point of Incidence')
+    print('Star 1:', day_13_Point_of_Incidence.star1())
+    print('Star 2:', day_13_Point_of_Incidence.star2())
