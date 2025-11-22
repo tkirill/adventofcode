@@ -37,26 +37,12 @@ def board_symmetry(rows: Iterable[list[str]], smudge_budget: int) -> Optional[in
 
 def star1():
     patterns = [Board(p) for p in readblocks(2023, 13, sep=None, parse=list)]
-    total = 0 
-    for p in patterns:
-        s = board_symmetry(p.values, 0)
-        if s is not None:
-            total += s
-        else:
-            total += 100 * board_symmetry(board.transpose(p).values, 0)
-    return total
+    return sum(board_symmetry(p.values, 0) or 100 * board_symmetry(board.transpose(p).values, 0) for p in patterns)
 
 
 def star2():
     patterns = [Board(p) for p in readblocks(2023, 13, sep=None, parse=list)]
-    total = 0 
-    for p in patterns:
-        s = board_symmetry(p.values, 1)
-        if s is not None:
-            total += s
-        else:
-            total += 100 * board_symmetry(board.transpose(p).values, 1)
-    return total
+    return sum(board_symmetry(p.values, 1) or 100 * board_symmetry(board.transpose(p).values, 1) for p in patterns)
 
 
 if __name__ == '__main__':
