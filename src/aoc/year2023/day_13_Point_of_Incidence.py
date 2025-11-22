@@ -5,25 +5,34 @@ from aoc.board import Board
 from aoc import board
 
 
-def check_symmetry(row: list[str], pos: int, error_budget: int) -> bool:
+def check_symmetry(row: list[str], pos: int, smudge_budget: int) -> bool:
     r = min(pos+1, len(row)-pos-1)
+    smudges = 0
     for i in range(r):
         if row[pos-i] == row[pos+i+1]:
             continue
-        if error_budget:
-            error_budget -= 1
-        else:
-            return False
-    return True
+        if smudges == smudge_budget:
+            return -1
+        smudges += 1
+    return smudges
 
 
-def board_symmetry(rows: Iterable[list[str]], error_budget: int) -> Optional[int]:
-    cur = [i for i in range(0, len(rows[0])-1) if check_symmetry(rows[0], i, error_budget)]
+def board_symmetry(rows: Iterable[list[str]], smudge_budget: int) -> Optional[int]:
+    cur = []
+    for i in range(0, len(rows[0])-1):
+        smudges = check_symmetry(rows[0], i, smudge_budget)
+        if smudges >= 0:
+            cur.append((i, smudges))
     for row in rows[1:]:
-        cur = [i for i in cur if check_symmetry(row, i, error_budget)]
-        if not cur:
+        nxt = []
+        for i, smudges in cur:
+            ne = check_symmetry(row, i, smudge_budget - smudges)
+            if ne >= 0:
+                nxt.append((i, max(smudges, ne)))
+        if not nxt:
             return None
-    return cur[0]+1
+        cur = nxt
+    return next((i+1 for i, e in cur if e == smudge_budget), None)
 
 
 def star1():
@@ -39,7 +48,15 @@ def star1():
 
 
 def star2():
-    pass
+    patterns = [Board(p) for p in readblocks(2023, 13, sep=None, parse=list)]
+    total = 0 
+    for p in patterns:
+        s = board_symmetry(p.values, 1)
+        if s is not None:
+            total += s
+        else:
+            total += 100 * board_symmetry([[v for _, v in col] for col in board.colsv(p)], 1)
+    return total
 
 
 if __name__ == '__main__':
