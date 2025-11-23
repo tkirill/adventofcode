@@ -1,5 +1,6 @@
 from dataclasses import dataclass, field
 from typing import Iterable, Optional
+from itertools import takewhile
 
 from aoc.vec2 import Vec2
 from aoc.rectangle import Rectangle
@@ -22,6 +23,9 @@ class Board[TValue]:
     
     def __getitem__(self, key: Vec2) -> TValue:
         return self.values[key.y][key.x]
+    
+    def __setitem__(self, key: Vec2, value: TValue) -> TValue:
+        self.values[key.y][key.x] = value
 
 
 def near8[TValue](b: Board[TValue], p: Vec2 | Rectangle) -> Iterable[Vec2]:
@@ -79,3 +83,15 @@ def itranspose[TValue](b: Board[TValue]) -> Iterable[Iterable[TValue]]:
 
 def transpose[TValue](b: Board[TValue]) -> Board[TValue]:
     return Board([list(c) for c in itranspose(b)])
+
+
+def beam[TValue](b: Board[TValue], start: Vec2, delta: Vec2, skip_start: bool=False) -> Iterable[Vec2]:
+    return takewhile(b.__contains__, grid.beam(start, delta, skip_start=skip_start))
+
+
+def beamv[TValue](b: Board[TValue], start: Vec2, delta: Vec2, skip_start: bool=False) -> Iterable[tuple[Vec2, TValue]]:
+    yield from with_value(b, beam(b, start, delta, skip_start))
+
+
+def swap[TValue](b: Board[TValue], src: Vec2, dst: Vec2):
+    b[src], b[dst] = b[dst], b[src]

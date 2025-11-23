@@ -82,14 +82,16 @@ def left(p: Vec2) -> Vec2:
     return p + LEFT
 
 
-def beam(p: Vec2, delta: Vec2, n: Optional[int]=None) -> Iterable[Vec2]:
+def beam(p: Vec2, delta: Vec2, n: Optional[int]=None, skip_start: bool=False) -> Iterable[Vec2]:
     if n is not None:
         yield from islice(beam(p, delta), n)
         return
     cur = p
-    while True:
+    if not skip_start:
         yield cur
+    while True:
         cur += delta
+        yield cur
 
 
 def mdist(a: Vec2, b: Vec2) -> int:
