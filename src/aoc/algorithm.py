@@ -62,5 +62,7 @@ def nth_with_cycle[TValue](values: Iterable[TValue], n: int) -> TValue:
             return v
         prev = seen.setdefault(v, i)
         if prev != i:
-            n = (n - i) % (i - prev)
-            return next(islice(it, n-1, n))
+            nn = (n - i) % (i - prev)
+            if not nn:
+                return v
+            return next(islice(it, nn-1, nn))
