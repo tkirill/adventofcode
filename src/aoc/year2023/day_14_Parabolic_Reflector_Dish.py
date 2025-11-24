@@ -1,5 +1,5 @@
 from typing import Iterable
-from itertools import takewhile, islice
+from itertools import takewhile
 from more_itertools import last, consume
 
 from aoc.io import read
