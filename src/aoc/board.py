@@ -42,37 +42,42 @@ def with_value[TValue](b: Board[TValue], positions: Iterable[Vec2]) -> Iterable[
         yield p, b[p]
 
 
-def cells[TValue](b: Board[TValue]) -> Iterable[Vec2]:
-    for row in range(b.height):
-        for col in range(b.width):
-            yield Vec2(col, row)
+def cells[TValue](b: Board[TValue], by_columns: bool=False, _reversed: bool=False) -> Iterable[Vec2]:
+    if not by_columns:
+        for row in rows(b, _reversed):
+            yield from row
+    else:
+        for col in cols(b, _reversed):
+            yield from col
 
 
-def cellsv[TValue](b: Board[TValue]) -> Iterable[tuple[Vec2, TValue]]:
-    yield from with_value(b, cells(b))
+def cellsv[TValue](b: Board[TValue], by_columns: bool=False, _reversed: bool=False) -> Iterable[tuple[Vec2, TValue]]:
+    yield from with_value(b, cells(b, by_columns, _reversed))
 
 
 def find[TValue](b: Board[TValue], value: TValue) -> Optional[TValue]:
     return next((p for p, v in cellsv(b) if v == value), None)
 
 
-def rows[TValue](b: Board[TValue]) -> Iterable[Iterable[Vec2]]:
-    for row in range(b.height):
+def rows[TValue](b: Board[TValue], _reversed: bool=False) -> Iterable[Iterable[Vec2]]:
+    _range = range(b.height) if not _reversed else range(b.height-1, -1, -1)
+    for row in _range:
         yield (Vec2(col, row) for col in range(b.width))
 
 
-def rowsv[TValue](b: Board[TValue]) -> Iterable[Iterable[tuple[Vec2, TValue]]]:
-    for row in rows(b):
+def rowsv[TValue](b: Board[TValue], _reversed: bool=False) -> Iterable[Iterable[tuple[Vec2, TValue]]]:
+    for row in rows(b, _reversed):
         yield with_value(b, row)
 
 
-def cols[TValue](b: Board[TValue]) -> Iterable[Iterable[Vec2]]:
-    for col in range(b.width):
+def cols[TValue](b: Board[TValue], _reversed: bool=False) -> Iterable[Iterable[Vec2]]:
+    _range = range(b.width) if not _reversed else range(b.width-1, -1, -1)
+    for col in _range:
         yield (Vec2(col, row) for row in range(b.height))
 
 
-def colsv[TValue](b: Board[TValue]) -> Iterable[Iterable[tuple[Vec2, TValue]]]:
-    for col in cols(b):
+def colsv[TValue](b: Board[TValue], _reversed: bool=False) -> Iterable[Iterable[tuple[Vec2, TValue]]]:
+    for col in cols(b, _reversed):
         yield with_value(b, col)
 
 

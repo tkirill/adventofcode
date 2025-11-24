@@ -1,5 +1,6 @@
 from typing import Iterable, Callable
 from collections import deque
+from itertools import islice
 
 
 def filter_visited[TState](
@@ -43,3 +44,23 @@ def _bfs_impl[TState](
             yield cur, curdist
             q.extend(near(cur))
         curdist += 1
+
+
+def find_cycle[TValue](values: Iterable[TValue]) -> tuple[TValue, int, int]:
+    seen = {}
+    for i, v in enumerate(values):
+        prev = seen.setdefault(v, i)
+        if prev != i:
+            return v, prev, i
+
+
+def nth_with_cycle[TValue](values: Iterable[TValue], n: int) -> TValue:
+    seen = {}
+    it = iter(values)
+    for i, v in enumerate(it):
+        if i == n:
+            return v
+        prev = seen.setdefault(v, i)
+        if prev != i:
+            n = (n - i) % (i - prev)
+            return next(islice(it, n-1, n))
