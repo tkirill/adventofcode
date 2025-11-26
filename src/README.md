@@ -19,11 +19,11 @@ python -m aoc
 Run all days in a year:
 
 ```
-python -m aoc.year2023
+python -m aoc -y 2023
 ```
 
 Run specific day:
 
 ```
-python -m aoc.year2023.day_02_Cube_Conundrum
+python -m aoc -y 2023 -d 5
 ```
