@@ -12,5 +12,6 @@ from aoc.year2023 import (
     day_11_Cosmic_Expansion,
     day_12_Hot_Springs,
     day_13_Point_of_Incidence,
-    day_14_Parabolic_Reflector_Dish
+    day_14_Parabolic_Reflector_Dish,
+    day_15_Lens_Library
 )
