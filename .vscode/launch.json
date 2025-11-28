@@ -5,11 +5,11 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Python Debugger: Module",
+            "name": "Python Debugger: AoC day",
             "type": "debugpy",
             "request": "launch",
             "cwd": "${workspaceFolder}/src",
-            "module": "aoc.year2023.${fileBasenameNoExtension}"
+            "module": "aoc.${fileDirnameBasename}.${fileBasenameNoExtension}"
         }
     ]
 }
