@@ -13,5 +13,6 @@ from aoc.year2023 import (
     day_12_Hot_Springs,
     day_13_Point_of_Incidence,
     day_14_Parabolic_Reflector_Dish,
-    day_15_Lens_Library
+    day_15_Lens_Library,
+    day_16_The_Floor_Will_Be_Lava
 )

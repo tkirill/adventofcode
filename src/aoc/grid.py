@@ -1,5 +1,6 @@
 from typing import Iterable, Optional
 from itertools import islice
+import dataclasses
 
 from aoc.vec2 import Vec2
 from aoc.rectangle import Rectangle
@@ -96,3 +97,11 @@ def beam(p: Vec2, delta: Vec2, n: Optional[int]=None, skip_start: bool=False) ->
 
 def mdist(a: Vec2, b: Vec2) -> int:
     return abs(a.x - b.x) + abs(a.y - b.y)
+
+
+def turn(v: Vec2, d: str) -> Vec2:
+    match d:
+        case 'CW':
+            return Vec2(-v.y, v.x)
+        case 'CCW':
+            return Vec2(v.y, -v.x)

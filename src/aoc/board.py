@@ -1,25 +1,28 @@
-from dataclasses import dataclass, field
+import dataclasses
 from typing import Iterable, Optional
 from itertools import takewhile
 
 from aoc.vec2 import Vec2
 from aoc.rectangle import Rectangle
-from aoc import grid
+from aoc import grid, walker
 
 
-@dataclass
+@dataclasses.dataclass
 class Board[TValue]:
 
     values: list[list[TValue]]
-    width: int = field(init=False)
-    height: int = field(init=False)
+    width: int = dataclasses.field(init=False)
+    height: int = dataclasses.field(init=False)
 
     def __post_init__(self):
         self.height = len(self.values)
         self.width = len(self.values[0]) if self.values else 0
 
-    def __contains__(self, item: Vec2) -> bool:
-        return 0 <= item.x < self.width and 0 <= item.y < self.height
+    def __contains__(self, item: Vec2 | walker.GridWalker) -> bool:
+        if isinstance(item, Vec2):
+            return 0 <= item.x < self.width and 0 <= item.y < self.height
+        else:
+            return 0 <= item.pos.x < self.width and 0 <= item.pos.y < self.height
     
     def __getitem__(self, key: Vec2) -> TValue:
         return self.values[key.y][key.x]
@@ -100,3 +103,9 @@ def beamv[TValue](b: Board[TValue], start: Vec2, delta: Vec2, skip_start: bool=F
 
 def swap[TValue](b: Board[TValue], src: Vec2, dst: Vec2):
     b[src], b[dst] = b[dst], b[src]
+
+
+def wrap_contains(f):
+    def wrapper(b, *args, **kwargs):
+        return filter(b.__contains__, f(b, *args, **kwargs))
+    return wrapper

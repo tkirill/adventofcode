@@ -27,7 +27,7 @@ def bfs_initial[TState](
 
 
 def bfs[TState](
-        initial: list[TState],
+        initial: TState,
         near: Callable[[TState], Iterable[TState]],
         track_visited: bool=True):
     yield from bfs_initial([initial], near, track_visited)
