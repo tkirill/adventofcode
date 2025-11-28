@@ -109,3 +109,29 @@ def wrap_contains(f):
     def wrapper(b, *args, **kwargs):
         return filter(b.__contains__, f(b, *args, **kwargs))
     return wrapper
+
+
+def row_at[TValue](b: Board[TValue], at: int) -> Iterable[Vec2]:
+    for col in range(b.width):
+        yield Vec2(col, at)
+
+
+def col_at[TValue](b: Board[TValue], at: int) -> Iterable[Vec2]:
+    for row in range(b.height):
+        yield Vec2(at, row)
+
+
+def top[TValue](b: Board[TValue]) -> Iterable[Vec2]:
+    return row_at(b, 0)
+
+
+def bottom[TValue](b: Board[TValue]) -> Iterable[Vec2]:
+    return row_at(b, b.height-1)
+
+
+def first_column[TValue](b: Board[TValue]) -> Iterable[Vec2]:
+    return col_at(b, 0)
+
+
+def last_column[TValue](b: Board[TValue]) -> Iterable[Vec2]:
+    return col_at(b, b.width-1)

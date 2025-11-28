@@ -38,12 +38,21 @@ def beam_step(maze: board.Board[str], beam: walker.GridWalker) -> Iterable[walke
 def star1():
     maze = board.Board(read(2023, 16, sep=None, parse=list))
     start = walker.GridWalker(Vec2(0, 0), grid.RIGHT)
-    visited = {p.pos for p, _ in algorithm.bfs(start, partial(beam_step, maze))}
+    near = partial(beam_step, maze)
+    visited = {p.pos for p, _ in algorithm.bfs(start, near)}
     return len(visited)
 
 
 def star2():
-    pass
+    maze = board.Board(read(2023, 16, sep=None, parse=list))
+    start = (
+        [walker.GridWalker(p, grid.DOWN) for p in board.top(maze)] +
+        [walker.GridWalker(p, grid.UP) for p in board.bottom(maze)] +
+        [walker.GridWalker(p, grid.RIGHT) for p in board.first_column(maze)] +
+        [walker.GridWalker(p, grid.LEFT) for p in board.last_column(maze)]
+    )
+    near = partial(beam_step, maze)
+    return max(len({p.pos for p, _ in algorithm.bfs(s, near)}) for s in start)
 
 
 if __name__ == '__main__':
