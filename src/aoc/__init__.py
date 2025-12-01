@@ -1,1 +1,1 @@
-from aoc import year2023
+from aoc import year2023, year2025
