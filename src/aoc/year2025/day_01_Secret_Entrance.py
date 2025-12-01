@@ -9,8 +9,8 @@ def rotate(items: list[tuple[str, int]]) -> Iterable[tuple[int, int]]:
         zero_clicks, dist = divmod(distance, 100)
         prev = cur
         cur += dist if direction == 'R' else -dist
-        zero_clicks += prev != 0 and (not cur or not 0 <= cur <= 99)
-        cur = (cur + 100) % 100
+        zero_clicks += (cur <= 0 < prev) or (100 <= cur)
+        cur %= 100
         yield cur, zero_clicks
 
 
