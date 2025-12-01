@@ -42,8 +42,3 @@ def star1():
 def star2():
     platform = Board(read(2023, 14, sep=None, parse=list))
     return nth_with_cycle(tilt_cycle(platform), 1_000_000_000-1)[1]
-
-
-if __name__ == '__main__':
-    print('Star 1:', star1())
-    print('Star 2:', star2())

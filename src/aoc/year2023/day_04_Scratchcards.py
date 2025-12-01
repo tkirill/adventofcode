@@ -22,8 +22,3 @@ def star2():
         for n in range(id+1, id+1+won):
             counters[n] += counters[id]
     return sum(counters)
-
-
-if __name__ == '__main__':
-    print('Star 1:', star1())
-    print('Star 2:', star2())

@@ -25,8 +25,3 @@ def star1():
 def star2():
     history = read(2023, 9)
     return sum(predict_backward(i) for i in history)
-
-
-if __name__ == '__main__':
-    print('Star 1:', star1())
-    print('Star 2:', star2())

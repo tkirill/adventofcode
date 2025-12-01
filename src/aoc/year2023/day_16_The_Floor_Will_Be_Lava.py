@@ -53,8 +53,3 @@ def star2():
     )
     near = partial(beam_step, maze)
     return max(len({p.pos for p, _ in algorithm.bfs(s, near)}) for s in start)
-
-
-if __name__ == '__main__':
-    print('Star 1:', star1())
-    print('Star 2:', star2())

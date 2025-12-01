@@ -19,8 +19,3 @@ def star1():
 
 def star2():
     return sum(find_first_and_last_digits(line, ALL_DIGITS) for line in readlines(year=2023, day=1))
-
-
-if __name__ == '__main__':
-    print('Star 1:', star1())
-    print('Star 2:', star2())

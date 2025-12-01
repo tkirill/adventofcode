@@ -34,8 +34,3 @@ def star2():
     universe = Board(read(2023, 11, sep=None, parse=list))
     galaxies, empty_rows, empty_cols = find_galaxies(universe)
     return sum(distance(a, b, empty_rows, empty_cols, 1_000_000) for a, b in combinations(galaxies, 2))
-
-
-if __name__ == '__main__':
-    print('Star 1:', star1())
-    print('Star 2:', star2())

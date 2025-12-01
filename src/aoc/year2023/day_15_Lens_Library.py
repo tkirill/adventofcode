@@ -35,8 +35,3 @@ def star2():
         h = compute_hash(label)
         boxes[h][label] = int(focal)
     return focusing_power(boxes)
-
-
-if __name__ == '__main__':
-    print('Star 1:', star1())
-    print('Star 2:', star2())

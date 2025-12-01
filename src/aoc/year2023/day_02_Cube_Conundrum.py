@@ -37,8 +37,3 @@ def star1():
 def star2():
     games = dict(parse_game(line) for line in readlines(year=2023, day=2))
     return sum(cubes_power(s) for s in games.values())
-
-
-if __name__ == '__main__':
-    print('Star 1:', star1())
-    print('Star 2:', star2())

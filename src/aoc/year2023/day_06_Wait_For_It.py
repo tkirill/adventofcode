@@ -19,8 +19,3 @@ def star1():
 def star2():
     races = zip(*read(2023, 6, sep=None, parse=lambda s: allints(s.replace(' ', ''))))
     return product(count_wins(t, d) for t, d in races)
-
-
-if __name__ == '__main__':
-    print('Star 1:', star1())
-    print('Star 2:', star2())

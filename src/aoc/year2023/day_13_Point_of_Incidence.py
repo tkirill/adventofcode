@@ -63,8 +63,3 @@ def star1():
 def star2():
     patterns = [Board(p) for p in readblocks(2023, 13, sep=None, parse=list)]
     return sum(board_symmetry_bfs(p, 1) or 100 * board_symmetry_bfs(board.transpose(p), 1) for p in patterns)
-
-
-if __name__ == '__main__':
-    print('Star 1:', star1())
-    print('Star 2:', star2())

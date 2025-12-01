@@ -45,8 +45,3 @@ def star1():
 def star2():
     seeds, maps = read_maps()
     return min(map_lowest_location(Interval.of_length(s, _len), maps) for s, _len in batched(seeds, 2))
-
-
-if __name__ == '__main__':
-    print('Star 1:', star1())
-    print('Star 2:', star2())

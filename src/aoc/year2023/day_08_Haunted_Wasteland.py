@@ -28,8 +28,3 @@ def star2():
         c = next(i for i, cur in enumerate(walk(instructions, network, start)) if cur[-1] == 'Z')
         cycles.append(c)
     return math.lcm(*cycles)
-
-
-if __name__ == '__main__':
-    print('Star 1:', star1())
-    print('Star 2:', star2())

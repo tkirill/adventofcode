@@ -31,8 +31,3 @@ def star2():
     hands = read(2023, 7, parse=str)
     hands.sort(key=lambda h: joker_hand_score(h[0]))
     return sum((i+1) * int(hand[1]) for i, hand in enumerate(hands))
-
-
-if __name__ == '__main__':
-    print('Star 1:', star1())
-    print('Star 2:', star2())

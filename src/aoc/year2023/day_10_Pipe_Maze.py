@@ -85,8 +85,3 @@ def star2():
     loop = [p for p, _ in walk(maze, start)]
     #return scanline(maze, set(loop))
     return pick_theorem(maze, loop)
-
-
-if __name__ == '__main__':
-    print('Star 1:', star1())
-    print('Star 2:', star2())

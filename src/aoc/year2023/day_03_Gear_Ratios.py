@@ -31,8 +31,3 @@ def star2():
             if v == '*':
                 gears[p].append(n)
     return sum(numbers[0] * numbers[1] for numbers in gears.values() if len(numbers) == 2)
-
-
-if __name__ == '__main__':
-    print('Star 1:', star1())
-    print('Star 2:', star2())

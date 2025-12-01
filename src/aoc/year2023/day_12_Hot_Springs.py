@@ -30,8 +30,3 @@ def star1():
 def star2():
     records = [('?'.join([s]*5), tuple(g*5)) for s, *g in read(2023, 12, sep=r' |,')]
     return sum(arrangements(springs, groups, sum(groups)) for springs, groups in records)
-
-
-if __name__ == '__main__':
-    print('Star 1:', star1())
-    print('Star 2:', star2())

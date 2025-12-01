@@ -22,8 +22,3 @@ def star1():
 def star2():
     it = read(year=2025, day=1, parse=lambda x: (x[0], int(x[1:])))
     return sum(zc for _, zc in rotate(it))
-
-
-if __name__ == '__main__':
-    print('Star 1:', star1())
-    print('Star 2:', star2())
