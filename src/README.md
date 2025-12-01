@@ -1,7 +1,7 @@
 Check everything:
 
 ```
-python -m unittest -v
+python -m unittest
 ```
 
 Check specific day:
