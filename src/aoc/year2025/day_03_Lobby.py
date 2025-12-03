@@ -2,17 +2,18 @@ from aoc.io import readlines
 from aoc import colutils
 
 
-def joltage(bank: list[int], batteries: int, start: int=0) -> int:
-    for b in range(9, 0, -1):
-        i = colutils.index(bank, b, start)
-        if i == -1:
-            continue
-        if batteries == 1:
-            return b
-        j = joltage(bank, batteries-1, i+1)
-        if j != -1:
-            return b * 10**(batteries-1) + j
-    return -1
+def joltage(bank: list[int], requested: int) -> int:
+    selected = []
+    for pos, value in enumerate(bank):
+        remaining_batteries = len(bank) - pos
+        while selected and len(selected) + remaining_batteries > requested and selected[-1] < value:
+            selected.pop()
+        if len(selected) < requested:
+            selected.append(value)
+    total = 0
+    for r in selected:
+        total = total * 10 + r
+    return total
 
 
 def star1():
