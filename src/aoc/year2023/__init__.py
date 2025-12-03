@@ -14,5 +14,6 @@ from aoc.year2023 import (
     day_13_Point_of_Incidence,
     day_14_Parabolic_Reflector_Dish,
     day_15_Lens_Library,
-    day_16_The_Floor_Will_Be_Lava
+    day_16_The_Floor_Will_Be_Lava,
+    day_17_Clumsy_Crucible
 )

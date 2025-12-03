@@ -1,6 +1,7 @@
 from typing import Iterable, Callable
 from collections import deque
 from itertools import islice
+from aoc import pqueue
 
 
 def filter_visited[TState](
@@ -66,3 +67,31 @@ def nth_with_cycle[TValue](values: Iterable[TValue], n: int) -> TValue:
             if not nn:
                 return v
             return next(islice(it, nn-1, nn))
+
+
+def dijkstra[TNode](
+        start: TNode,
+        near: Callable[[TNode], Iterable[tuple[TNode, int]]]
+        ) -> Iterable[tuple[TNode, int]]:
+    return dijkstra_initial([start], near)
+
+
+def dijkstra_initial[TNode](
+        initial: list[TNode],
+        near: Callable[[TNode], Iterable[tuple[TNode, int]]]
+        ) -> Iterable[tuple[TNode, int]]:
+    dist = {s: 0 for s in initial}
+    prev = {s: None for s in initial}
+    q = pqueue.PriorityQueue(dist.items())
+    
+    while q:
+        u = q.pop()
+        udist = dist[u]
+        yield u, udist
+        for v, cost in near(u):
+            alt = udist + cost
+            vdist = dist.get(v, None)
+            if vdist is None or vdist > alt:
+                dist[v] = alt
+                prev[v] = u
+                q.add(v, alt)

@@ -21,11 +21,12 @@ class Board[TValue]:
     def __contains__(self, item: Vec2 | walker.GridWalker) -> bool:
         if isinstance(item, Vec2):
             return 0 <= item.x < self.width and 0 <= item.y < self.height
-        else:
-            return 0 <= item.pos.x < self.width and 0 <= item.pos.y < self.height
+        return 0 <= item.pos.x < self.width and 0 <= item.pos.y < self.height
     
-    def __getitem__(self, key: Vec2) -> TValue:
-        return self.values[key.y][key.x]
+    def __getitem__(self, key: Vec2 | walker.GridWalker) -> TValue:
+        if isinstance(key, Vec2):
+            return self.values[key.y][key.x]
+        return self.values[key.pos.y][key.pos.x]
     
     def __setitem__(self, key: Vec2, value: TValue) -> TValue:
         self.values[key.y][key.x] = value
