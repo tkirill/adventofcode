@@ -1,5 +1,5 @@
 from aoc.io import read, allints
-from aoc.math import product
+from aoc.mathutils import product
 from math import sqrt, floor, ceil
 
 
