@@ -136,3 +136,9 @@ def first_column[TValue](b: Board[TValue]) -> Iterable[Vec2]:
 
 def last_column[TValue](b: Board[TValue]) -> Iterable[Vec2]:
     return col_at(b, b.width-1)
+
+
+def find[TValue](b: Board[TValue], expected: TValue) -> Iterable[Vec2]:
+    for p, v in cellsv(b):
+        if v == expected:
+            yield p
