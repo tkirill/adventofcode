@@ -1,4 +1,4 @@
-from collections import Counter
+from collections import deque
 
 from aoc import board
 from aoc.io import read
@@ -13,17 +13,11 @@ def star1():
 def star2():
     maze = Board(read(2025, 4, sep=None, parse=list))
     total = 0
-    while True:
-        counts = Counter()
-        for pos, v in board.cellsv(maze):
-            if v == '@':
-                counts.update(board.near8(maze, pos))
-        removed = 0
-        for p, v in board.cellsv(maze):
-            if v == '@' and counts[p] < 4:
-                maze[p] = '.'
-                removed += 1
-        if not removed:
-            return total
-        else:
-            total += removed
+    q = deque(board.find(maze, '@'))
+    while q:
+        cur = q.popleft()
+        if maze[cur] == '@' and board.count_near8(maze, cur, '@') < 4:
+            maze[cur] = '.'
+            total += 1
+            q.extend(board.find_near8(maze, cur, '@'))
+    return total
