@@ -142,3 +142,13 @@ def find[TValue](b: Board[TValue], expected: TValue) -> Iterable[Vec2]:
     for p, v in cellsv(b):
         if v == expected:
             yield p
+
+
+def find_near8[TValue](b: Board[TValue], pos: Vec2, expected: TValue) -> Iterable[Vec2]:
+    for p, v in near8v(b, pos):
+        if v == expected:
+            yield p
+
+
+def count_near8[TValue](b: Board[TValue], pos: Vec2, expected: TValue) -> Iterable[Vec2]:
+    return sum(1 for _ in find_near8(b, pos, expected))

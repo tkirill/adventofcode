@@ -7,11 +7,7 @@ from aoc.board import Board
 
 def star1():
     maze = Board(read(2025, 4, sep=None, parse=list))
-    total = 0
-    for p in board.find(maze, '@'):
-        if sum(1 for _, v in board.near8v(maze, p) if v == '@') < 4:
-            total += 1
-    return total
+    return sum(1 for p in board.find(maze, '@') if board.count_near8(maze, p, '@') < 4)
 
 
 def star2():
