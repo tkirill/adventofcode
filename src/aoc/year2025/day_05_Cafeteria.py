@@ -1,4 +1,5 @@
 from aoc.io import readblocks
+from aoc import interval
 
 
 def star1():
@@ -10,4 +11,7 @@ def star1():
     return total
 
 def star2():
-    pass
+    ranges, _ = readblocks(2025, 5, sep=r'-')
+    ranges.sort()
+    merged = interval.union_overlapped(ranges)
+    return sum(len(i)+1 for i in merged)
