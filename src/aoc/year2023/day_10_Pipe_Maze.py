@@ -74,14 +74,14 @@ def pick_theorem(b: Board[str], loop: list[Vec2]) -> int:
 
 def star1():
     maze = Board(read(2023, 10, sep=None, parse=list))
-    start = board.find(maze, 'S')
+    start = next(board.find(maze, 'S'))
     loop_len = sum(1 for _ in walk(maze, start))
     return loop_len // 2
 
 
 def star2():
     maze = Board(read(2023, 10, sep=None, parse=list))
-    start = board.find(maze, 'S')
+    start = next(board.find(maze, 'S'))
     loop = [p for p, _ in walk(maze, start)]
     #return scanline(maze, set(loop))
     return pick_theorem(maze, loop)

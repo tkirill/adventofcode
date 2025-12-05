@@ -59,10 +59,6 @@ def cellsv[TValue](b: Board[TValue], by_columns: bool=False, _reversed: bool=Fal
     yield from with_value(b, cells(b, by_columns, _reversed))
 
 
-def find[TValue](b: Board[TValue], value: TValue) -> Optional[TValue]:
-    return next((p for p, v in cellsv(b) if v == value), None)
-
-
 def rows[TValue](b: Board[TValue], _reversed: bool=False) -> Iterable[Iterable[Vec2]]:
     _range = range(b.height) if not _reversed else range(b.height-1, -1, -1)
     for row in _range:
