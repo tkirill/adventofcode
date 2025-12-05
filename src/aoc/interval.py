@@ -4,16 +4,16 @@ from typing import Iterable
 import bisect
 
 
-@dataclass(frozen=True, order=True)
+@dataclass(frozen=True)
 class Interval:
 
     begin: int | float
     end: int | float
 
-    def __post_init__(self, begin: int | float, end: int | float):
+    def __post_init__(self):
         if self.begin > self.end:
-            self.begin = float('+inf')
-            self.end = float('-inf')
+            object.__setattr__(self, 'begin', float('+inf'))
+            object.__setattr__(self, 'end', float('-inf'))
 
     def __contains__(self, key: int) -> bool:
         return self.begin <= key <= self.end
@@ -39,6 +39,11 @@ class Interval:
     def __bool__(self) -> bool:
         return not self.is_empty
     
+    def __lt__(self, other: Interval) -> bool:
+        if not self or not other:
+            raise ValueError('Comparison with empty interval is undefined')
+        return self.end < other.begin
+    
     @functools.cached_property
     def is_empty(self) -> bool:
         return self.begin > self.end
@@ -60,12 +65,18 @@ def hull(a: Interval, b: Interval) -> Interval:
     return Interval(min(a.begin, b.begin), max(a.end, b.end))
 
 
-def union_overlapped(intervals: Iterable[Interval]) -> list[Interval]:
+def union_overlapped(intervals: list[Interval | tuple[int, int] | list[int, int]]) -> list[Interval]:
     result = []
     for cur in intervals:
+        if not isinstance(cur, Interval):
+            cur = Interval(*cur)
         if not cur:
             continue
-        raise NotImplementedError
+        if not result or not (result[-1] & cur):
+            result.append(cur)
+            continue
+        result[-1] = result[-1] | cur
+    return result
 
 
 def of_length(begin: int, length: int) -> Interval:
@@ -78,3 +89,7 @@ def empty() -> Interval:
 
 def degenerate(x: int) -> Interval:
     return Interval(x, x)
+
+
+def begin(a: Interval) -> int:
+    return a.begin

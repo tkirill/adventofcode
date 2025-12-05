@@ -3,14 +3,15 @@ from typing import Iterable
 
 from aoc.io import readblocks, allints
 from aoc.interval import Interval
+from aoc import interval
 
 
 def read_maps() -> tuple[list[int], list[list[tuple[Interval, Interval]]]]:
     seeds, *map_blocks = readblocks(2023, 5, sep=None, parse=allints)
     maps = []
     for _, *block_intervals in map_blocks:
-        cur = [(Interval.of_length(src, _len), Interval.of_length(dst, _len)) for dst, src, _len in block_intervals]
-        cur.sort()
+        cur = [(interval.of_length(src, _len), interval.of_length(dst, _len)) for dst, src, _len in block_intervals]
+        cur.sort(key=lambda t: t[0].begin)
         maps.append(cur)
     return seeds[0], maps
 
@@ -24,9 +25,8 @@ def map_interval(seed: Interval, _map: list[tuple[Interval, Interval]]) -> Itera
         shift = dst.begin - src.begin
         yield Interval(overlap.begin + shift, overlap.end + shift)
         if cur.begin < overlap.begin:
-            yield Interval(cur.begin, overlap.begin)
-            cur = Interval(overlap.begin, cur.end)
-        cur = Interval(overlap.end, cur.end)
+            yield Interval(cur.begin, overlap.begin-1)
+        cur = Interval(overlap.end+1, cur.end)
     if cur:
         yield cur
 
@@ -39,9 +39,9 @@ def map_lowest_location(seed: Interval, maps: list[list[tuple[Interval, Interval
 
 def star1():
     seeds, maps = read_maps()
-    return min(map_lowest_location(Interval.of_length(s, 1), maps) for s in seeds)
+    return min(map_lowest_location(interval.degenerate(s), maps) for s in seeds)
 
 
 def star2():
     seeds, maps = read_maps()
-    return min(map_lowest_location(Interval.of_length(s, _len), maps) for s, _len in batched(seeds, 2))
+    return min(map_lowest_location(interval.of_length(s, _len), maps) for s, _len in batched(seeds, 2))
