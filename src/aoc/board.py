@@ -59,25 +59,43 @@ def cellsv[TValue](b: Board[TValue], by_columns: bool=False, _reversed: bool=Fal
     yield from with_value(b, cells(b, by_columns, _reversed))
 
 
-def rows[TValue](b: Board[TValue], _reversed: bool=False) -> Iterable[Iterable[Vec2]]:
+def irow[TValue](b: Board[TValue], row: int, _reversed: bool=False) -> Iterable[Vec2]:
+    _range = range(b.width) if not _reversed else range(b.width-1, -1, -1)
+    for col in _range:
+        yield Vec2(col, row)
+
+
+def icol[TValue](b: Board[TValue], col: int, _reversed: bool=False) -> Iterable[Vec2]:
     _range = range(b.height) if not _reversed else range(b.height-1, -1, -1)
     for row in _range:
-        yield (Vec2(col, row) for col in range(b.width))
+        yield Vec2(col, row)
 
 
-def rowsv[TValue](b: Board[TValue], _reversed: bool=False) -> Iterable[Iterable[tuple[Vec2, TValue]]]:
-    for row in rows(b, _reversed):
+def rows[TValue](b: Board[TValue], _reversed: bool=False, reversed_row: bool=False) -> Iterable[Iterable[Vec2]]:
+    _range = range(b.height) if not _reversed else range(b.height-1, -1, -1)
+    for row in _range:
+        yield irow(b, row, reversed_row)
+
+
+def rowsv[TValue](
+        b: Board[TValue],
+        _reversed: bool=False,
+        reversed_row: bool=False) -> Iterable[Iterable[tuple[Vec2, TValue]]]:
+    for row in rows(b, _reversed, reversed_row):
         yield with_value(b, row)
 
 
-def cols[TValue](b: Board[TValue], _reversed: bool=False) -> Iterable[Iterable[Vec2]]:
+def cols[TValue](b: Board[TValue], _reversed: bool=False, reversed_col: bool=False) -> Iterable[Iterable[Vec2]]:
     _range = range(b.width) if not _reversed else range(b.width-1, -1, -1)
     for col in _range:
-        yield (Vec2(col, row) for row in range(b.height))
+        yield icol(b, col, reversed_col)
 
 
-def colsv[TValue](b: Board[TValue], _reversed: bool=False) -> Iterable[Iterable[tuple[Vec2, TValue]]]:
-    for col in cols(b, _reversed):
+def colsv[TValue](
+        b: Board[TValue],
+        _reversed: bool=False,
+        reversed_col: bool=False) -> Iterable[Iterable[tuple[Vec2, TValue]]]:
+    for col in cols(b, _reversed, reversed_col):
         yield with_value(b, col)
 
 
@@ -148,3 +166,20 @@ def find_near8[TValue](b: Board[TValue], pos: Vec2, expected: TValue) -> Iterabl
 
 def count_near8[TValue](b: Board[TValue], pos: Vec2, expected: TValue) -> Iterable[Vec2]:
     return sum(1 for _ in find_near8(b, pos, expected))
+
+
+def of_size[TValue](w: int, h: int, value: TValue) -> Board[TValue]:
+    return Board([[value]*w for _ in range(h)])
+
+
+def scanline[TValue](b: Board[TValue], is_inside) -> int:
+    # https://en.wikipedia.org/wiki/Scanline_rendering
+    total = 0
+    for row in rowsv(b):
+        is_inside = False
+        for p, v in row:
+            
+            if v in markers:
+                is_inside = not is_inside
+            total += is_inside
+    return total
