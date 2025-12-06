@@ -1,6 +1,5 @@
 from typing import Iterable, Optional
-from itertools import islice
-import dataclasses
+from itertools import islice, pairwise
 
 from aoc.vec2 import Vec2
 from aoc.rectangle import Rectangle
@@ -26,8 +25,20 @@ OPPOSITE = {
 }
 
 
-def opposite(direction: Vec2) -> Vec2:
-    return OPPOSITE[direction]
+def direction(s: str, d: int=1) -> Vec2:
+    match s:
+        case 'D':
+            return DOWN * d
+        case 'L':
+            return LEFT * d
+        case 'R':
+            return RIGHT * d
+        case 'U':
+            return UP * d
+
+
+def opposite(d: Vec2) -> Vec2:
+    return OPPOSITE[d]
 
 
 def near8(p: Vec2 | Rectangle):
@@ -85,7 +96,7 @@ def left(p: Vec2) -> Vec2:
 
 def beam(p: Vec2, delta: Vec2, n: Optional[int]=None, skip_start: bool=False) -> Iterable[Vec2]:
     if n is not None:
-        yield from islice(beam(p, delta), n)
+        yield from islice(beam(p, delta, skip_start=skip_start), n)
         return
     cur = p
     if not skip_start:
@@ -105,3 +116,20 @@ def turn(v: Vec2, d: str) -> Vec2:
             return Vec2(-v.y, v.x)
         case 'CCW':
             return Vec2(v.y, -v.x)
+
+
+def pick_theorem(edge: list[Vec2], include_edge: bool=True) -> int:
+    b = 0
+    # Shoelace formula: https://en.wikipedia.org/wiki/Shoelace_formula
+    A = 0
+    for cur, nxt in pairwise(edge):
+        b += mdist(cur, nxt)
+        A += (cur.y + nxt.y) * (cur.x - nxt.x)
+    b += mdist(edge[-1], edge[0])
+    A += (edge[-1].y + edge[0].y) * (edge[-1].x - edge[0].x)
+    A //= 2
+    # Pick's theorem: https://en.wikipedia.org/wiki/Pick%27s_theorem
+    inside = A - b // 2 + 1
+    if include_edge:
+        inside += b
+    return inside
