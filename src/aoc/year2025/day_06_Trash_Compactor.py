@@ -1,3 +1,5 @@
+import math
+
 from aoc.io import readlines, read
 from aoc import board
 
@@ -10,10 +12,7 @@ def star1():
             case '+':
                 total += sum(a)
             case '*':
-                tmp = 1
-                for x in a:
-                    tmp *= x
-                total += tmp
+                total += math.prod(a)
     return total
 
 
@@ -34,9 +33,6 @@ def star2():
             case '+':
                 total += sum(args)
             case '*':
-                tmp = 1
-                for x in args:
-                    tmp *= x
-                total += tmp
+                total += math.prod(args)
         args.clear()
     return total
