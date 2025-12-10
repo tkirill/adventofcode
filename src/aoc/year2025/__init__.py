@@ -7,5 +7,6 @@ from aoc.year2025 import (
     day_06_Trash_Compactor,
     day_07_Laboratories,
     day_08_Playground,
-    day_09_Movie_Theater
+    day_09_Movie_Theater,
+    day_10_Factory
 )
