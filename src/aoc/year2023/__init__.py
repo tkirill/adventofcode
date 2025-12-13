@@ -16,5 +16,6 @@ from aoc.year2023 import (
     day_15_Lens_Library,
     day_16_The_Floor_Will_Be_Lava,
     day_17_Clumsy_Crucible,
-    day_18_Lavaduct_Lagoon
+    day_18_Lavaduct_Lagoon,
+    day_19_Aplenty
 )
