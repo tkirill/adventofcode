@@ -1,5 +1,6 @@
 from typing import Iterable, Optional
 from itertools import islice, pairwise
+import dataclasses
 
 from aoc.vec2 import Vec2
 from aoc.rectangle import Rectangle
@@ -23,6 +24,32 @@ OPPOSITE = {
     DOWN_LEFT: UP_RIGHT,
     LEFT: RIGHT
 }
+
+
+@dataclasses.dataclass(frozen=True)
+class GridInterval:
+
+    begin: Vec2
+    end: Vec2
+
+    def __post_init__(self):
+        if gridpos(self.begin) > gridpos(self.end):
+            tmp = self.begin
+            object.__setattr__(self, 'begin', self.end)
+            object.__setattr__(self, 'end', tmp)
+    
+    @property
+    def is_vertical(self):
+        return self.begin.x == self.end.x
+    
+    @property
+    def is_horizontal(self):
+        return self.begin.y == self.end.y
+    
+    def __contains__(self, other: Vec2) -> bool:
+        if self.is_vertical:
+            return self.begin.x == other.x and self.begin.y <= other.y <= self.end.y
+        return self.begin.y == other.y and self.begin.x <= other.x <= self.end.x
 
 
 def direction(s: str, d: int=1) -> Vec2:
@@ -133,3 +160,7 @@ def pick_theorem(edge: list[Vec2], include_edge: bool=True) -> int:
     if include_edge:
         inside += b
     return inside
+
+
+def gridpos(a: Vec2):
+    return (a.y, a.x)

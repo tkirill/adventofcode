@@ -11,7 +11,7 @@ class Year2025_Day09(unittest.TestCase):
     
     def testStar2(self):
         actual = star2()
-        self.assertEqual(0, actual)
+        self.assertEqual(1452422268, actual)
 
 
 if __name__ == '__main__':
