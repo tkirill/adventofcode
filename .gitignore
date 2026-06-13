@@ -31,3 +31,6 @@ aoc_tiles/.aoc_tiles_cache
 
 # inputs
 *.txt
+
+# libs
+*.egg-info
